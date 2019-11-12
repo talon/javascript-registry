@@ -10,8 +10,10 @@
 
 - [encode](#encode)
   - [Parameters](#parameters)
+  - [Examples](#examples)
 - [decode](#decode)
   - [Parameters](#parameters-1)
+  - [Examples](#examples-1)
 
 ## encode
 
@@ -21,6 +23,16 @@ encode data into a route
 
 - `route` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** a route `/with/:params`
 - `data` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** keys will replace the `/path/:param`
+
+### Examples
+
+```javascript
+const [path, data] = Route.encode("/api/v1/:id/items/:name", {
+  id: 1,
+  name: "keyboard",
+  limit: 20
+});
+```
 
 Returns **[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)** `[path, data]` lefover data is returned as the second element in the array
 
@@ -32,5 +44,14 @@ decode data from a path
 
 - `route` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** a route `/with/:params`
 - `path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** from which to extract `data`
+
+### Examples
+
+```javascript
+const { id, name, limit } = Route.decode(
+  "/api/v1/:id/items/:name",
+  "/api/v1/1/items/keyboard?limit=20"
+);
+```
 
 Returns **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** the `data` extracted from `path`

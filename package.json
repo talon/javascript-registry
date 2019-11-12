@@ -5,7 +5,7 @@
     "format": "lerna run format",
     "docs": "lerna run docs",
     "test": "lerna run test",
-    "build": "lerna run build",
+    "build": "lerna run docs && lerna run build",
     "publish": "git push && lerna publish"
   },
   "husky": {
