@@ -52,7 +52,7 @@ export const encode = (route, data) => {
  *
  * @param {string} route a route `/with/:params`
  * @param {object} data keys will replace the `/path/:param`
- * @returns {array} path including the querystring
+ * @returns {string} `path` including the querystring
  */
 export const withQuery = (route, data) => {
   const [path, query] = encode(route, data);
