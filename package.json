@@ -6,13 +6,13 @@
     "docs": "lerna run docs",
     "test": "lerna run test",
     "build": "lerna run build",
-    "publish": "lerna publish",
+    "publish": "lerna publish && git push",
     "new": "babel-node ./scripts/new"
   },
   "husky": {
     "hooks": {
       "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
-      "pre-commit": "pretty-quick --staged",
+      "pre-commit": "npm run docs && git add packages/**/README.md && pretty-quick --staged",
       "pre-push": "npm run test"
     }
   },

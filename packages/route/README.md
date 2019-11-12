@@ -58,7 +58,7 @@ const path = Route.withQuery("/api/v1/:id/items/:name", {
 });
 ```
 
-Returns **[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)** path including the querystring
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** `path` including the querystring
 
 ## decode
 
