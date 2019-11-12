@@ -6,7 +6,7 @@
     "docs": "lerna run docs",
     "test": "lerna run test",
     "build": "lerna run build",
-    "publish": "lerna publish"
+    "publish": "git push && lerna publish"
   },
   "husky": {
     "hooks": {

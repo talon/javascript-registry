@@ -4,7 +4,7 @@ import Url from "url";
 /**
  * encode data into a route
  * @param {string} route a route `/with/:params`
- * @param {object} keys will replace the `/path/:param`
+ * @param {object} data keys will replace the `/path/:param`
  * @returns {array} `[path, data]` lefover data is returned as the second element in the array
  */
 export const encode = (route, data) => {
