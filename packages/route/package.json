@@ -1,6 +1,6 @@
 {
   "name": "@talon/route",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "encode/decode data to/from routes",
   "homepage": "https://github.com/talon/javascript-registry/packages/route#readme",
   "author": "Talon Poole",
