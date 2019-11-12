@@ -6,12 +6,12 @@
     "docs": "lerna run docs",
     "test": "lerna run test",
     "build": "lerna run build",
-    "publish": "git commit && lerna publish"
+    "publish": "lerna publish"
   },
   "husky": {
     "hooks": {
       "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
-      "pre-commit": "npm run docs && pretty-quick --staged",
+      "pre-commit": "pretty-quick --staged",
       "pre-push": "npm run test"
     }
   },
