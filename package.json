@@ -5,8 +5,9 @@
     "format": "lerna run format",
     "docs": "lerna run docs",
     "test": "lerna run test",
-    "build": "lerna run docs && lerna run build",
-    "publish": "git push && lerna publish"
+    "build": "lerna run build",
+    "publish": "lerna publish",
+    "new": "babel-node ./scripts/new"
   },
   "husky": {
     "hooks": {
@@ -15,7 +16,22 @@
       "pre-push": "npm run test"
     }
   },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": true
+          }
+        }
+      ]
+    ]
+  },
   "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/node": "^7.7.0",
+    "@babel/preset-env": "^7.7.1",
     "commitizen": "^4.0.3",
     "cz-lerna-changelog": "^2.0.2",
     "documentation": "^12.1.3",
@@ -23,6 +39,7 @@
     "lerna": "^3.18.4",
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1",
+    "prompts": "^2.3.0",
     "semantic-release": "^15.13.30"
   },
   "config": {
