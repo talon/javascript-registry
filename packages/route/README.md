@@ -11,9 +11,12 @@
 - [encode](#encode)
   - [Parameters](#parameters)
   - [Examples](#examples)
-- [decode](#decode)
+- [withQuery](#withquery)
   - [Parameters](#parameters-1)
   - [Examples](#examples-1)
+- [decode](#decode)
+  - [Parameters](#parameters-2)
+  - [Examples](#examples-2)
 
 ## encode
 
@@ -35,6 +38,27 @@ const [path, data] = Route.encode("/api/v1/:id/items/:name", {
 ```
 
 Returns **[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)** `[path, data]` lefover data is returned as the second element in the array
+
+## withQuery
+
+encode data into a route, include the querystring
+
+### Parameters
+
+- `route` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** a route `/with/:params`
+- `data` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** keys will replace the `/path/:param`
+
+### Examples
+
+```javascript
+const path = Route.withQuery("/api/v1/:id/items/:name", {
+  id: 1,
+  name: "keyboard",
+  limit: 20
+});
+```
+
+Returns **[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)** path including the querystring
 
 ## decode
 
