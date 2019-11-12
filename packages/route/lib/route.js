@@ -3,8 +3,8 @@ import Url from "url";
 
 /**
  * encode data into a route
- * @param {string} a route /with/:params
- * @param {object} the object[key] will replace the /path/:param
+ * @param {string} route a route /with/:params
+ * @param {object} data the object[key] will replace the /path/:param
  * @returns {array} [path, data] lefover data is returned as the second element in the array
  */
 export const encode = (route, data) => {
@@ -18,8 +18,8 @@ export const encode = (route, data) => {
 
 /**
  * decode data from a path
- * @param {string} a route /with/:params
- * @param {string} from which to extract data
+ * @param {string} route a route /with/:params
+ * @param {string} path from which to extract data
  * @returns {object} the data extracted from `path`
  */
 export const decode = (route, path) => {
