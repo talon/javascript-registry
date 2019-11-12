@@ -44,5 +44,6 @@
     "@babel/preset-env": "^7.7.1",
     "jest": "^24.9.0",
     "prettier": "^1.19.1"
-  }
+  },
+  "gitHead": "b522953e30d5386183e5005f82bcfa6924f53a10"
 }
