@@ -31,4 +31,4 @@ npm install @talon/[package]
 
 # About
 
-This is a lerna repo backed by the GitHub Package Registry.
+This is a [Lerna](https://github.com/lerna/lerna) repo backed by the [GitHub Package Registry](https://github.com/features/package-registry).
