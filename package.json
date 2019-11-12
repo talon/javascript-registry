@@ -1,0 +1,27 @@
+{
+  "name": "root",
+  "private": true,
+  "scripts": {
+    "publish": "lerna publish",
+    "test": "lerna run test",
+    "exec": "lerna exec --"
+  },
+  "husky": {
+    "hooks": {
+      "prepare-commit-message": "exec > /dev/tty && git cz --hook || true",
+      "pre-commit": "pretty-quick --staged",
+      "pre-push": "npm run test"
+    }
+  },
+  "devDependencies": {
+    "commitizen": "^4.0.3",
+    "cz-lerna-changelog": "^2.0.2",
+    "lerna": "^3.18.4",
+    "semantic-release": "^15.13.30"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-lerna-changelog"
+    }
+  }
+}
