@@ -19,10 +19,8 @@ encode data into a route
 
 ### Parameters
 
-- `route`
-- `data`
-- `a` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** route /with/:params
-- `the` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** object[key] will replace the /path/:param
+- `route` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** a route /with/:params
+- `data` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** the object[key] will replace the /path/:param
 
 Returns **[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)** [path, data] lefover data is returned as the second element in the array
 
@@ -32,9 +30,7 @@ decode data from a path
 
 ### Parameters
 
-- `route`
-- `path`
-- `a` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** route /with/:params
-- `from` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** which to extract data
+- `route` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** a route /with/:params
+- `path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** from which to extract data
 
 Returns **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** the data extracted from `path`
