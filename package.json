@@ -11,8 +11,8 @@
   "husky": {
     "hooks": {
       "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
-      "pre-commit": "pretty-quick --staged",
-      "pre-push": "npm run test && npm run docs"
+      "pre-commit": "npm run docs && pretty-quick --staged",
+      "pre-push": "npm run test"
     }
   },
   "devDependencies": {
