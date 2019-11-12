@@ -20,8 +20,7 @@ encode data into a route
 ### Parameters
 
 - `route` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** a route `/with/:params`
-- `data`
-- `keys` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** will replace the `/path/:param`
+- `data` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** keys will replace the `/path/:param`
 
 Returns **[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)** `[path, data]` lefover data is returned as the second element in the array
 
