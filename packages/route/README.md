@@ -15,22 +15,26 @@
 
 ## encode
 
-encode an Object in to a route
+encode data into a route
 
 ### Parameters
 
-- `route` {string} a route /with/:params
-- `data` {object} the object[key] will replace the /path/:param
+- `route`
+- `data`
+- `a` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** route /with/:params
+- `the` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** object[key] will replace the /path/:param
 
 Returns **[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)** [path, data] lefover data is returned as the second element in the array
 
 ## decode
 
-decode an Object from a url
+decode data from a path
 
 ### Parameters
 
-- `route` {string} a route /with/:params
-- `path` {string} from which to extract data
+- `route`
+- `path`
+- `a` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** route /with/:params
+- `from` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** which to extract data
 
 Returns **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** the data extracted from `path`
