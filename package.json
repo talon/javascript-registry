@@ -3,10 +3,10 @@
   "private": true,
   "scripts": {
     "format": "lerna run format",
-    "test": "lerna run test",
     "docs": "lerna run docs",
+    "test": "lerna run test",
     "build": "lerna run build",
-    "publish": "git commit && git push && lerna publish"
+    "publish": "git commit && lerna publish"
   },
   "husky": {
     "hooks": {
