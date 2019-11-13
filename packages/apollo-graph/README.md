@@ -8,17 +8,122 @@
 
 ### Table of Contents
 
-- [constructor](#constructor)
+- [typeDefs](#typedefs)
   - [Parameters](#parameters)
+- [context](#context)
+  - [Parameters](#parameters-1)
+- [dataSources](#datasources)
+  - [Parameters](#parameters-2)
+- [resolvers](#resolvers)
+  - [Parameters](#parameters-3)
+- [fromNodes](#fromnodes)
+  - [Parameters](#parameters-4)
+- [RESTEdge](#restedge)
+  - [Parameters](#parameters-5)
+  - [Examples](#examples)
 
-## constructor
+## typeDefs
 
-Implementation (a usurping, perhaps)
+merges an array of typeDefs into one to rule them all
+
+### Parameters
+
+- `nodes` **[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)**
+
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** typeDefs
+
+## context
+
+merges an array of contexts into one function to call
+at the graph root
+
+### Parameters
+
+- `nodes` **[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)**
+
+Returns **[function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** Request -> Context
+
+## dataSources
+
+merges an array of dataSources into one function to call
+at the graph root
+
+### Parameters
+
+- `nodes` **[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)**
+
+Returns **[function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** () -> DataSources
+
+## resolvers
+
+merges an array of resolvers into one to rule them all
+
+### Parameters
+
+- `nodes` **[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)**
+
+Returns **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**
+
+## fromNodes
+
+- **See: RESTEdge**
+
+build a Graph.fromNodes
+
+nodes are objects of the shape
+{ typeDefs, context, dataSources }
+
+where `dataSources` is an array of `Edges`
+
+### Parameters
+
+- `nodes` **[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)**
+
+Returns **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**
+
+## RESTEdge
+
+**Extends RESTDataSource**
+
+Declaritively map GraphQL queries to REST endpoints
 
 ### Parameters
 
 - `$0` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**
   - `$0.resource`
   - `$0.name`
-  - `$0.context`
-  - `$0.bind`
+  - `$0.instance`
+  - `$0.authorization`
+- `bind`
+
+### Examples
+
+```javascript
+new RESTEdge(
+  {
+    name: "mastodon.accounts",
+    resource: "/api/v1/accounts",
+    instance: "mastodon.instance",
+    authorization: "mastodon.authorization"
+  },
+  {
+    get: {
+      account: "/:id",
+      followers: "/:id/followers",
+      following: "/:id/followers",
+      relationships: "/:id/relationships",
+      search: "/:id/search",
+      statuses: "/:id/statuses",
+      verify_credentials: "/:id/verify_credentials"
+    },
+    post: {
+      accounts: "/:id/",
+      follow: "/:id/follow",
+      unfollow: "/:id/unfollow"
+    },
+    patch: {
+      update_credentials: "update_credentials"
+    }
+  }
+);
+```

@@ -13,16 +13,36 @@ import { RESTDataSource } from "apollo-datasource-rest";
 import QueryString from "querystring";
 import Route from "@talon/route";
 
+/**
+ * merges an array of typeDefs into one to rule them all
+ *
+ * @param {array} nodes
+ * @returns {string} typeDefs
+ */
 export const typeDefs = reduce(
   (typeDefs, node) => `${typeDefs} ${node.typeDefs}`,
   ""
 );
 
+/**
+ * merges an array of contexts into one function to call
+ * at the graph root
+ *
+ * @param {array} nodes
+ * @returns {function} Request -> Context
+ */
 export const context = nodes => {
   const fns = ap(map(prop("context"), nodes));
   return request => Promise.all(fns([request])).then(mergeAll);
 };
 
+/**
+ * merges an array of dataSources into one function to call
+ * at the graph root
+ *
+ * @param {array} nodes
+ * @returns {function} () -> DataSources
+ */
 export const dataSources = nodes => {
   const cache = pipe(
     map(prop("dataSources")),
@@ -37,6 +57,12 @@ export const dataSources = nodes => {
   return () => cache;
 };
 
+/**
+ * merges an array of resolvers into one to rule them all
+ *
+ * @param {array} nodes
+ * @returns {object}
+ */
 export const resolvers = pipe(
   map(prop("dataSources")),
   flatten,
@@ -44,6 +70,18 @@ export const resolvers = pipe(
   reduce(mergeDeepLeft, {})
 );
 
+/**
+ * build a Graph.fromNodes
+ *
+ * nodes are objects of the shape
+ *     { typeDefs, context, dataSources }
+ *
+ * where `dataSources` is an array of `Edges`
+ *
+ * @see RESTEdge
+ * @param {array} nodes
+ * @returns {object}
+ */
 export const fromNodes = (...nodes) => ({
   typeDefs: typeDefs(nodes),
   context: context(nodes),
@@ -51,16 +89,43 @@ export const fromNodes = (...nodes) => ({
   resolvers: resolvers(nodes)
 });
 
+/**
+ * Declaritively map GraphQL queries to REST endpoints
+ *
+ * @example
+ *     new RESTEdge({
+ *       name: "mastodon.accounts",
+ *       resource: "/api/v1/accounts",
+ *       instance: "mastodon.instance",
+ *       authorization: "mastodon.authorization"
+ *     }, {
+ *       get: {
+ *         account: "/:id",
+ *         followers: "/:id/followers",
+ *         following: "/:id/followers",
+ *         relationships: "/:id/relationships",
+ *         search: "/:id/search",
+ *         statuses: "/:id/statuses",
+ *         verify_credentials: "/:id/verify_credentials"
+ *       },
+ *       post: {
+ *         accounts: "/:id/",
+ *         follow: "/:id/follow",
+ *         unfollow: "/:id/unfollow"
+ *       },
+ *       patch: {
+ *         update_credentials: "update_credentials"
+ *       }
+ *     })
+ */
 export class RESTEdge extends RESTDataSource {
-  /**
-   * Implementation (a usurping, perhaps)
-   */
-  constructor({ resource, name, context, bind }) {
+  constructor({ resource, name, instance, authorization }, bind) {
     super();
     this.name = name;
     this.resource = resource;
-    this.authorization = prop(context.authorization);
-    this.instance = prop(context.instance);
+    this.authorization = prop(authorization);
+    this.instance = prop(instance);
+
     this.graph = { Query: [], Mutation: [] };
 
     forEachObjIndexed((queries, method) => {
