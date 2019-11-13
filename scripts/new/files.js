@@ -19,6 +19,9 @@ export default {
           build: "rm -rf dist && babel lib --ignore '**/*.test.js' -d dist",
           watch: "nodemon --exec babel-node lib/index.js"
         },
+        publishConfig: {
+          registry: "https://npm.pkg.github.com"
+        },
         repository: {
           type: "git",
           url: "ssh://git@github.com/talon/javascript-registry.git"

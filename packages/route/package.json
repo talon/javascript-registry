@@ -17,6 +17,9 @@
     "type": "git",
     "url": "ssh://git@github.com/talon/javascript-registry.git"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "babel": {
     "presets": [
       [
@@ -45,5 +48,5 @@
     "jest": "^24.9.0",
     "prettier": "^1.19.1"
   },
-  "gitHead": "b522953e30d5386183e5005f82bcfa6924f53a10"
+  "gitHead": "dc8300df6c1504e3bcd15076eb183bb5fa1dca82"
 }

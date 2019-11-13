@@ -9,6 +9,9 @@
     "publish": "lerna publish && git push",
     "new": "babel-node ./scripts/new"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "husky": {
     "hooks": {
       "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
