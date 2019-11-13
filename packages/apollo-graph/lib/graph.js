@@ -11,7 +11,7 @@ import {
 } from "ramda";
 import { RESTDataSource } from "apollo-datasource-rest";
 import QueryString from "querystring";
-import Route from "./route";
+import Route from "@talon/route";
 
 export const typeDefs = reduce(
   (typeDefs, node) => `${typeDefs} ${node.typeDefs}`,
@@ -69,8 +69,7 @@ export class RESTEdge extends RESTDataSource {
           case "get":
             this.graph.Query.push(query);
             this[query] = data => {
-              const [path, params] = Route.encode(route, data);
-              this[method](`${path}?${QueryString.encode(params)}`);
+              this[method](Route.withQuery(route, data));
             };
             break;
           case "post":

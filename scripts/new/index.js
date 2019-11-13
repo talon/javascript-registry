@@ -17,6 +17,7 @@ const DEV_DEPENDENCIES = [
   "@babel/preset-env",
   "documentation",
   "prettier",
+  "jest",
   "nodemon"
 ];
 
