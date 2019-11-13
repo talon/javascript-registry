@@ -23,7 +23,3 @@ npm install @talon/[package]
 | build   | build every package's `dist` folder              |
 | publish | publish changed packages                         |
 | new     | generate a new package                           |
-
-# About
-
-This is a [Lerna](https://github.com/lerna/lerna) repo backed by the [GitHub Package Registry](https://github.com/features/package-registry).
