@@ -2,45 +2,45 @@ import * as Graph from "./graph";
 
 // Generate a few mock dataSources
 const [neat, cool, fun] = [
-  new Graph.RESTEdge({
-    name: "neat.stuff",
-    resource: "/api/v1",
-    context: {
+  new Graph.RESTEdge(
+    {
+      name: "neat.stuff",
+      resource: "/api/v1",
       authorization: "neat.authorization",
       instance: "neat.instance"
     },
-    bind: {
+    {
       get: {
         stuff: "/:id/stuff"
       }
     }
-  }),
-  new Graph.RESTEdge({
-    name: "cool.stuff",
-    resource: "/api/v1",
-    context: {
+  ),
+  new Graph.RESTEdge(
+    {
+      name: "cool.stuff",
+      resource: "/api/v1",
       authorization: "cool.authorization",
       instance: "cool.instance"
     },
-    bind: {
+    {
       post: {
         things: "/:id/things"
       }
     }
-  }),
-  new Graph.RESTEdge({
-    name: "fun.stuff",
-    resource: "/api/v1",
-    context: {
+  ),
+  new Graph.RESTEdge(
+    {
+      name: "fun.stuff",
+      resource: "/api/v1",
       authorization: "fun.authorization",
       instance: "fun.instance"
     },
-    bind: {
+    {
       get: {
         dogs: "/dogs/:id"
       }
     }
-  })
+  )
 ];
 
 // builds the context function given an array of nodes
