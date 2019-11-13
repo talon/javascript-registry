@@ -13,9 +13,6 @@
     "type": "git",
     "url": "git://github.com/talon/javascript-registry.git"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "husky": {
     "hooks": {
       "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
