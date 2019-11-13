@@ -6,8 +6,12 @@
     "docs": "lerna run docs",
     "test": "lerna run test",
     "build": "lerna run build",
-    "publish": "lerna publish && git push",
+    "publish": "lerna publish --registry=https://npm.pkg.github.com && git push",
     "new": "babel-node ./scripts/new"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/talon/javascript-registry.git"
   },
   "husky": {
     "hooks": {
