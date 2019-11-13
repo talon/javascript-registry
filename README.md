@@ -2,6 +2,8 @@
 
 > a javacript collection
 
+[browse all packages](https://github.com/talon/javascript-registry/packages)
+
 # Usage
 
 add this line to your project's `.npmrc`
