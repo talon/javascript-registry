@@ -4,7 +4,7 @@
 
 # Usage
 
-you must (authenticate to the registry)[https://help.github.com/en/github/managing-packages-with-github-package-registry/configuring-npm-for-use-with-github-package-registry#authenticating-to-github-package-registry] before you can install a package.
+you must [authenticate to the registry](https://help.github.com/en/github/managing-packages-with-github-package-registry/configuring-npm-for-use-with-github-package-registry#authenticating-to-github-package-registry) before you can install a package.
 
 ```sh
 npm install @talon/[package]
