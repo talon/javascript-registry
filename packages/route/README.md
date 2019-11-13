@@ -1,4 +1,4 @@
-# [@talon/route](https://github.com/talon/javascript-registry/packages/route)
+# @talon/route
 
 > encode/decode data to/from routes
 
@@ -79,17 +79,3 @@ const { id, name, limit } = Route.decode(
 ```
 
 Returns **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** the `data` extracted from `path`
-
-# Contributing
-
-## Scripts
-
-`npm run [command]`
-
-| command | description                        |
-| ------- | ---------------------------------- |
-| format  | format all files                   |
-| docs    | generate API docs in \`README.md\` |
-| test    | run the test suite                 |
-| build   | build the \`dist\` folder          |
-| watch   | re-run on file changes             |

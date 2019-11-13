@@ -53,22 +53,6 @@ export default {
 > ${description}
 
 # API
-
-# Install
-
-# Contributing
-
-## Scripts
-
-\`npm run [command]\`
-
-| command | description
-|---------|-----------------------------------
-| format  | format all files
-| docs    | generate API docs in \`README.md\`
-| test    | run the test suite
-| build   | build the \`dist\` folder
-| watch   | re-run on file changes
 `,
   "lib/index.js": ({ name, description }) => ` /**
   * ${description}

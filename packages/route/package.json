@@ -18,6 +18,7 @@
     "url": "git://github.com/talon/javascript-registry.git"
   },
   "publishConfig": {
+    "access": "public",
     "registry": "https://npm.pkg.github.com"
   },
   "babel": {
