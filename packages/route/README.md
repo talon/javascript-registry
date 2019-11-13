@@ -1,18 +1,6 @@
-# @talon/route
+# [@talon/route](https://github.com/talon/javascript-registry/packages/route)
 
 > encode/decode data to/from routes
-
-# Install
-
-add this line to your project's `.npmrc`
-
-    registry=https://npm.pkg.github.com/talon
-
-then
-
-```sh
-npm install @talon/route
-```
 
 # API
 

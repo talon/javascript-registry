@@ -46,22 +46,15 @@ export default {
       2
     ),
 
-  "README.md": ({ name, description }) => `# @talon/${name}
+  "README.md": ({
+    name,
+    description
+  }) => `# [@talon/${name}](https://github.com/talon/javascript-registry/packages/${name})
 > ${description}
 
 # API
 
 # Install
-
-add this line to your project's \`.npmrc\`
-\`\`\`
-registry=https://npm.pkg.github.com/talon
-\`\`\`
-
-then
-\`\`\`sh
-npm install @talon/${name}
-\`\`\`
 
 # Contributing
 
