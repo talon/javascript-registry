@@ -14,7 +14,7 @@ can derive their own resolvers as conceptually they're an implementation there o
 
 Let's look at how this plays out with [apollo-datasource-rest](https://www.npmjs.com/package/apollo-datasource-rest)
 
-let's assume we have a typeDef that declares `Account` and 
+Assuming we have a GraphQL typeDef that declares `Account` and a `Query` of `account`
 
 ```js
 class Mastodon extends RESTDataSource {
@@ -34,7 +34,22 @@ const server = new ApolloServer({
 })
 ```
 
-This will create `context.dataSources.mastodon.account`
+This will create `context.dataSources.mastodon.account` which can be consumed by the resolver as
+
+```js
+const server = new ApolloServer({
+  dataSources: {
+    mastodon: new Mastodon()
+  },
+  resolvers: {
+    Query: {
+      account: ({parent, params, context}) => 
+        context.dataSources.mastodon.account(params)
+    }
+  }
+})
+
+```
 
 # Occam's Razor, applied
 
