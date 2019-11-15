@@ -1,6 +1,6 @@
 # @talon/apollo-graph
 
-## Background
+# Why?
 
 Let's say we want this query to work:
 
@@ -61,7 +61,7 @@ const server = new ApolloServer({
 
 With this final stroke we've completed the implementation of our `account` query. But perhaps we can do better! 🔬
 
-# Occam's Razor
+## Occam's Razor
 
 That's all kinda messy and we only did one thing: _map the `account` query to the `/api/v1/:id/accounts` REST endpoint_. It's not that messy to _describe_, in fact it's pretty simple. That's our razor.
 
@@ -102,8 +102,6 @@ Node.REST("mastodon", {
 One or more nodes can be composed with `Graph.fromNodes` and served by Apollo Server.
 
 Node implementations handle the dirty work of applying the razor, consumers enjoy the benefits.
-
-Feel free to take a peak at the [full implementation for Node.REST]().
 
 # API
 
