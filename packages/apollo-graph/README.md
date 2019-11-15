@@ -14,9 +14,27 @@ can derive their own resolvers as conceptually they're an implementation there o
 
 Let's look at how this plays out with [apollo-datasource-rest](https://www.npmjs.com/package/apollo-datasource-rest)
 
+let's assume we have a typeDef that declares `Account` and 
+
 ```js
-// TODO
+class Mastodon extends RESTDataSource {
+  get baseUrl() {
+    return "mastodon.technology"
+  }
+
+  accounts(params) {
+    this.get(`/api/v1/${params.id}`)
+  }
+}
+
+const server = new ApolloServer({
+  dataSources: {
+    mastodon: new Mastodon()
+  }
+})
 ```
+
+This will create `context.dataSources.mastodon.account`
 
 # Occam's Razor, applied
 
