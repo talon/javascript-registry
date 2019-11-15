@@ -1,20 +1,29 @@
 # @talon/apollo-graph
 
-## Occam's Razor
+## Background
 
-Apollo Server requires four options `{typeDefs, context, dataSources, resolvers}`.
+Let's say we want this query to work:
 
-A resolver is a connection (edge) from a GraphQL query to the source of it's data. This abstracts _how data is retrieved_.
+```graphql
+type Query {
+  account(id: ID): Account
+}
+```
 
-Apollo Server calls it's opinion on how to retrieve data a [data source](https://www.npmjs.com/package/apollo-datasource). 
-Seeing as this is one of the four Apollo Server options it's a very strong opinion.
+Apollo Server has four options `{typeDefs, context, dataSources, resolvers}`
 
-If resolvers ask "how?" and data sources answer then it stands to reason that most, if not all, data sources
-can derive their own resolvers as conceptually they're an implementation there of.
+A `resolver` is a connection (edge) from a GraphQL query that abstracts _how data is retrieved_
 
-Let's look at how this plays out with [apollo-datasource-rest](https://www.npmjs.com/package/apollo-datasource-rest)
+```js
+{
+  Query: {
+    account: (parent, params, context) => Promise.resolve({id: 1})
+  }
+}
+```
+> They look kinda like GraphQL cause they kinda are like that but in JS and actually connected to the data.
 
-Assuming we have a GraphQL typeDef that declares `Account` and a `Query` of `account`
+Since the resolver technically only handles mapping queries to Promises, Apollo Server also introduces the concept of a [data source](https://www.npmjs.com/package/apollo-datasource). Which handles a few things, but for now let's look at how our implementation plays out if we simply use [apollo-datasource-rest](https://www.npmjs.com/package/apollo-datasource-rest) to get an account from Mastodon.
 
 ```js
 class Mastodon extends RESTDataSource {
@@ -34,7 +43,7 @@ const server = new ApolloServer({
 })
 ```
 
-This will create `context.dataSources.mastodon.account` which can be consumed by the resolver as
+So we extended the `RESTDataSource`, wrote a method for retrieving an `account` and instantiated it as `dataSources.mastodon` in Apollo Server. This will create `context.dataSources.mastodon.account` which can be consumed by the resolver like so:
 
 ```js
 const server = new ApolloServer({
@@ -48,24 +57,53 @@ const server = new ApolloServer({
     }
   }
 })
-
 ```
 
-# Occam's Razor, applied
+With this final stroke we've completed the implementation of our `account` query. But perhaps we can do better! 🔬
 
-In this implementation a `Node` is a composable abstraction of the four Apollo options.
-They look like this:
+# Occam's Razor
+
+That's all kinda messy and we only did one thing: _map the `account` query to the `/api/v1/:id/accounts` REST endpoint_. It's not that messy to _describe_, in fact it's pretty simple. That's our razor.
+
+ ```js
+ {
+   get: {
+     account: "/api/v1/:id"
+   }
+ }
+ ```
+> _map the `account` query to the `/api/v1/:id/accounts` REST endpoint_
+
+We can use this config to _derive the data source methods_ and distinguish between a Query (GET) and Mutation (POST, PUT, PATCH, DELETE) so we can also _derive the resolvers from the data source_.
+
+We'll also want to depend on things in `context`. We'll declare those like this
+
+```js
+{
+  data: async () => ""
+}
+```
+
+It inverts the way context normally works but allows us to also know what keys are being depended on in the `context`. All of this occurs under a `namespace` for composability.
+
+Let's call our new type `Node` it usurps `DataSource` and there will be an implementation of such per data source implementation.
+Currently only REST is supported.
+
+One or more nodes can be composed with `Graph.fromNodes` and served by Apollo Server.
+
+Node implementations handle the dirty work of applying the razor, consumers enjoy the benefits.
 
 ```js
 Node.REST("mastodon", {
-  instance: async () => "mastodon.technology",
-  authorization: async () => ""
+  baseUrl: async () => "mastodon.technology",
 }, {
   get: {
     account: "/api/v1/accounts/:id"
   }
 })
 ```
+
+Feel free to take a peak at the [full implementation for Node.REST]().
 
 **Parameters**
 
@@ -75,9 +113,6 @@ Node.REST("mastodon", {
 | `context`   | keys will be resolved as values on the final Apollo context under the `namespace`. Ex. `mastodon.instance`
 | `config`    | the final Apollo `resolvers` are built from this. Varies per Node type.
 
-One or more nodes can be composed with `Graph.fromNodes` and served by Apollo Server.
-
-Node implementations handle the dirty work of applying the razor, consumers enjoy the benefits.
 
 # API
 
