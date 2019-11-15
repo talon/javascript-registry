@@ -89,13 +89,15 @@ One or more nodes can be composed with `Graph.fromNodes` and served by Apollo Se
 
 Applying the razor to our initial endeavor looks like this:
 ```js
-Node.REST("mastodon", typeDefs, {
-  baseUrl: async () => "mastodon.technology",
-}, {
-  get: {
-    account: "/api/v1/accounts/:id"
-  }
-})
+const server = new ApolloServer(Graph.fromNodes(
+  Node.REST("mastodon", typeDefs, {
+    baseUrl: async () => "mastodon.technology",
+  }, {
+    get: {
+      account: "/api/v1/accounts/:id"
+    }
+  })
+))
 ```
 > Node implementations handle the dirty work of applying the razor, consumers enjoy the benefits. Namaste.
 
