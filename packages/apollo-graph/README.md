@@ -1,6 +1,50 @@
-# [@talon/apollo-graph](https://github.com/talon/javascript-registry/packages/apollo-graph)
+# @talon/apollo-graph
 
-> apollo utilities for much fun
+## Occam's Razor
+
+Apollo Server requires four options `{typeDefs, context, dataSources, resolvers}`.
+
+A resolver is a connection (edge) from a GraphQL query to the source of it's data. This abstracts _how data is retrieved_.
+
+Apollo Server calls it's opinion on how to retrieve data a [data source](https://www.npmjs.com/package/apollo-datasource). 
+Seeing as this is one of the four Apollo Server options it's a very strong opinion.
+
+If resolvers ask "how?" and data sources answer then it stands to reason that most, if not all, data sources
+can derive their own resolvers as conceptually they're an implementation there of.
+
+Let's look at how this plays out with [apollo-datasource-rest](https://www.npmjs.com/package/apollo-datasource-rest)
+
+```js
+// TODO
+```
+
+# Occam's Razor, applied
+
+In this implementation a `Node` is a composable abstraction of the four Apollo options.
+They look like this:
+
+```js
+Node.REST("mastodon", {
+  instance: async () => "mastodon.technology",
+  authorization: async () => ""
+}, {
+  get: {
+    account: "/api/v1/accounts/:id"
+  }
+})
+```
+
+**Parameters**
+
+| name        | Description
+|-------------|------------
+| `namespace` | used internally to organize the final Apollo object
+| `context`   | keys will be resolved as values on the final Apollo context under the `namespace`. Ex. `mastodon.instance`
+| `config`    | the final Apollo `resolvers` are built from this. Varies per Node type.
+
+One or more nodes can be composed with `Graph.fromNodes` and served by Apollo Server.
+
+Node implementations handle the dirty work of applying the razor, consumers enjoy the benefits.
 
 # API
 
