@@ -84,14 +84,10 @@ We'll also want to depend on things in `context`. We'll declare those like this
 }
 ```
 
-It inverts the way context normally works but allows us to also know what keys are being depended on in the `context`. All of this occurs under a `namespace` for composability.
+It inverts the way context normally works but allows implementations to also know what keys are being depended on in the `context`.
 
-Let's call our new type `Node` it usurps `DataSource` and there will be an implementation of such per data source implementation.
+Let's call our new type `Node`, it usurps `DataSource` and there will be an implementation of such per data source implementation.
 Currently only REST is supported.
-
-One or more nodes can be composed with `Graph.fromNodes` and served by Apollo Server.
-
-Node implementations handle the dirty work of applying the razor, consumers enjoy the benefits.
 
 ```js
 Node.REST("mastodon", {
@@ -103,16 +99,11 @@ Node.REST("mastodon", {
 })
 ```
 
+One or more nodes can be composed with `Graph.fromNodes` and served by Apollo Server.
+
+Node implementations handle the dirty work of applying the razor, consumers enjoy the benefits.
+
 Feel free to take a peak at the [full implementation for Node.REST]().
-
-**Parameters**
-
-| name        | Description
-|-------------|------------
-| `namespace` | used internally to organize the final Apollo object
-| `context`   | keys will be resolved as values on the final Apollo context under the `namespace`. Ex. `mastodon.instance`
-| `config`    | the final Apollo `resolvers` are built from this. Varies per Node type.
-
 
 # API
 
