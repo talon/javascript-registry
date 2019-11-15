@@ -59,11 +59,13 @@ const server = new ApolloServer({
 })
 ```
 
-With this final stroke we've completed the implementation of our `account` query. But perhaps we can do better! 🔬
+With this final stroke we've completed the implementation of our `account` query.
+
+That's all kinda messy and we only did one thing: _map the `account` query to the `/api/v1/:id/accounts` REST endpoint_. It's not that messy to _describe_, in fact it's pretty simple. That's our razor! 🔪
 
 ## Occam's Razor
 
-That's all kinda messy and we only did one thing: _map the `account` query to the `/api/v1/:id/accounts` REST endpoint_. It's not that messy to _describe_, in fact it's pretty simple. That's our razor.
+Let's create a new type `Node`, which usurps `DataSource`. `Node`'s contain everything they need to derive their piece of the Apollo Server pie (resolvers, typeDefs, context, dataSources)
 
  ```js
  {
@@ -74,23 +76,20 @@ That's all kinda messy and we only did one thing: _map the `account` query to th
  ```
 > _map the `account` query to the `/api/v1/:id/accounts` REST endpoint_
 
-We can use this config to _derive the data source methods_ and distinguish between a Query (GET) and Mutation (POST, PUT, PATCH, DELETE) so we can also _derive the resolvers from the data source_.
+`Node.REST` can use this config to **derive the data source methods** and distinguish between a Query (GET) and Mutation (POST, PUT, PATCH, DELETE) so they can also **derive the resolvers from the data source**.
 
-We'll also want to depend on things in `context`. We'll declare those like this
-
+`Node`s also depend on things in `context`. If we declare those as such it **allows implementations to know what keys are being depended on in the `context`**
 ```js
 {
   data: async () => ""
 }
 ```
 
-It inverts the way context normally works but allows implementations to also know what keys are being depended on in the `context`.
+One or more nodes can be composed with `Graph.fromNodes` and served by Apollo Server.
 
-Let's call our new type `Node`, it usurps `DataSource` and there will be an implementation of such per data source implementation.
-Currently only REST is supported.
-
+Applying the razor to our initial endeavor looks like this:
 ```js
-Node.REST("mastodon", {
+Node.REST("mastodon", typeDefs, {
   baseUrl: async () => "mastodon.technology",
 }, {
   get: {
@@ -98,10 +97,7 @@ Node.REST("mastodon", {
   }
 })
 ```
-
-One or more nodes can be composed with `Graph.fromNodes` and served by Apollo Server.
-
-Node implementations handle the dirty work of applying the razor, consumers enjoy the benefits.
+> Node implementations handle the dirty work of applying the razor, consumers enjoy the benefits. Namaste.
 
 # API
 
