@@ -1,24 +1,18 @@
 # @talon/route
-> encode/decode [Objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) to/from [URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL)
+> encode/decode [objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) to/from [URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL)
 
 # Why?
-
-A _lot_ of libraries use a syntax to represent URLs I have here dubbed `Route`.
-I'm also prone to blindness but I couldn't find a do-one-thing-well solution for handling this syntax.
 
 ```
 /a/URL/has/pathname?and='a search'
 ```
 > a URL has pathname and a search
 
-- [pathname](https://developer.mozilla.org/en-US/docs/Web/API/URL/pathname) values are _positional_, meaning their order matters.
-The `Route` syntax allows you to `:key` these positional parameters.
+- [pathname](https://developer.mozilla.org/en-US/docs/Web/API/URL/pathname) values are _positional_. The `Route` syntax allows you to `:key` these positional parameters.
 
 - [search](https://developer.mozilla.org/en-US/docs/Web/API/URL/search) values, unlike pathname, already have a `key=` 
 
-By treating [URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL)
-as a data structure, like [Objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) 
-this library enables developers to smoothly convert from one format to the other.
+By treating [URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL) as a data structure like an [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) this library enables developers to smoothly convert from one format to the other.
 
 ```js
 {id: "123", bio: true} === Route.decode(
@@ -26,7 +20,19 @@ this library enables developers to smoothly convert from one format to the other
   "/api/v1/123/accounts?bio=true"
 )
 
-"/api/v1/123/accounts?bio=true" === Route.withQuery(
+"/api/v1/123/accounts?bio=true" === Route.encode(
+  "/api/v1/:id/accounts", 
+  {id: "123", bio: true}
+)
+```
+
+For requests other than GET it's usually more useful to return the unused parts of the object to be sent as the body.
+
+```js
+[
+  "/api/v1/123/accounts", 
+  {bio: true}
+] === Route.withBody(
   "/api/v1/:id/accounts", 
   {id: "123", bio: true}
 )
