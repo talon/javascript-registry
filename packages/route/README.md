@@ -1,6 +1,34 @@
 # @talon/route
+> encode/decode Objects to/from routes
 
-> encode/decode data to/from routes
+# Why?
+
+A _lot_ of libraries use a syntax to represent URLs I have here dubbed `Route`.
+I'm also prone to blindness but I couldn't find a do-one-thing-well solution for handling this syntax.
+
+```
+"/a/route/has/:parameters?and='a querystring'"
+```
+> a route has parameters and a querystring
+
+Parameters build up the path to a resource. They are _positional_ meaning they're order matters.
+The route syntax allows you to name these positional parameters.
+
+Querystrings usually represent metadata around the request. Either for tracking purposes or other application options.
+Unlike parameters querystrings are _keyed values_. Nothing fancy needs to be done to name them.
+
+Much like how JavaScript Objects represent data, so do URLs.
+
+This library enables developers to smoothly convert from one format to the other.
+
+```js
+{id: "123", bio: true} === Route.decode(
+  "/api/v1/:id/accounts",
+  "/api/v1/123/accounts?bio=true"
+)
+
+"/api/v1/123/accounts?bio=true" === Route.encode("/api/v1/:id/accounts", {id: "123", bio: true})
+```
 
 # API
 
