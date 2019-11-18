@@ -67,12 +67,13 @@ That's all kinda messy and we only did one thing: _map the `account` query to th
 
 Let's create a new type `Node`, which usurps `DataSource`. The unique thing about Node's is they'll derive their own resolvers and context.
 
-At minimum a `Node` has a `namespace` which is where it organizes everything on the context and
-a context declaration, used internally to build and depend on context properties.
+At minimum a `Node` has a `namespace` which is where it organizes everything on the context,
+a `typeDef` which is merged with other nodes,
+and a _context declaration_ used internally to build and depend on context properties.
 
 For our mastodon example this looks look like
 ```js
-Node.REST("mastodon", {
+Node.REST("mastodon", typeDef, {
   baseUrl: Promise.resolve("mastodon.technology")
 })
 ```
