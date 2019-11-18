@@ -7,7 +7,7 @@ A _lot_ of libraries use a syntax to represent URLs I have here dubbed `Route`.
 I'm also prone to blindness but I couldn't find a do-one-thing-well solution for handling this syntax.
 
 ```
-"/a/URL/has/pathname?and='a search'"
+/a/URL/has/pathname?and='a search'
 ```
 > a URL has pathname and a search
 
