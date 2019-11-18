@@ -9,17 +9,16 @@ I'm also prone to blindness but I couldn't find a do-one-thing-well solution for
 ```
 "/a/URL/has/pathname?and='a search'"
 ```
-> a URL has pathname a search
+> a URL has pathname and a search
 
-- parameters build up the [pathname](https://developer.mozilla.org/en-US/docs/Web/API/URL/pathname) 
-They are _positional_ meaning their order matters.
+- [pathname](https://developer.mozilla.org/en-US/docs/Web/API/URL/pathname) values are _positional_, meaning their order matters.
 The `Route` syntax allows you to `:key` these positional parameters.
 
 - [search](https://developer.mozilla.org/en-US/docs/Web/API/URL/search) represents the metadata of the URL.
-Unlike parameters querystrings are already _keyed values_. 
+Unlike parameters, querystrings are already _keyed values_. 
 
-Much like how [Objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) represent data, so do [URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL)
-
+[URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL)
+) are a a data structure much like [Objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) 
 This library enables developers to smoothly convert from one format to the other.
 
 ```js
