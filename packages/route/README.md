@@ -27,7 +27,10 @@ This library enables developers to smoothly convert from one format to the other
   "/api/v1/123/accounts?bio=true"
 )
 
-"/api/v1/123/accounts?bio=true" === Route.encode("/api/v1/:id/accounts", {id: "123", bio: true})
+"/api/v1/123/accounts?bio=true" === Route.encode(
+  "/api/v1/:id/accounts", 
+  {id: "123", bio: true}
+)
 ```
 
 # API
