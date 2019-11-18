@@ -23,7 +23,7 @@ A `resolver` is a connection (edge) from a GraphQL query that abstracts _how dat
 ```
 > They look kinda like GraphQL cause they kinda are like that but in JS and actually connected to the data.
 
-Since the resolver technically only handles mapping queries to Promises, Apollo Server also introduces the concept of a [data source](https://www.npmjs.com/package/apollo-datasource). Which handles a few things, but for now let's look at how our implementation plays out if we simply use [apollo-datasource-rest](https://www.npmjs.com/package/apollo-datasource-rest) to get an account from Mastodon.
+Since the resolver only handles mapping queries to Promises of data, Apollo Server also introduces the concept of a [data source](https://www.npmjs.com/package/apollo-datasource). Which handles a few things, but for now let's look at how our implementation plays out if we simply use [apollo-datasource-rest](https://www.npmjs.com/package/apollo-datasource-rest) to get an account from Mastodon.
 
 ```js
 class Mastodon extends RESTDataSource {
@@ -65,41 +65,39 @@ That's all kinda messy and we only did one thing: _map the `account` query to th
 
 ## Occam's Razor
 
-Let's create a new type `Node`, which usurps `DataSource`. `Node`'s contain everything they need to derive their piece of the Apollo Server pie (resolvers, typeDefs, context, dataSources)
+Let's create a new type `Node`, which usurps `DataSource`. The unique thing about Node's is they'll derive their own resolvers and context.
 
- ```js
- {
+At minimum a `Node` has a `namespace` which is where it organizes everything on the context and
+a context declaration, used internally to build and depend on context properties.
+
+For our mastodon example this looks look like
+```js
+Node.REST("mastodon", {
+  baseUrl: Promise.resolve("mastodon.technology")
+})
+```
+
+With this we're gonna claim the `mastodon` namespace on `context` and attach `baseUrl` to it.
+
+The third argument to any `Node` depends on the underlying implementation. In the case of REST it's a simple
+mapping of GraphQL queries to REST endpoints.
+
+```js
+ Node.REST("mastodon", {
+   baseUrl: Promise.resolve("mastodon.technology")
+ },{
    get: {
      account: "/api/v1/:id"
    }
  }
- ```
+```
 > _map the `account` query to the `/api/v1/:id/accounts` REST endpoint_
 
 `Node.REST` can use this config to **derive the data source methods** and distinguish between a Query (GET) and Mutation (POST, PUT, PATCH, DELETE) so they can also **derive the resolvers from the data source**.
 
-`Node`s also depend on things in `context`. If we declare those as such it **allows implementations to know what keys are being depended on in the `context`**
-```js
-{
-  data: async () => ""
-}
-```
-
 One or more nodes can be composed with `Graph.fromNodes` and served by Apollo Server.
 
-Applying the razor to our initial endeavor looks like this:
-```js
-const server = new ApolloServer(Graph.fromNodes(
-  Node.REST("mastodon", typeDefs, {
-    baseUrl: async () => "mastodon.technology",
-  }, {
-    get: {
-      account: "/api/v1/accounts/:id"
-    }
-  })
-))
-```
-> Node implementations handle the dirty work of applying the razor, consumers enjoy the benefits. Namaste.
+Node implementations handle the dirty work of applying the razor, consumers enjoy the benefits. Namaste.
 
 # API
 
