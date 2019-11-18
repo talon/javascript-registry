@@ -1,5 +1,5 @@
 # @talon/route
-> encode/decode Objects to/from routes
+> encode/decode [Objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) to/from [URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL)
 
 # Why?
 
@@ -7,19 +7,18 @@ A _lot_ of libraries use a syntax to represent URLs I have here dubbed `Route`.
 I'm also prone to blindness but I couldn't find a do-one-thing-well solution for handling this syntax.
 
 ```
-"/a/route/has/:parameters?and='a querystring'"
+"/a/URL/has/pathname?and='a search'"
 ```
-> a route has parameters and a querystring
+> a URL has pathname a search
 
-- Parameters build up the path for a request. 
-They are _positional_ meaning they're order matters.
-The `Route` syntax allows you to name these positional parameters.
+- parameters build up the [pathname](https://developer.mozilla.org/en-US/docs/Web/API/URL/pathname) 
+They are _positional_ meaning their order matters.
+The `Route` syntax allows you to `:key` these positional parameters.
 
-- Querystrings represent metadata around the request.
-Unlike parameters querystrings are _keyed values_. 
-Nothing fancy needs to be done to name them.
+- [search](https://developer.mozilla.org/en-US/docs/Web/API/URL/search) represents the metadata of the URL.
+Unlike parameters querystrings are already _keyed values_. 
 
-Much like how JavaScript Objects represent data, so do URLs.
+Much like how [Objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) represent data, so do [URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL)
 
 This library enables developers to smoothly convert from one format to the other.
 
@@ -29,7 +28,7 @@ This library enables developers to smoothly convert from one format to the other
   "/api/v1/123/accounts?bio=true"
 )
 
-"/api/v1/123/accounts?bio=true" === Route.encode(
+"/api/v1/123/accounts?bio=true" === Route.withQuery(
   "/api/v1/:id/accounts", 
   {id: "123", bio: true}
 )
