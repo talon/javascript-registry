@@ -11,11 +11,13 @@ I'm also prone to blindness but I couldn't find a do-one-thing-well solution for
 ```
 > a route has parameters and a querystring
 
-Parameters build up the path to a resource. They are _positional_ meaning they're order matters.
-The route syntax allows you to name these positional parameters.
+- Parameters build up the path for a request. 
+They are _positional_ meaning they're order matters.
+The `Route` syntax allows you to name these positional parameters.
 
-Querystrings usually represent metadata around the request. Either for tracking purposes or other application options.
-Unlike parameters querystrings are _keyed values_. Nothing fancy needs to be done to name them.
+- Querystrings represent metadata around the request.
+Unlike parameters querystrings are _keyed values_. 
+Nothing fancy needs to be done to name them.
 
 Much like how JavaScript Objects represent data, so do URLs.
 
