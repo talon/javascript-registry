@@ -16,9 +16,9 @@ The `Route` syntax allows you to `:key` these positional parameters.
 
 - [search](https://developer.mozilla.org/en-US/docs/Web/API/URL/search) values, unlike pathname, already have a `key=` 
 
-[URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL)
-) are a a data structure much like [Objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) 
-This library enables developers to smoothly convert from one format to the other.
+By treating [URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL)
+as a data structure, like [Objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) 
+this library enables developers to smoothly convert from one format to the other.
 
 ```js
 {id: "123", bio: true} === Route.decode(
