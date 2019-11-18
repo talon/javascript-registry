@@ -14,8 +14,7 @@ I'm also prone to blindness but I couldn't find a do-one-thing-well solution for
 - [pathname](https://developer.mozilla.org/en-US/docs/Web/API/URL/pathname) values are _positional_, meaning their order matters.
 The `Route` syntax allows you to `:key` these positional parameters.
 
-- [search](https://developer.mozilla.org/en-US/docs/Web/API/URL/search) represents the metadata of the URL.
-Unlike parameters, querystrings are already _keyed values_. 
+- [search](https://developer.mozilla.org/en-US/docs/Web/API/URL/search) values, unlike pathname, already have a `key=` 
 
 [URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL)
 ) are a a data structure much like [Objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) 
