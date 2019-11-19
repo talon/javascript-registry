@@ -2,6 +2,48 @@
 import * as Route from "./route";
 ```
 
+# Why?
+
+    /a/URL/has/a/pathname?and='a search'
+
+> a URL has a pathname and a search
+
+- [pathname](https://developer.mozilla.org/en-US/docs/Web/API/URL/pathname) values are _positional_.
+  The `Route` syntax allows you to `:key` these.
+
+There are two ways `Route` looks at the pathname. It sees `keys`:
+
+```js
+test.skip("Route.keys", () => {
+  expect(Route.keys("/pathnames/are/made/of/:keys")).toEqual([
+    "pathnames",
+    "are",
+    "made",
+    "of",
+    "keys"
+  ]);
+});
+```
+
+and it sees `values`:
+
+```js
+test.skip("Route.values", () => {
+  expect(Route.values("/pathnames/are/:made/of/values")).toEqual([
+    "pathnames",
+    "are",
+    undefined,
+    "of",
+    "values"
+  ]);
+});
+```
+
+If you `zip(Route.keys(route), Route.values(pathname))` you get an object which can be used to look up the pathname values of route `.key`s.
+
+By treating [URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL) as a data structure like an [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)
+this library enables developers to smoothly convert from one format to the other.
+
 ```js
 test("Route.encode", () => {
   expect(
@@ -25,6 +67,9 @@ test("Route.decode", () => {
 });
 ```
 
+For requests other than GET it's usually more useful to return the pathname `withBody` so the rest of the object can
+be sent in the request.
+
 ```js
 test("Route.withBody", () => {
   const [pathname, body] = Route.withBody("/:id/people/:name", {
@@ -37,6 +82,10 @@ test("Route.withBody", () => {
   expect(body).toEqual({ limit: 1 });
 });
 ```
+
+## Future
+
+Normally only the dynamic keys are decoded. To also include the constant keys use `Route.withConstants`
 
 ```js
 test.skip("Route.withConstants", () => {
@@ -51,37 +100,6 @@ test.skip("Route.withConstants", () => {
     people: "people",
     name: "belle",
     limit: 1
-  });
-});
-```
-
-```js
-test.skip("Route.keys", () => {
-  expect(Route.keys("/pathnames/are/made/of/:keys")).toEqual([
-    "pathnames",
-    "are",
-    "made",
-    "of",
-    "keys"
-  ]);
-});
-```
-
-```js
-test.skip("Route.constants", () => {
-  expect(Route.constants("/pathnames/are/made/of/:keys")).toEqual([
-    "pathnames",
-    "are",
-    "made",
-    "of"
-  ]);
-});
-```
-
-```js
-test.skip("Route.positionals", () => {
-  expect(Route.positionals("/pathnames/are/made/of/:keys")).toEqual({
-    4: "keys"
   });
 });
 ```
