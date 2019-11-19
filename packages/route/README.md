@@ -1,16 +1,16 @@
 # @talon/route
+
 > encode/decode [objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) to/from [URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL)
 
 # Why?
 
-```
-/a/URL/has/pathname?and='a search'
-```
+    /a/URL/has/pathname?and='a search'
+
 > a URL has pathname and a search
 
 - [pathname](https://developer.mozilla.org/en-US/docs/Web/API/URL/pathname) values are _positional_. The `Route` syntax allows you to `:key` these positional parameters.
 
-- [search](https://developer.mozilla.org/en-US/docs/Web/API/URL/search) values, unlike pathname, already have a `key=` 
+- [search](https://developer.mozilla.org/en-US/docs/Web/API/URL/search) values, unlike pathname, already have a `key=`
 
 By treating [URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL) as a data structure like an [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) this library enables developers to smoothly convert from one format to the other.
 
@@ -21,7 +21,7 @@ By treating [URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL) as a da
 )
 
 "/api/v1/123/accounts?bio=true" === Route.encode(
-  "/api/v1/:id/accounts", 
+  "/api/v1/:id/accounts",
   {id: "123", bio: true}
 )
 ```
@@ -29,13 +29,8 @@ By treating [URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL) as a da
 For requests other than GET it's usually more useful to return the unused parts of the object to be sent as the body.
 
 ```js
-[
-  "/api/v1/123/accounts", 
-  {bio: true}
-] === Route.withBody(
-  "/api/v1/:id/accounts", 
-  {id: "123", bio: true}
-)
+["/api/v1/123/accounts", { bio: true }] ===
+  Route.withBody("/api/v1/:id/accounts", { id: "123", bio: true });
 ```
 
 # API
@@ -44,71 +39,96 @@ For requests other than GET it's usually more useful to return the unused parts 
 
 ### Table of Contents
 
--   [encode](#encode)
-    -   [Parameters](#parameters)
-    -   [Examples](#examples)
--   [withQuery](#withquery)
-    -   [Parameters](#parameters-1)
-    -   [Examples](#examples-1)
--   [decode](#decode)
-    -   [Parameters](#parameters-2)
-    -   [Examples](#examples-2)
+- [keys](#keys)
+  - [Parameters](#parameters)
+  - [Examples](#examples)
+- [encode](#encode)
+  - [Parameters](#parameters-1)
+  - [Examples](#examples-1)
+- [decode](#decode)
+  - [Parameters](#parameters-2)
+  - [Examples](#examples-2)
+- [withBody](#withbody)
+  - [Parameters](#parameters-3)
+  - [Examples](#examples-3)
+
+## keys
+
+get the keys of a route (or path)
+
+### Parameters
+
+- `route` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** a `/route/with/:keys`
+
+### Examples
+
+```javascript
+["route", "with", "keys"] === Route.keys("/route/with/:keys");
+```
+
+Returns **[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)** an array of each key's name
 
 ## encode
 
-encode data into a route
+encode an object into a route
 
 ### Parameters
 
--   `route` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** a route `/with/:params`
--   `data` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** keys will replace the `/path/:param`
+- `route` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** a route `/with/:keys`
+- `object` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** keys will replace the `/route/:keys`
 
 ### Examples
 
 ```javascript
-const [path, data] = Route.encode("/api/v1/:id/items/:name", {
-       id: 1,
-       name: "keyboard",
-       limit: 20
-    })
+"/api/v1/1/items/keyboard?limit=20" ===
+  Route.encode("/api/v1/:id/items/:name", {
+    id: 1,
+    name: "keyboard",
+    limit: 20
+  });
 ```
 
-Returns **[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)** `[path, data]` lefover data is returned as the second element in the array
-
-## withQuery
-
-encode data into a route, include the querystring
-
-### Parameters
-
--   `route` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** a route `/with/:params`
--   `data` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** keys will replace the `/path/:param`
-
-### Examples
-
-```javascript
-const path = Route.withQuery("/api/v1/:id/items/:name", {
-       id: 1,
-       name: "keyboard",
-       limit: 20
-    })
-```
-
-Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** `path` including the querystring
+Returns **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** the combined "pathname?search"
 
 ## decode
 
-decode data from a path
+decode an object from a url
 
 ### Parameters
 
--   `route` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** a route `/with/:params`
--   `path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** from which to extract `data`
+- `route` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** a route `/with/:keys`
+- `url`
+- `pathname` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** from which to extract values
 
 ### Examples
 
 ```javascript
-const {id, name, limit} = Route.decode("/api/v1/:id/items/:name", "/api/v1/1/items/keyboard?limit=20")
+{ id: "1", name: "keyboard", limit: "1" } === Route.decode(
+      "/api/v1/:id/items/:name",
+      "/api/v1/1/items/keyboard?limit=20"
+    )
 ```
 
-Returns **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** the `data` extracted from `path`
+Returns **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** the `object` extracted from url
+
+## withBody
+
+encode object into a route, return the rest as body
+
+### Parameters
+
+- `route` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** a route `/with/:keys`
+- `object` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** keys will replace the `/route/:keys`
+
+### Examples
+
+```javascript
+["/api/v1/1/items/keyboard", { limit: 20 }] ===
+  Route.withBody("/api/v1/:id/items/:name", {
+    id: 1,
+    name: "keyboard",
+    limit: 20
+  });
+```
+
+Returns **[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)** `[parameters, body]`
