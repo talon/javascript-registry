@@ -1,6 +1,4 @@
-# Why?
-
-A _lot_ of libraries use a common syntax to pull values off pathnames. We'll call it `route`
+A _lot_ of libraries use a common syntax to pull values off pathnames. We'll call it `route`.
 
 ```js
 import * as Route from "./route";
@@ -9,7 +7,7 @@ const route = "/pathnames/are/:made/of/:keys";
 const pathname = "/pathnames/are/made/of/values";
 ```
 
-a `route` is made of `keys` that point to the location of the value on `pathname`
+A `route` is made of `keys` that point to the location of the value on `pathname`.
 
 - constant values represent only themselves. (ex. `/pathname`)
 - dynamic values are denoted by prefixing the key with a colon. (ex. `/:key`)
@@ -20,21 +18,21 @@ test("Route.keys", () => {
 });
 ```
 
-and `pathname`s are made of `values`
+`pathname`s are made of `values`.
 
 ```js
 test("Route.values", () => {
   expect(Route.values(pathname)).toEqual([
     "pathnames",
     "are",
-    undefined,
+    "made",
     "of",
     "values"
   ]);
 });
 ```
 
-If you `zip` these you get an object which can be used to look up the pathname values using the route `.key`s.
+If you `zip` these you get an object which can be used to look up the pathname values.
 
 ```js
 import {zip} from "ramda"
@@ -42,7 +40,7 @@ import {zip} from "ramda"
 expect(zip(Route.keys(route), Route.values(pathname))).toEqual({
   pathnames: "pathnames"
   are: "are",
-  made: undefined,
+  made: "made",
   of: "of",
   keys: "values"
 })
