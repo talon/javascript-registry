@@ -23,6 +23,21 @@
     "access": "public",
     "registry": "https://npm.pkg.github.com"
   },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "ts",
+      "md",
+      "tsx"
+    ],
+    "testMatch": [
+      "**/*.js.md",
+      "**/*.test.[jt]sx?"
+    ],
+    "transform": {
+      "^.+\\.([jt]sx?|md)$": "babel-jest"
+    }
+  },
   "babel": {
     "presets": [
       [
@@ -33,6 +48,9 @@
           }
         }
       ]
+    ],
+    "plugins": [
+      "babel-plugin-literate"
     ]
   },
   "bugs": {
@@ -48,6 +66,8 @@
   "devDependencies": {
     "@babel/core": "^7.7.2",
     "@babel/preset-env": "^7.7.1",
+    "babel-jest": "^24.9.0",
+    "babel-plugin-literate": "0.0.2",
     "documentation": "^12.1.4",
     "jest": "^24.9.0",
     "prettier": "^1.19.1"

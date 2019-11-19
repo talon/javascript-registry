@@ -45,6 +45,28 @@ export const decode = (route, url) => {
 };
 
 /**
+ * decode an object from a url including the constant keys
+ *
+ * @example
+ *     { id: "1", name: "keyboard", limit: "1" } === Route.decode(
+ *       "/api/v1/:id/items/:name",
+ *       "/api/v1/1/items/keyboard?limit=20"
+ *     )
+ *
+ * @param {string} route a route `/with/:keys`
+ * @param {string} pathname from which to extract values
+ * @returns {object} the `object` extracted from url
+ */
+export const withConstant = (route, url) => {
+  const { query, pathname } = Url.parse(url, true);
+
+  return Object.assign(
+    Object.fromEntries(zip(keys(route), keys(pathname))),
+    query
+  );
+};
+
+/**
  * encode object into a route, return the rest as body
  *
  * @example
@@ -91,3 +113,18 @@ export const keys = route =>
         return key;
       }
     });
+
+/**
+ * get the constants of a route (or path)
+ *
+ * @example
+ *     ["route", "with", undefined] === Route.constants("/route/with/:keys")
+ *
+ * @param {string} route a `/route/with/:keys`
+ * @return {array} an array of each constant's name
+ */
+export const values = route =>
+  route
+    .replace(/^\//, "")
+    .split("/")
+    .filter(key => !key.match(/:\w+/g));
