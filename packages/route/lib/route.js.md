@@ -1,35 +1,30 @@
-```js
-import * as Route from "./route";
-```
-
 # Why?
 
-    /a/URL/has/a/pathname?and='a search'
-
-> a URL has a pathname and a search
-
-- [pathname](https://developer.mozilla.org/en-US/docs/Web/API/URL/pathname) values are _positional_.
-  The `Route` syntax allows you to `:key` these.
-
-There are two ways `Route` looks at the pathname. It sees `keys`:
+A _lot_ of libraries use a common syntax to pull values off pathnames. We'll call it `route`
 
 ```js
-test.skip("Route.keys", () => {
-  expect(Route.keys("/pathnames/are/made/of/:keys")).toEqual([
-    "pathnames",
-    "are",
-    "made",
-    "of",
-    "keys"
-  ]);
+import * as Route from "./route";
+
+const route = "/pathnames/are/:made/of/:keys";
+const pathname = "/pathnames/are/made/of/values";
+```
+
+a `route` is made of `keys` that point to the location of the value on `pathname`
+
+- constant values represent only themselves. (ex. `/pathname`)
+- dynamic values are denoted by prefixing the key with a colon. (ex. `/:key`)
+
+```js
+test("Route.keys", () => {
+  expect(Route.keys(route)).toEqual(["pathnames", "are", "made", "of", "keys"]);
 });
 ```
 
-and it sees `values`:
+and `pathname`s are made of `values`
 
 ```js
-test.skip("Route.values", () => {
-  expect(Route.values("/pathnames/are/:made/of/values")).toEqual([
+test("Route.values", () => {
+  expect(Route.values(pathname)).toEqual([
     "pathnames",
     "are",
     undefined,
@@ -39,10 +34,22 @@ test.skip("Route.values", () => {
 });
 ```
 
-If you `zip(Route.keys(route), Route.values(pathname))` you get an object which can be used to look up the pathname values of route `.key`s.
+If you `zip` these you get an object which can be used to look up the pathname values using the route `.key`s.
 
-By treating [URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL) as a data structure like an [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)
-this library enables developers to smoothly convert from one format to the other.
+```js
+import {zip} from "ramda"
+
+expect(zip(Route.keys(route), Route.values(pathname))).toEqual({
+  pathnames: "pathnames"
+  are: "are",
+  made: undefined,
+  of: "of",
+  keys: "values"
+})
+```
+
+When this is merged with the `search` (which is already `key=value`) you can represent your complete URL as an [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object).
+This library enables developers to smoothly convert from one format to the other.
 
 ```js
 test("Route.encode", () => {
@@ -85,7 +92,7 @@ test("Route.withBody", () => {
 
 ## Future
 
-Normally only the dynamic keys are decoded. To also include the constant keys use `Route.withConstants`
+By default only the dynamic keys are decoded. To also include the constant keys use `Route.withConstants`
 
 ```js
 test.skip("Route.withConstants", () => {
@@ -104,6 +111,8 @@ test.skip("Route.withConstants", () => {
 });
 ```
 
+Maybe you wanna see if this route is the same as another
+
 ```js
 test.skip("Route.matches", () => {
   expect(
@@ -119,6 +128,8 @@ test.skip("Route.matches", () => {
 });
 ```
 
+or check if the route fits a pathname
+
 ```js
 test.skip("Route.fits", () => {
   expect(
@@ -133,6 +144,8 @@ test.skip("Route.fits", () => {
   ).toBeFalsey();
 });
 ```
+
+**Experimental:** a sugar kinda way to deal with all this
 
 ```js
 test.skip("Route.create", () => {
