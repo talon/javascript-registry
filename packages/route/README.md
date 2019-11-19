@@ -131,4 +131,4 @@ encode object into a route, return the rest as body
   });
 ```
 
-Returns **[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)** `[parameters, body]`
+Returns **[array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)** `[pathname, body]`

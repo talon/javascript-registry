@@ -3,27 +3,6 @@ import Url from "url";
 import QueryString from "querystring";
 
 /**
- * get the keys of a route (or path)
- *
- * @example
- *     ["route", "with", "keys"] === Route.keys("/route/with/:keys")
- *
- * @param {string} route a `/route/with/:keys`
- * @return {array} an array of each key's name
- */
-export const keys = route =>
-  route
-    .replace(/^\//, "")
-    .split("/")
-    .map(key => {
-      if (key.match(/:\w+/g)) {
-        return key.substr(1);
-      } else {
-        return key;
-      }
-    });
-
-/**
  * encode an object into a route
  *
  * @example
@@ -81,7 +60,7 @@ export const decode = (route, url) => {
  *
  * @param {string} route a route `/with/:keys`
  * @param {object} object keys will replace the `/route/:keys`
- * @returns {array} `[parameters, body]`
+ * @returns {array} `[pathname, body]`
  */
 export const withBody = (route, object) => {
   const keeze = keys(route);
@@ -91,3 +70,24 @@ export const withBody = (route, object) => {
     omit(keeze, object)
   ];
 };
+
+/**
+ * get the keys of a route (or path)
+ *
+ * @example
+ *     ["route", "with", "keys"] === Route.keys("/route/with/:keys")
+ *
+ * @param {string} route a `/route/with/:keys`
+ * @return {array} an array of each key's name
+ */
+export const keys = route =>
+  route
+    .replace(/^\//, "")
+    .split("/")
+    .map(key => {
+      if (key.match(/:\w+/g)) {
+        return key.substr(1);
+      } else {
+        return key;
+      }
+    });
