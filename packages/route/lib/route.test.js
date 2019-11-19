@@ -1,19 +1,8 @@
 import * as Route from "./route";
 
 test("Route.encode", () => {
-  const [path, data] = Route.encode("/:id/people/:name", {
-    id: 1,
-    name: "belle",
-    limit: 1
-  });
-
-  expect(path).toBe("/1/people/belle");
-  expect(data).toEqual({ limit: 1 });
-});
-
-test("Route.withQuery", () => {
   expect(
-    Route.withQuery("/:id/people/:name", {
+    Route.encode("/:id/people/:name", {
       id: 1,
       name: "belle",
       limit: 1
@@ -28,4 +17,15 @@ test("Route.decode", () => {
     name: "belle",
     limit: "1"
   });
+});
+
+test("Route.withBody", () => {
+  const [pathname, body] = Route.withBody("/:id/people/:name", {
+    id: 1,
+    name: "belle",
+    limit: 1
+  });
+
+  expect(pathname).toBe("/1/people/belle");
+  expect(body).toEqual({ limit: 1 });
 });

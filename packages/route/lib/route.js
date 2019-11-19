@@ -2,77 +2,92 @@ import { omit, zip } from "ramda";
 import Url from "url";
 import QueryString from "querystring";
 
-const parts = route =>
+/**
+ * get the keys of a route (or path)
+ *
+ * @example
+ *     ["route", "with", "keys"] === Route.keys("/route/with/:keys")
+ *
+ * @param {string} route a `/route/with/:keys`
+ * @return {array} an array of each key's name
+ */
+export const keys = route =>
   route
     .replace(/^\//, "")
     .split("/")
-    .map(segment => {
-      if (segment.match(/:\w+/g)) {
-        return segment.substr(1);
+    .map(key => {
+      if (key.match(/:\w+/g)) {
+        return key.substr(1);
       } else {
-        return segment;
+        return key;
       }
     });
 
 /**
- * encode data into a route
+ * encode an object into a route
  *
  * @example
- *     const [path, data] = Route.encode("/api/v1/:id/items/:name", {
+ *     "/api/v1/1/items/keyboard?limit=20" === Route.encode("/api/v1/:id/items/:name", {
  *        id: 1,
  *        name: "keyboard",
  *        limit: 20
  *     })
  *
- * @param {string} route a route `/with/:params`
- * @param {object} data keys will replace the `/path/:param`
- * @returns {array} `[path, data]` lefover data is returned as the second element in the array
+ * @param {string} route a route `/with/:keys`
+ * @param {object} object keys will replace the `/route/:keys`
+ * @returns {string} the combined "pathname?search"
  */
-export const encode = (route, data) => {
-  const segments = parts(route);
+export const encode = (route, object) => {
+  const [pathname, search] = withBody(route, object);
+
+  return `${pathname}?${QueryString.encode(search)}`;
+};
+
+/**
+ * decode an object from a url
+ *
+ * @example
+ *     { id: "1", name: "keyboard", limit: "1" } === Route.decode(
+ *       "/api/v1/:id/items/:name",
+ *       "/api/v1/1/items/keyboard?limit=20"
+ *     )
+ *
+ * @param {string} route a route `/with/:keys`
+ * @param {string} pathname from which to extract values
+ * @returns {object} the `object` extracted from url
+ */
+export const decode = (route, url) => {
+  const { query, pathname } = Url.parse(url, true);
+
+  return Object.assign(
+    Object.fromEntries(zip(keys(route), keys(pathname))),
+    query
+  );
+};
+
+/**
+ * encode object into a route, return the rest as body
+ *
+ * @example
+ *     [
+ *       "/api/v1/1/items/keyboard",
+ *       {limit: 20}
+ *     ] === Route.withBody(
+ *         "/api/v1/:id/items/:name", {
+ *         id: 1,
+ *         name: "keyboard",
+ *         limit: 20
+ *      })
+ *
+ * @param {string} route a route `/with/:keys`
+ * @param {object} object keys will replace the `/route/:keys`
+ * @returns {array} `[parameters, body]`
+ */
+export const withBody = (route, object) => {
+  const keeze = keys(route);
 
   return [
-    segments.reduce(
-      (url, param) => url.replace(`:${param}`, data[param]),
-      route
-    ),
-    omit(segments, data)
+    keeze.reduce((path, key) => path.replace(`:${key}`, object[key]), route),
+    omit(keeze, object)
   ];
-};
-
-/**
- * encode data into a route, include the querystring
- *
- * @example
- *     const path = Route.withQuery("/api/v1/:id/items/:name", {
- *        id: 1,
- *        name: "keyboard",
- *        limit: 20
- *     })
- *
- * @param {string} route a route `/with/:params`
- * @param {object} data keys will replace the `/path/:param`
- * @returns {string} `path` including the querystring
- */
-export const withQuery = (route, data) => {
-  const [path, query] = encode(route, data);
-  return `${path}?${QueryString.encode(query)}`;
-};
-
-/**
- * decode data from a path
- *
- * @example
- *     const {id, name, limit} = Route.decode("/api/v1/:id/items/:name", "/api/v1/1/items/keyboard?limit=20")
- *
- * @param {string} route a route `/with/:params`
- * @param {string} path from which to extract `data`
- * @returns {object} the `data` extracted from `path`
- */
-export const decode = (route, path) => {
-  const url = Url.parse(path, true);
-  return Object.assign(
-    Object.fromEntries(zip(parts(route), parts(url.pathname))),
-    url.query
-  );
 };
