@@ -25,17 +25,15 @@
   },
   "jest": {
     "moduleFileExtensions": [
+      "md",
       "js",
       "ts",
-      "md",
+      "jsx",
       "tsx"
     ],
-    "testMatch": [
-      "**/*.js.md",
-      "**/*.test.[jt]sx?"
-    ],
+    "testRegex": ".*(README|\\.(test|usage|spec))\\.([jt]sx?|md)$",
     "transform": {
-      "^.+\\.([jt]sx?|md)$": "babel-jest"
+      ".*(README|\\.(test|usage|spec))\\.([jt]sx?|md)$": "babel-jest"
     }
   },
   "babel": {
@@ -61,14 +59,13 @@
     "route"
   ],
   "dependencies": {
+    "babel-plugin-literate": "github:talon/babel-plugin-literate#feature/configuration",
     "ramda": "^0.26.1"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
     "@babel/preset-env": "^7.7.1",
     "babel-jest": "^24.9.0",
-    "babel-plugin-literate": "0.0.2",
-    "documentation": "^12.1.4",
     "jest": "^24.9.0",
     "prettier": "^1.19.1"
   },
