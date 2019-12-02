@@ -50,7 +50,7 @@ prompts([
         )
       )
     );
-    await spawn("npm", ["install", "--save-dev", ...DEV_DEPENDENCIES], {
+    return await spawn("npm", ["install", "--save-dev", ...DEV_DEPENDENCIES], {
       cwd: pgk,
       stdio: ["inherit", "inherit", "inherit"]
     });
