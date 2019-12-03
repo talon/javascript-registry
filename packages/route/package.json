@@ -9,7 +9,7 @@
   "scripts": {
     "format": "prettier --write **/*.js",
     "test": "jest",
-    "docs": "typedoc --readme none --plugin typedoc-plugin-markdown --ignoreCompilerErrors --excludeExternals --excludeNotExported --out ./api ./lib",
+    "docs": "typedoc --mode file --readme none --plugin typedoc-plugin-markdown --ignoreCompilerErrors --excludeExternals --excludeNotExported --out ./api ./lib",
     "build": "rm -rf dist && babel --extensions '.js,.md,.ts' lib -d dist",
     "watch": "nodemon --exec babel-node lib/index.js",
     "prepublishOnly": "npm run test && npm run docs && npm run build",
