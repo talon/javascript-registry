@@ -31,7 +31,11 @@
       "jsx",
       "tsx"
     ],
-    "testRegex": ".*(README|\\.(test|usage|spec))\\.([jt]sx?|md)$",
+    "testRegex": "(README|\\.(test|usage))\\.([jt]sx?|md)$",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/api/"
+    ],
     "transform": {
       "^.+\\.([jt]sx?|md)$": "babel-jest"
     }
