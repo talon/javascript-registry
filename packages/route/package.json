@@ -9,7 +9,7 @@
   "scripts": {
     "format": "prettier --write **/*.js",
     "test": "jest",
-    "docs": "typedoc --theme minimal --ignoreCompilerErrors --excludeExternals --excludeNotExported --out ./docs ./lib",
+    "docs": "typedoc --readme none --plugin typedoc-plugin-markdown --ignoreCompilerErrors --excludeExternals --excludeNotExported --out ./api ./lib",
     "build": "rm -rf dist && babel --extensions '.js,.md,.ts' lib -d dist",
     "watch": "nodemon --exec babel-node lib/index.js",
     "prepublishOnly": "npm run test && npm run docs && npm run build",
@@ -76,7 +76,8 @@
     "babel-plugin-literate": "talon/babel-plugin-literate#feature/configuration",
     "jest": "^24.9.0",
     "prettier": "^1.19.1",
-    "typedoc": "^0.15.3"
+    "typedoc": "^0.15.3",
+    "typedoc-plugin-markdown": "^2.2.11"
   },
   "gitHead": "1fa7f09f82366ee26fedbc47581ca02678c674ee"
 }
