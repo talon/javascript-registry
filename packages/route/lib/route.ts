@@ -1,13 +1,19 @@
 import { omit, zip } from "ramda";
-import Url from "url";
-import QueryString from "querystring";
+import * as Url from "url";
+import * as QueryString from "querystring";
 
+/**
+ * encode an object into a route
+ */
 export const encode = (route: string, data: object): string => {
   const [pathname, search] = withBody(route, data);
 
   return `${pathname}?${QueryString.encode(search)}`;
 };
 
+/**
+ * decode an object from a route
+ */
 export const decode = (route: string, url: string): object => {
   const { query, pathname } = Url.parse(url, true);
 
@@ -17,6 +23,9 @@ export const decode = (route: string, url: string): object => {
   );
 };
 
+/**
+ * decode an object from a route, including the constant keys
+ */
 export const withConstant = (route: string, url: string): object => {
   const { query, pathname } = Url.parse(url, true);
 
@@ -26,6 +35,9 @@ export const withConstant = (route: string, url: string): object => {
   );
 };
 
+/**
+ * encode an object into a route, include the excess object
+ */
 export const withBody = (route: string, data: object): [string, object] => {
   const keeze = keys(route);
 
@@ -35,6 +47,9 @@ export const withBody = (route: string, data: object): [string, object] => {
   ];
 };
 
+/**
+ * get the keys from a route or path
+ */
 export const keys = (route: string): string[] =>
   route
     .replace(/^\//, "")
@@ -47,6 +62,9 @@ export const keys = (route: string): string[] =>
       }
     });
 
+/**
+ * get the values from a route or path
+ */
 export const values = (route: string): string[] =>
   route
     .replace(/^\//, "")
