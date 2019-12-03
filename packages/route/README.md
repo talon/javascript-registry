@@ -41,13 +41,13 @@ If you `zip` these you get an object which can be used to look up the pathname v
 ```js
 import { zip } from "ramda";
 
-expect(zip(Route.keys(route), Route.values(pathname))).toEqual({
-  pathnames: "pathnames",
-  are: "are",
-  made: "made",
-  of: "of",
-  keys: "values"
-});
+expect(zip(Route.keys(route), Route.values(pathname))).toEqual([
+  ["pathnames", "pathnames"],
+  ["are", "are"],
+  ["made", "made"],
+  ["of", "of"],
+  ["keys", "values"]
+]);
 ```
 
 When this is merged with the `search` (which is already `key=value`) you can represent your complete URL as an [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object).
