@@ -2,13 +2,13 @@ import { omit, zip } from "ramda";
 import Url from "url";
 import QueryString from "querystring";
 
-export const encode = (route, object) => {
-  const [pathname, search] = withBody(route, object);
+export const encode = (route: string, data: object): string => {
+  const [pathname, search] = withBody(route, data);
 
   return `${pathname}?${QueryString.encode(search)}`;
 };
 
-export const decode = (route, url) => {
+export const decode = (route: string, url: string): object => {
   const { query, pathname } = Url.parse(url, true);
 
   return Object.assign(
@@ -17,7 +17,7 @@ export const decode = (route, url) => {
   );
 };
 
-export const withConstant = (route, url) => {
+export const withConstant = (route: string, url: string): object => {
   const { query, pathname } = Url.parse(url, true);
 
   return Object.assign(
@@ -26,16 +26,16 @@ export const withConstant = (route, url) => {
   );
 };
 
-export const withBody = (route, object) => {
+export const withBody = (route: string, data: object): [string, object] => {
   const keeze = keys(route);
 
   return [
-    keeze.reduce((path, key) => path.replace(`:${key}`, object[key]), route),
-    omit(keeze, object)
+    keeze.reduce((path, key) => path.replace(`:${key}`, data[key]), route),
+    omit(keeze, data)
   ];
 };
 
-export const keys = route =>
+export const keys = (route: string): string[] =>
   route
     .replace(/^\//, "")
     .split("/")
@@ -47,7 +47,7 @@ export const keys = route =>
       }
     });
 
-export const values = route =>
+export const values = (route: string): string[] =>
   route
     .replace(/^\//, "")
     .split("/")
