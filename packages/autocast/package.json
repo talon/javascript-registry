@@ -1,6 +1,6 @@
 {
   "name": "@talon/autocast",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "absurd podcast scripting",
   "homepage": "https://github.com/talon/javascript-registry/packages/autocast#readme",
   "main": "dist/index.js",
