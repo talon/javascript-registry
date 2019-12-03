@@ -2,6 +2,8 @@
 
 > encode/decode [objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object) to/from [URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL)
 
+# Usage
+
 A _lot_ of libraries use a common syntax to pull values off pathnames. We'll call it `route`.
 
 ```js
@@ -161,5 +163,3 @@ test.skip("Route.create", () => {
   expect(route.values).toEqual(["another", undefined, "route"]);
 });
 ```
-
-# [API Documentation](./api)
