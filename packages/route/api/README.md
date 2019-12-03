@@ -4,6 +4,10 @@
 
 ## Index
 
+### Variables
+
+- [matches](README.md#const-matches)
+
 ### Functions
 
 - [decode](README.md#const-decode)
@@ -13,13 +17,21 @@
 - [withBody](README.md#const-withbody)
 - [withConstant](README.md#const-withconstant)
 
+## Variables
+
+### `Const` matches
+
+• **matches**: _any_
+
+Defined in future.ts:1
+
 ## Functions
 
 ### `Const` decode
 
 ▸ **decode**(`route`: string, `url`: string): _object_
 
-_Defined in [route.ts:17](https://github.com/talon/javascript-library/blob/2238a6b/packages/route/lib/route.ts#L17)_
+_Defined in [route.ts:17](https://github.com/talon/javascript-library/blob/4516ab3/packages/route/lib/route.ts#L17)_
 
 decode an object from a route
 
@@ -38,7 +50,7 @@ decode an object from a route
 
 ▸ **encode**(`route`: string, `data`: object): _string_
 
-_Defined in [route.ts:8](https://github.com/talon/javascript-library/blob/2238a6b/packages/route/lib/route.ts#L8)_
+_Defined in [route.ts:8](https://github.com/talon/javascript-library/blob/4516ab3/packages/route/lib/route.ts#L8)_
 
 encode an object into a route
 
@@ -57,7 +69,7 @@ encode an object into a route
 
 ▸ **keys**(`route`: string): _string[]_
 
-_Defined in [route.ts:53](https://github.com/talon/javascript-library/blob/2238a6b/packages/route/lib/route.ts#L53)_
+_Defined in [route.ts:53](https://github.com/talon/javascript-library/blob/4516ab3/packages/route/lib/route.ts#L53)_
 
 get the keys from a route or path
 
@@ -75,7 +87,7 @@ get the keys from a route or path
 
 ▸ **values**(`route`: string): _string[]_
 
-_Defined in [route.ts:68](https://github.com/talon/javascript-library/blob/2238a6b/packages/route/lib/route.ts#L68)_
+_Defined in [route.ts:68](https://github.com/talon/javascript-library/blob/4516ab3/packages/route/lib/route.ts#L68)_
 
 get the values from a route or path
 
@@ -93,7 +105,7 @@ get the values from a route or path
 
 ▸ **withBody**(`route`: string, `data`: object): _[string, object]_
 
-_Defined in [route.ts:41](https://github.com/talon/javascript-library/blob/2238a6b/packages/route/lib/route.ts#L41)_
+_Defined in [route.ts:41](https://github.com/talon/javascript-library/blob/4516ab3/packages/route/lib/route.ts#L41)_
 
 encode an object into a route, include the excess object
 
@@ -112,7 +124,7 @@ encode an object into a route, include the excess object
 
 ▸ **withConstant**(`route`: string, `url`: string): _object_
 
-_Defined in [route.ts:29](https://github.com/talon/javascript-library/blob/2238a6b/packages/route/lib/route.ts#L29)_
+_Defined in [route.ts:29](https://github.com/talon/javascript-library/blob/4516ab3/packages/route/lib/route.ts#L29)_
 
 decode an object from a route, including the constant keys
 
