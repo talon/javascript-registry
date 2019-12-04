@@ -1,0 +1,51 @@
+{
+  "name": "@talon/scripts",
+  "version": "1.0.0",
+  "description": "useful scripts",
+  "main": "index.js",
+  "scripts": {
+    "task": "gulp",
+    "test": "jest"
+  },
+  "keywords": [
+    "scripts",
+    "util"
+  ],
+  "author": "Talon Poole",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "^7.7.4",
+    "@babel/plugin-proposal-export-namespace-from": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/preset-typescript": "^7.7.4",
+    "del": "^5.1.0",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-prettier": "^2.3.0",
+    "gulp-typedoc": "^2.2.3",
+    "typedoc": "^0.15.3",
+    "typedoc-plugin-markdown": "^2.2.11"
+  },
+  "devDependencies": {
+    "@babel/register": "^7.7.4"
+  },
+  "prettier": {
+    "semi": false
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ],
+      "@babel/preset-typescript"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-export-namespace-from"
+    ]
+  }
+}
