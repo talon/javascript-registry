@@ -14,7 +14,7 @@
 
 ▸ **element**(): _any_
 
-_Defined in [test.tsx:12](https://github.com/talon/javascript-library/blob/f27a993/packages/scripts/lib/test.tsx#L12)_
+_Defined in [test.tsx:12](https://github.com/talon/javascript-library/blob/c504b34/packages/scripts/lib/test.tsx#L12)_
 
 create an element
 

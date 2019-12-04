@@ -1,4 +1,4 @@
-import { src, dest, series } from "gulp"
+import { src, dest, series, lastRun } from "gulp"
 import babel from "gulp-babel"
 import prettier from "gulp-prettier"
 import typedoc from "gulp-typedoc"
@@ -15,15 +15,12 @@ export const readme = series(
   remove_documentation_folder
 )
 
+export const test = series(readme, tests)
+
 export const format = () =>
   src(ALL_FILES)
     .pipe(prettier())
     .pipe(dest("./"))
-
-export const test = () => {
-  process.env.NODE_ENV = "test"
-  return src(["README.md", "**/*.test.*"]).pipe(jest())
-}
 
 export const build = () =>
   src(LIBRARY_FILES)
@@ -54,4 +51,9 @@ function move_documentation_to_readme() {
 
 function remove_documentation_folder() {
   return del("./docs")
+}
+
+function tests() {
+  process.env.NODE_ENV = "test"
+  return src(["*.test.*", "*.md"]).pipe(jest())
 }
