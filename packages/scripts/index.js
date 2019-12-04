@@ -2,6 +2,7 @@ import { src, dest, series } from "gulp"
 import babel from "gulp-babel"
 import prettier from "gulp-prettier"
 import typedoc from "gulp-typedoc"
+import jest from "gulp-jest"
 import del from "del"
 
 const ALL_FILES = ["**", "!node_modules/**"]
@@ -19,7 +20,10 @@ export const format = () =>
     .pipe(prettier())
     .pipe(dest("./"))
 
-export const test = () => src()
+export const test = () => {
+  process.env.NODE_ENV = "test"
+  return src(["README.md", "**/*.test.*"]).pipe(jest())
+}
 
 export const build = () =>
   src(LIBRARY_FILES)
