@@ -7,13 +7,12 @@
   "license": "MIT",
   "main": "dist/route.js",
   "scripts": {
-    "format": "prettier --write **/*.js",
-    "test": "jest",
-    "docs": "typedoc --mode file --readme none --plugin typedoc-plugin-markdown --ignoreCompilerErrors --excludeExternals --excludeNotExported --out ./api ./lib",
-    "build": "rm -rf dist && babel --extensions '.js,.md,.ts' lib -d dist",
-    "watch": "nodemon --exec babel-node lib/index.js",
-    "prepublishOnly": "npm run test && npm run docs && npm run build",
-    "publish": "git push"
+    "docs": "gulp docs",
+    "test": "gulp test",
+    "format": "gulp format",
+    "compile": "gulp compile",
+    "develop": "gulp develop",
+    "build": "gulp distribute"
   },
   "repository": {
     "type": "git",
@@ -31,7 +30,10 @@
       "jsx",
       "tsx"
     ],
-    "testRegex": "(README|\\.(test|usage))\\.([jt]sx?|md)$",
+    "testRegex": [
+      ".+\\.test\\.[jt]sx?$",
+      "(README|API)\\.md$"
+    ],
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/api/"
@@ -49,8 +51,7 @@
             "node": "current"
           }
         }
-      ],
-      "@babel/preset-typescript"
+      ]
     ],
     "plugins": [
       [
@@ -77,8 +78,16 @@
     "@babel/preset-env": "^7.7.4",
     "@babel/preset-typescript": "^7.7.4",
     "babel-jest": "^24.9.0",
-    "babel-plugin-literate": "talon/babel-plugin-literate#feature/configuration",
+    "babel-plugin-literate": "talon/babel-plugin-literate#feature/smarter",
+    "documentation": "^12.1.4",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-cli": "^2.2.0",
+    "gulp-documentation": "^3.2.1",
+    "gulp-jest": "^4.0.3",
+    "gulp-prettier": "^2.3.0",
     "jest": "^24.9.0",
+    "jest-cli": "^24.9.0",
     "prettier": "^1.19.1",
     "typedoc": "^0.15.3",
     "typedoc-plugin-markdown": "^2.2.11"

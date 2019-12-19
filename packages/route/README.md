@@ -18,42 +18,9 @@ A `route` is made of `keys` that point to the location of the value on `pathname
 - constant values represent only themselves. (ex. `/pathname`)
 - dynamic values are denoted by prefixing the key with a colon. (ex. `/:key`)
 
-```js
-test("Route.keys", () => {
-  expect(Route.keys(route)).toEqual(["pathnames", "are", "made", "of", "keys"]);
-});
-```
-
 `pathname`s are made of `values`.
 
-```js
-test("Route.values", () => {
-  expect(Route.values(pathname)).toEqual([
-    "pathnames",
-    "are",
-    "made",
-    "of",
-    "values"
-  ]);
-});
-```
-
-If you `zip` these you get an object which can be used to look up the pathname values.
-
-```js
-import { zip } from "ramda";
-
-expect(zip(Route.keys(route), Route.values(pathname))).toEqual([
-  ["pathnames", "pathnames"],
-  ["are", "are"],
-  ["made", "made"],
-  ["of", "of"],
-  ["keys", "values"]
-]);
-```
-
-When this is merged with the `search` (which is already `key=value`) you can represent your complete URL as an [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object).
-This library enables developers to smoothly convert from one format to the other.
+By merging this is with the `search` (which is already `key=value`) you can represent your complete URL as an [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object). This library enables developers to smoothly convert from one format to the other.
 
 ```js
 test("Route.encode", () => {
@@ -94,72 +61,4 @@ test("Route.withBody", () => {
 });
 ```
 
-## Future
-
-By default only the dynamic keys are decoded. To also include the constant keys use `Route.withConstants`
-
-```js
-test.skip("Route.withConstants", () => {
-  expect(
-    Route.withConstants("/:id/people/:name", "/1/people/belle", {
-      id: 1,
-      name: "belle",
-      limit: 1
-    })
-  ).toEqual({
-    id: 1,
-    people: "people",
-    name: "belle",
-    limit: 1
-  });
-});
-```
-
-Maybe you wanna see if this route is the same as another
-
-```js
-test.skip("Route.matches", () => {
-  expect(
-    Route.matches(
-      "/pathnames/are/made/of/:keys",
-      "/pathnames/are/made/of/:keys"
-    )
-  ).toBeTruthy();
-
-  expect(
-    Route.matches("/pathnames/are/made/of/:keys", "/pathnames/made/of/:keys")
-  ).toBeFalsey();
-});
-```
-
-or check if the route fits a pathname
-
-```js
-test.skip("Route.fits", () => {
-  expect(
-    Route.fits(
-      "/pathnames/:are/made/of/:keys",
-      "/pathnames/dogs/made/of/things"
-    )
-  ).toBeTruthy();
-
-  expect(
-    Route.fits("/pathnames/are/made/of/:keys", "/pathnames/made/of/things")
-  ).toBeFalsey();
-});
-```
-
-**Experimental:** a sugar kinda way to deal with all this
-
-```js
-test.skip("Route.create", () => {
-  const route = Route.create("/another/:adjective/route");
-
-  expect(route.decode("/another/cool/route")).toEqual({ adjective: "cool" });
-  expect(route.encode({ adjective: "fun" })).toBe("/another/fun/route");
-  expect(route.matches("/another/:adjective/route")).toBeTruthy();
-  expect(route.fits("/another/sick/route")).toBeTruthy();
-  expect(route.keys).toEqual(["another", "adjective", "route"]);
-  expect(route.values).toEqual(["another", undefined, "route"]);
-});
-```
+_Checkout the [API Docs](./API.md) to learn more!_
