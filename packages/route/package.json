@@ -93,6 +93,7 @@
     "gulp-prettier": "^2.3.0",
     "jest": "^24.9.0",
     "jest-cli": "^24.9.0",
+    "markdown-toc": "^1.2.0",
     "prettier": "^1.19.1",
     "typedoc": "^0.15.3",
     "typedoc-plugin-markdown": "^2.2.11"

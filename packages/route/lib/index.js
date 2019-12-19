@@ -3,6 +3,8 @@ import { omit, zip } from "ramda"
 import * as Url from "url"
 import * as QueryString from "querystring"
 
+const KEY = /:\w+/g
+
 /**
  * ```js
  * import * as Route from "./lib"
@@ -17,7 +19,7 @@ export const keys = (route /*: string */) /*: Array<string> */ =>
     .replace(/^\//, "")
     .split("/")
     .map(key => {
-      if (key.match(/:\w+/g)) {
+      if (key.match(KEY)) {
         return key.substr(1)
       } else {
         return key
@@ -41,7 +43,7 @@ export const values = (pathname /*: string */) /*: Array<string> */ =>
   pathname
     .replace(/^\//, "")
     .split("/")
-    .filter(key => !key.match(/:\w+/g))
+    .filter(key => !key.match(KEY))
 
 /**
  * encode an object into a route
@@ -97,23 +99,21 @@ export const withBody = (
  * By default only the dynamic keys are decoded. To also include the constant keys use `Route.withConstants`
  *
  * ```js
- * test.skip("Route.withConstants", () => {
+ * test("Route.withConstants", () => {
  *   expect(
  *     Route.withConstants("/:id/people/:name", "/1/people/belle", {
  *       id: 1,
- *       name: "belle",
- *       limit: 1
+ *       name: "belle"
  *     })
  *   ).toEqual({
- *     id: 1,
- *     people: "people",
+ *     id: "1",
  *     name: "belle",
- *     limit: 1
+ *     people: "people",
  *   });
  * });
  * ```
  */
-export const withConstant = (
+export const withConstants = (
   route /*: string */,
   url /*: string */
 ) /*: any */ => {
@@ -126,12 +126,10 @@ export const withConstant = (
 }
 
 /**
- * # Future
- *
  * Maybe you wanna see if this route is the same as another
  *
  * ```js
- * test.skip("Route.matches", () => {
+ * test("Route.matches", () => {
  *   expect(
  *     Route.matches(
  *       "/pathnames/are/made/of/:keys",
@@ -141,14 +139,20 @@ export const withConstant = (
  *
  *   expect(
  *     Route.matches("/pathnames/are/made/of/:keys", "/pathnames/made/of/:keys")
- *   ).toBeFalsey();
+ *   ).toBeFalsy();
  * });
  * ```
- *
+ */
+export const matches = (
+  route /*: string */,
+  other /*: string */
+) /*: boolean */ => !!route.match(other)
+
+/**
  * or check if the route fits a pathname
  *
  * ```js
- * test.skip("Route.fits", () => {
+ * test("Route.fits", () => {
  *   expect(
  *     Route.fits(
  *       "/pathnames/:are/made/of/:keys",
@@ -158,11 +162,23 @@ export const withConstant = (
  *
  *   expect(
  *     Route.fits("/pathnames/are/made/of/:keys", "/pathnames/made/of/things")
- *   ).toBeFalsey();
+ *   ).toBeFalsy();
  * });
  * ```
- *
- * **Experimental:** a sugar kinda way to deal with all this
+ */
+export const fits = (
+  route /*: string */,
+  pathname /*: string */
+) /*: boolean */ => {
+  const vals = values(pathname)
+  return route
+    .replace(/^\//, "")
+    .split("/")
+    .every((name, index) => !!name.match(KEY) || !!name.match(vals[index]))
+}
+
+/**
+ * **Perhaps:** a sugar kinda way to deal with all this
  *
  * ```js
  * test.skip("Route.create", () => {
@@ -177,3 +193,6 @@ export const withConstant = (
  * });
  * ```
  */
+export const create = (route /*: string */) => {
+  throw new Error("not implemented")
+}
