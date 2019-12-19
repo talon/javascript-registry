@@ -126,6 +126,7 @@ export const withConstant = (
 };
 
 /**
+ * # Future
  *
  * Maybe you wanna see if this route is the same as another
  *
