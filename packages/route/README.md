@@ -9,23 +9,14 @@
 <!-- toc -->
 
 - [keys](#keys)
-  - [Parameters](#parameters)
 - [values](#values)
-  - [Parameters](#parameters-1)
 - [encode](#encode)
-  - [Parameters](#parameters-2)
 - [decode](#decode)
-  - [Parameters](#parameters-3)
 - [withBody](#withbody)
-  - [Parameters](#parameters-4)
 - [withConstants](#withconstants)
-  - [Parameters](#parameters-5)
 - [matches](#matches)
-  - [Parameters](#parameters-6)
 - [fits](#fits)
-  - [Parameters](#parameters-7)
 - [create](#create)
-  - [Parameters](#parameters-8)
 
 <!-- tocstop -->
 

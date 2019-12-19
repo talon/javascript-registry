@@ -27,7 +27,7 @@ export const docs = () =>
           )}`
       )
     )
-    .pipe(modify(content => toc.insert(content)))
+    .pipe(modify(content => toc.insert(content, { maxdepth: 2 })))
     .pipe(prettier())
     .pipe(dest("./"), { overwrite: true })
 
