@@ -1,11 +1,11 @@
 //@flow
-import { omit, zip } from "ramda";
-import * as Url from "url";
-import * as QueryString from "querystring";
+import { omit, zip } from "ramda"
+import * as Url from "url"
+import * as QueryString from "querystring"
 
 /**
  * ```js
- * import * as Route from "./lib/route"
+ * import * as Route from "./lib"
  *
  * test("Route.keys", () => {
  *   expect(Route.keys("/routes/are/made/of/:keys")).toEqual(["routes", "are", "made", "of", "keys"]);
@@ -18,11 +18,11 @@ export const keys = (route /*: string */) /*: Array<string> */ =>
     .split("/")
     .map(key => {
       if (key.match(/:\w+/g)) {
-        return key.substr(1);
+        return key.substr(1)
       } else {
-        return key;
+        return key
       }
-    });
+    })
 
 /**
  * ```js
@@ -41,28 +41,28 @@ export const values = (pathname /*: string */) /*: Array<string> */ =>
   pathname
     .replace(/^\//, "")
     .split("/")
-    .filter(key => !key.match(/:\w+/g));
+    .filter(key => !key.match(/:\w+/g))
 
 /**
  * encode an object into a route
  */
 export const encode = (route /*: string */, data /*: any */) /*: string */ => {
-  const [pathname, search] = withBody(route, data);
+  const [pathname, search] = withBody(route, data)
 
-  return `${pathname}?${QueryString.encode(search)}`;
-};
+  return `${pathname}?${QueryString.encode(search)}`
+}
 
 /**
  * decode an object from a route
  */
 export const decode = (route /*: string */, url /*: string */) /*: any */ => {
-  const { query, pathname } = Url.parse(url, true);
+  const { query, pathname } = Url.parse(url, true)
 
   return Object.assign(
     Object.fromEntries(zip(keys(route), keys(pathname))),
     query
-  );
-};
+  )
+}
 
 /**
  * For requests other than GET it's usually more useful to return the pathname `withBody` so the rest of the object can
@@ -85,13 +85,13 @@ export const withBody = (
   route /*: string */,
   data /*: any */
 ) /*: [string, any]*/ => {
-  const keeze = keys(route);
+  const keeze = keys(route)
 
   return [
     keeze.reduce((path, key) => path.replace(`:${key}`, data[key]), route),
     omit(keeze, data)
-  ];
-};
+  ]
+}
 
 /**
  * By default only the dynamic keys are decoded. To also include the constant keys use `Route.withConstants`
@@ -117,13 +117,13 @@ export const withConstant = (
   route /*: string */,
   url /*: string */
 ) /*: any */ => {
-  const { query, pathname } = Url.parse(url, true);
+  const { query, pathname } = Url.parse(url, true)
 
   return Object.assign(
     Object.fromEntries(zip(keys(route), keys(pathname))),
     query
-  );
-};
+  )
+}
 
 /**
  * # Future
