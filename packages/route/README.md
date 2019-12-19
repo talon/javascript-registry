@@ -6,8 +6,6 @@
 
 # Table of Contents
 
-## API
-
 <!-- toc -->
 
 - [keys](#keys)
