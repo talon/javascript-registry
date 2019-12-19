@@ -3,8 +3,7 @@
 # @talon/route
 
 > encode/decode data to/from routes
-
-# Table of Contents
+> **Table of Contents**
 
 <!-- toc -->
 

@@ -22,7 +22,7 @@ export const docs = () =>
             meta.name
           }\n>${
             meta.description
-          }\n# Table of Contents\n<!-- toc -->\n${content.substring(
+          }\n**Table of Contents**\n<!-- toc -->\n${content.substring(
             content.indexOf("\n") + 2
           )}`
       )
