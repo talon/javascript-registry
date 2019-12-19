@@ -51,7 +51,7 @@ export const values = (pathname /*: string */) /*: Array<string> */ =>
 export const encode = (route /*: string */, data /*: any */) /*: string */ => {
   const [pathname, search] = withBody(route, data)
 
-  return `${pathname}?${QueryString.encode(search)}`
+  return `${pathname}?${QueryString.stringify(search)}`
 }
 
 /**
@@ -61,7 +61,7 @@ export const decode = (route /*: string */, url /*: string */) /*: any */ => {
   const { query, pathname } = Url.parse(url, true)
 
   return Object.assign(
-    Object.fromEntries(zip(keys(route), keys(pathname))),
+    Object.fromEntries(zip(keys(route), keys(pathname || ""))),
     query
   )
 }
@@ -120,7 +120,7 @@ export const withConstants = (
   const { query, pathname } = Url.parse(url, true)
 
   return Object.assign(
-    Object.fromEntries(zip(keys(route), keys(pathname))),
+    Object.fromEntries(zip(keys(route), keys(pathname || ""))),
     query
   )
 }
