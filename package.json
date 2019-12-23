@@ -9,7 +9,7 @@
     "clean": "lerna clean",
     "bootstrap": "lerna bootstrap",
     "build": "lerna exec -- gulp build",
-    "release": "lerna exec --concurrency 1 -- npx --no-install semantic-release -e semantic-release-monorepo",
+    "release": "lerna exec --concurrency 1 -- npx semantic-release -e semantic-release-monorepo",
     "gulp": "lerna exec -- gulp"
   },
   "devDependencies": {
