@@ -1,4 +1,4 @@
-# JavaScript Registry ![](https://github.com/talon/javascript-registry/workflows/Continuous%20Integration/badge.svg)
+# JavaScript Registry [![](https://github.com/talon/javascript-registry/workflows/Continuous%20Integration/badge.svg)](https://github.com/talon/javascript-registry/actions?query=workflow%3A%22Continuous+Integration%22)
 
 # Usage
 
