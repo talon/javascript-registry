@@ -1,0 +1,54 @@
+//@flow
+import MarkdownIt from "markdown-it"
+import fs from "fs"
+import { resolve } from "path"
+
+const snapshot = tokens => {
+  fs.writeFileSync(
+    resolve("examples/simple/tokens.js"),
+    JSON.stringify(tokens, null, 2)
+  )
+  return tokens
+}
+
+/**
+ * ```js
+ * import lit from "./lib"
+ * import { readFileSync } from "fs"
+ * import { resolve } from "path"
+ *
+ * test("examples/simple", () => {
+ *   expect(
+ *     lit(readFileSync(resolve(__dirname, "./examples/simple/literate.md"), "utf8"))
+ *   ).toBe(readFileSync(resolve(__dirname, "./examples/simple/illiterate.js"), "utf8"))
+ * })
+ * ```
+ */
+export default markdown =>
+  MarkdownIt()
+    .parse(markdown, {})
+    .map(token => {
+      if (token.type === "fence")
+        return token.info.match(/js$/) ? token.content + "\n" : comment(token)
+
+      if (token.nesting === 1 && token.level === 0)
+        return `/**\n * ${token.markup.length !== 0 ? token.markup + " " : ""}`
+
+      if (token.type.match(/inline/) && token.level > 0)
+        return `${token.content}\n`
+
+      if (token.nesting === -1 && token.level === 0) return ` */\n`
+
+      return ""
+    })
+    .join("")
+    .replace(/^\s+\*\/\n\/\*\*\n/gm, " *\n")
+    .trim() + "\n"
+
+function comment(token) {
+  return `/**
+ * ${token.markup}${token.info}
+ * ${token.content.split("\n").join("\n *")} ${token.markup}
+ */
+`
+}
