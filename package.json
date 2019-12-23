@@ -6,10 +6,11 @@
     "url": "git://github.com/talon/javascript-registry.git"
   },
   "scripts": {
-    "bootstrap": "lerna bootstrap",
-    "gulp": "lerna exec -- gulp",
     "clean": "lerna clean",
-    "release": "lerna exec --concurrency 1 -- npx --no-install semantic-release -e semantic-release-monorepo"
+    "bootstrap": "lerna bootstrap",
+    "build": "lerna exec -- gulp build",
+    "release": "lerna exec --concurrency 1 -- npx --no-install semantic-release -e semantic-release-monorepo",
+    "gulp": "lerna exec -- gulp"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",

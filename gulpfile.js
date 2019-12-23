@@ -47,7 +47,7 @@ const compile = (exports.compile = () =>
 exports.develop = series(test, () =>
   watch(LIBRARY_FILES, series(test))
 )
-exports.distribute = series(test, format, compile)
+exports.build = series(test, format, compile)
 
 function tests() {
   process.env.NODE_ENV = "test"
