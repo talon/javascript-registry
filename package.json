@@ -5,8 +5,54 @@
     "type": "git",
     "url": "git://github.com/talon/javascript-registry.git"
   },
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "gulp": "lerna exec -- gulp",
+    "clean": "lerna clean"
+  },
   "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/preset-typescript": "^7.7.4",
+    "babel-jest": "^24.9.0",
+    "babel-plugin-literate": "talon/babel-plugin-literate#feature/smarter",
+    "documentation": "^12.1.4",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-cli": "^2.2.0",
+    "gulp-documentation": "^3.2.1",
+    "gulp-jest": "^4.0.3",
+    "gulp-markdown-toc": "^1.1.0",
+    "gulp-modify-file": "^1.0.1",
+    "gulp-prettier": "^2.3.0",
+    "jest": "^24.9.0",
+    "jest-cli": "^24.9.0",
     "lerna": "^3.19.0",
+    "markdown-toc": "^1.2.0",
     "prettier": "^1.19.1"
+  },
+  "prettier": {
+    "semi": false
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "md",
+      "js",
+      "ts",
+      "jsx",
+      "tsx"
+    ],
+    "testRegex": [
+      ".+\\.test\\.[jt]sx?$",
+      "(README|API)\\.md$"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/api/"
+    ],
+    "transform": {
+      "^.+\\.([jt]sx?|md)$": "./lib/babel-jest-upward.js"
+    }
   }
 }
