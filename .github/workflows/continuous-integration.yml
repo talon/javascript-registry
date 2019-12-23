@@ -22,6 +22,4 @@ jobs:
         npm install
         npm run bootstrap
         npm run gulp distribute
-        npm run gulp test
-    - name: Semantic Release
-      uses: brpaz/action-semantic-release@v1
+        npm run release
