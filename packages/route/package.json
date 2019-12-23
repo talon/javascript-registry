@@ -1,65 +1,18 @@
 {
   "name": "@talon/route",
-  "version": "1.1.4",
+  "version": "1.0.1",
   "description": "encode/decode data to/from routes",
   "homepage": "https://github.com/talon/javascript-registry/packages/route#readme",
   "author": "Talon Poole",
   "license": "MIT",
-  "main": "dist/route.js",
-  "scripts": {
-    "format": "prettier --write **/*.js",
-    "test": "jest",
-    "docs": "typedoc --mode file --readme none --plugin typedoc-plugin-markdown --ignoreCompilerErrors --excludeExternals --excludeNotExported --out ./api ./lib",
-    "build": "rm -rf dist && babel --extensions '.js,.md,.ts' lib -d dist",
-    "watch": "nodemon --exec babel-node lib/index.js",
-    "prepublishOnly": "npm run test && npm run docs && npm run build",
-    "publish": "git push"
-  },
+  "main": "dist",
   "repository": {
     "type": "git",
-    "url": "git://github.com/talon/javascript-registry.git"
+    "url": "https://github.com/talon/javascript-registry.git"
   },
   "publishConfig": {
     "access": "public",
     "registry": "https://npm.pkg.github.com"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "md",
-      "js",
-      "ts",
-      "jsx",
-      "tsx"
-    ],
-    "testRegex": "(README|\\.(test|usage))\\.([jt]sx?|md)$",
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/api/"
-    ],
-    "transform": {
-      "^.+\\.([jt]sx?|md)$": "babel-jest"
-    }
-  },
-  "babel": {
-    "presets": [
-      [
-        "@babel/preset-env",
-        {
-          "targets": {
-            "node": "current"
-          }
-        }
-      ],
-      "@babel/preset-typescript"
-    ],
-    "plugins": [
-      [
-        "babel-plugin-literate",
-        {
-          "files": "\\.md$"
-        }
-      ]
-    ]
   },
   "bugs": {
     "url": "https://github.com/talon/javascript-registry/issues"
@@ -68,20 +21,8 @@
     "utility",
     "route"
   ],
+  "gitHead": "1fa7f09f82366ee26fedbc47581ca02678c674ee",
   "dependencies": {
     "ramda": "^0.26.1"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.7.2",
-    "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
-    "@babel/preset-env": "^7.7.4",
-    "@babel/preset-typescript": "^7.7.4",
-    "babel-jest": "^24.9.0",
-    "babel-plugin-literate": "talon/babel-plugin-literate#feature/configuration",
-    "jest": "^24.9.0",
-    "prettier": "^1.19.1",
-    "typedoc": "^0.15.3",
-    "typedoc-plugin-markdown": "^2.2.11"
-  },
-  "gitHead": "1fa7f09f82366ee26fedbc47581ca02678c674ee"
+  }
 }

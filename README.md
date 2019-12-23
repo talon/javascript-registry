@@ -1,25 +1,11 @@
-# JavaScript Registry [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)
-
-> a javacript collection
+# JavaScript Registry [![](https://github.com/talon/javascript-registry/workflows/Continuous%20Integration/badge.svg)](https://github.com/talon/javascript-registry/actions?query=workflow%3A%22Continuous+Integration%22)
 
 # Usage
 
-you must [authenticate to the registry](https://help.github.com/en/github/managing-packages-with-github-package-registry/configuring-npm-for-use-with-github-package-registry#authenticating-to-github-package-registry) before you can install a package.
+configure your `.npmrc` like so
 
 ```sh
-npm install @talon/[package]
+echo "registry=https://npm.pkg.github.com/talon" >> .npmrc
 ```
-> [browse all packages](https://github.com/talon/javascript-registry/packages)
 
-# Scripts
-
-`npm run [command]`
-
-| command | description                                      |
-| ------- | ------------------------------------------------ |
-| format  | format every package                             |
-| docs    | generate API docs in every package's `README.md` |
-| test    | run every packages test suite                    |
-| build   | build every package's `dist` folder              |
-| publish | publish changed packages                         |
-| new     | generate a new package                           |
+then [browse the registry](https://github.com/talon/javascript-registry/packages) and `npm install @talon/<package>` the packages you want
