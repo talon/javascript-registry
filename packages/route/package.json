@@ -12,7 +12,8 @@
   },
   "publishConfig": {
     "access": "public",
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://npm.pkg.github.com",
+    "repositoryUrl": "https://github.com/talon/javascript-registry.git"
   },
   "bugs": {
     "url": "https://github.com/talon/javascript-registry/issues"
