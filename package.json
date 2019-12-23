@@ -9,14 +9,13 @@
     "clean": "lerna clean",
     "bootstrap": "lerna bootstrap",
     "build": "lerna exec -- gulp build",
-    "release": "lerna exec --concurrency 1 -- npx semantic-release -e semantic-release-monorepo",
+    "release": "lerna exec --concurrency 1 -- npx --no-install semantic-release -e semantic-release-monorepo",
     "gulp": "lerna exec -- gulp"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
-    "@babel/preset-typescript": "^7.7.4",
     "babel-jest": "^24.9.0",
     "babel-plugin-literate": "talon/babel-plugin-literate#feature/smarter",
     "documentation": "^12.1.4",
