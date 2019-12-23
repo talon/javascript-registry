@@ -21,5 +21,8 @@
     "utility",
     "route"
   ],
-  "gitHead": "1fa7f09f82366ee26fedbc47581ca02678c674ee"
+  "gitHead": "1fa7f09f82366ee26fedbc47581ca02678c674ee",
+  "dependencies": {
+    "ramda": "^0.26.1"
+  }
 }
