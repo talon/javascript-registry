@@ -8,7 +8,8 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "gulp": "lerna exec -- gulp",
-    "clean": "lerna clean"
+    "clean": "lerna clean",
+    "release": "lerna exec --concurrency 1 -- npx --no-install semantic-release -e semantic-release-monorepo"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
@@ -31,28 +32,5 @@
     "lerna": "^3.19.0",
     "markdown-toc": "^1.2.0",
     "prettier": "^1.19.1"
-  },
-  "prettier": {
-    "semi": false
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "md",
-      "js",
-      "ts",
-      "jsx",
-      "tsx"
-    ],
-    "testRegex": [
-      ".+\\.test\\.[jt]sx?$",
-      "(README|API)\\.md$"
-    ],
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/api/"
-    ],
-    "transform": {
-      "^.+\\.([jt]sx?|md)$": "./lib/babel-jest-upward.js"
-    }
   }
 }
