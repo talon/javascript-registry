@@ -41,7 +41,7 @@
     "markdown-toc": "^1.2.0",
     "prettier": "^1.19.1",
     "semantic-release": "^15.14.0",
-    "semantic-release-monorepo": "https://github.com/hweeks/semantic-release-monorepo/tree/fix-latest-monorepo-issue"
+    "semantic-release-monorepo": "hweeks/semantic-release-monorepo/tree/fix-latest-monorepo-issue"
   },
   "config": {
     "commitizen": {
