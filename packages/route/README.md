@@ -13,7 +13,6 @@
 - [encode](#encode)
 - [decode](#decode)
 - [withBody](#withbody)
-- [withConstants](#withconstants)
 - [matches](#matches)
 - [fits](#fits)
 - [create](#create)
@@ -66,6 +65,18 @@ Returns **[Array][2]&lt;[string][1]>**
 
 encode an object into a route
 
+```js
+test("Route.encode", () => {
+  expect(
+    Route.encode("/:id/people/:name", {
+      id: 1,
+      name: "belle",
+      limit: 1
+    })
+  ).toBe("/1/people/belle?limit=1")
+})
+```
+
 ### Parameters
 
 - `route` **[string][1]**
@@ -76,6 +87,21 @@ Returns **[string][1]**
 ## decode
 
 decode an object from a route
+
+```js
+test("Route.decode", () => {
+  expect(
+    Route.decode("/:id/people/:name", "/1/people/belle", {
+      id: 1,
+      name: "belle"
+    })
+  ).toEqual({
+    id: "1",
+    name: "belle",
+    people: "people"
+  })
+})
+```
 
 ### Parameters
 
@@ -109,44 +135,13 @@ test("Route.withBody", () => {
 
 Returns **\[[string][1], any]**
 
-## withConstants
-
-By default only the dynamic keys are decoded. To also include the constant keys use `Route.withConstants`
-
-```js
-test("Route.withConstants", () => {
-  expect(
-    Route.withConstants("/:id/people/:name", "/1/people/belle", {
-      id: 1,
-      name: "belle"
-    })
-  ).toEqual({
-    id: "1",
-    name: "belle",
-    people: "people"
-  })
-})
-```
-
-### Parameters
-
-- `route` **[string][1]**
-- `url` **[string][1]**
-
-Returns **any**
-
 ## matches
 
 Maybe you wanna see if this route is the same as another
 
 ```js
 test("Route.matches", () => {
-  expect(
-    Route.matches(
-      "/pathnames/are/made/of/:keys",
-      "/pathnames/are/made/of/:keys"
-    )
-  ).toBeTruthy()
+  expect(Route.matches("/pathnames/are/made/of/:keys")).toBeTruthy()
 
   expect(
     Route.matches("/pathnames/are/made/of/:keys", "/pathnames/made/of/:keys")
@@ -167,12 +162,7 @@ or check if the route fits a pathname
 
 ```js
 test("Route.fits", () => {
-  expect(
-    Route.fits(
-      "/pathnames/:are/made/of/:keys",
-      "/pathnames/dogs/made/of/things"
-    )
-  ).toBeTruthy()
+  expect(Route.fits("/pathnames/dogs/made/of/things")).toBeTruthy()
 
   expect(
     Route.fits("/pathnames/are/made/of/:keys", "/pathnames/made/of/things")
@@ -195,7 +185,6 @@ Returns **[boolean][3]**
 test.skip("Route.create", () => {
   const route = Route.create("/another/:adjective/route")
 
-  expect(route.decode("/another/cool/route")).toEqual({ adjective: "cool" })
   expect(route.encode({ adjective: "fun" })).toBe("/another/fun/route")
   expect(route.matches("/another/:adjective/route")).toBeTruthy()
   expect(route.fits("/another/sick/route")).toBeTruthy()

@@ -15,7 +15,7 @@ const KEY = /:\w+/g
  * ```
  */
 export const keys = (route /*: string */) /*: Array<string> */ =>
-  route
+  (route || "")
     .replace(/^\//, "")
     .split("/")
     .map(key => {
@@ -40,13 +40,25 @@ export const keys = (route /*: string */) /*: Array<string> */ =>
  * ```
  */
 export const values = (pathname /*: string */) /*: Array<string> */ =>
-  pathname
+  (pathname || "")
     .replace(/^\//, "")
     .split("/")
     .filter(key => !key.match(KEY))
 
 /**
  * encode an object into a route
+ *
+ * ```js
+ * test("Route.encode", () => {
+ *  expect(
+ *    Route.encode("/:id/people/:name", {
+ *      id: 1,
+ *      name: "belle",
+ *      limit: 1
+ *    })
+ *  ).toBe("/1/people/belle?limit=1");
+ * });
+ * ```
  */
 export const encode = (route /*: string */, data /*: any */) /*: string */ => {
   const [pathname, search] = withBody(route, data)
@@ -56,6 +68,20 @@ export const encode = (route /*: string */, data /*: any */) /*: string */ => {
 
 /**
  * decode an object from a route
+ * ```js
+ * test("Route.decode", () => {
+ *   expect(
+ *     Route.decode("/:id/people/:name", "/1/people/belle", {
+ *       id: 1,
+ *       name: "belle"
+ *     })
+ *   ).toEqual({
+ *     id: "1",
+ *     name: "belle",
+ *     people: "people",
+ *   });
+ * });
+ * ```
  */
 export const decode = (route /*: string */, url /*: string */) /*: any */ => {
   const { query, pathname } = Url.parse(url, true)
@@ -96,43 +122,13 @@ export const withBody = (
 }
 
 /**
- * By default only the dynamic keys are decoded. To also include the constant keys use `Route.withConstants`
- *
- * ```js
- * test("Route.withConstants", () => {
- *   expect(
- *     Route.withConstants("/:id/people/:name", "/1/people/belle", {
- *       id: 1,
- *       name: "belle"
- *     })
- *   ).toEqual({
- *     id: "1",
- *     name: "belle",
- *     people: "people",
- *   });
- * });
- * ```
- */
-export const withConstants = (
-  route /*: string */,
-  url /*: string */
-) /*: any */ => {
-  const { query, pathname } = Url.parse(url, true)
-
-  return Object.assign(
-    Object.fromEntries(zip(keys(route), keys(pathname || ""))),
-    query
-  )
-}
-
-/**
  * Maybe you wanna see if this route is the same as another
  *
  * ```js
  * test("Route.matches", () => {
  *   expect(
  *     Route.matches(
- *       "/pathnames/are/made/of/:keys",
+
  *       "/pathnames/are/made/of/:keys"
  *     )
  *   ).toBeTruthy();
@@ -155,7 +151,7 @@ export const matches = (
  * test("Route.fits", () => {
  *   expect(
  *     Route.fits(
- *       "/pathnames/:are/made/of/:keys",
+
  *       "/pathnames/dogs/made/of/things"
  *     )
  *   ).toBeTruthy();
@@ -184,7 +180,7 @@ export const fits = (
  * test.skip("Route.create", () => {
  *   const route = Route.create("/another/:adjective/route");
  *
- *   expect(route.decode("/another/cool/route")).toEqual({ adjective: "cool" });
+
  *   expect(route.encode({ adjective: "fun" })).toBe("/another/fun/route");
  *   expect(route.matches("/another/:adjective/route")).toBeTruthy();
  *   expect(route.fits("/another/sick/route")).toBeTruthy();
