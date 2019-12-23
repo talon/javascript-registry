@@ -12,12 +12,18 @@
     "release": "lerna exec --concurrency 1 -- npx --no-install semantic-release -e semantic-release-monorepo",
     "gulp": "lerna exec -- gulp"
   },
+  "husky": {
+    "hooks": {
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook"
+    }
+  },
   "devDependencies": {
     "@babel/core": "^7.7.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
     "babel-jest": "^24.9.0",
     "babel-plugin-literate": "talon/babel-plugin-literate#feature/smarter",
+    "cz-lerna-changelog": "^2.0.0",
     "documentation": "^12.1.4",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
@@ -27,6 +33,7 @@
     "gulp-markdown-toc": "^1.1.0",
     "gulp-modify-file": "^1.0.1",
     "gulp-prettier": "^2.3.0",
+    "husky": "^3.1.0",
     "jest": "^24.9.0",
     "jest-cli": "^24.9.0",
     "lerna": "^3.19.0",
@@ -34,5 +41,10 @@
     "prettier": "^1.19.1",
     "semantic-release": "^15.14.0",
     "semantic-release-monorepo": "^6.1.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-lerna-changelog"
+    }
   }
 }
