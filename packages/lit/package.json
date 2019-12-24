@@ -1,6 +1,6 @@
 {
   "name": "@talon/lit",
-  "description": "encode/decode data to/from routes",
+  "description": "literate programming with Markdown and JavaScript",
   "homepage": "https://github.com/talon/javascript-registry/packages/route#readme",
   "author": "Talon Poole",
   "license": "MIT",
