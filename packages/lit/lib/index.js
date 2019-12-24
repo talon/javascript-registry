@@ -1,7 +1,7 @@
 //@flow
-import MarkdownIt from "markdown-it"
-import fs from "fs"
-import { resolve } from "path"
+const MarkdownIt = require("markdown-it")
+const fs = require("fs")
+const { resolve } = require("path")
 
 const snapshot = tokens => {
   fs.writeFileSync(
@@ -12,6 +12,8 @@ const snapshot = tokens => {
 }
 
 /**
+ * Convert a markdown string with JS code blocks into executable code.
+ * 
  * ```js
  * import lit from "./lib"
  * import { readFileSync } from "fs"
@@ -23,9 +25,10 @@ const snapshot = tokens => {
  *   ).toBe(readFileSync(resolve(__dirname, "./examples/simple/illiterate.js"), "utf8"))
  * })
  * ```
+ * @name lit
  */
-export default markdown =>
-  MarkdownIt()
+module.exports = function lit(markdown) {
+  return MarkdownIt()
     .parse(markdown, {})
     .map(token => {
       if (token.type === "fence")
@@ -44,6 +47,7 @@ export default markdown =>
     .join("")
     .replace(/^\s+\*\/\n\/\*\*\n/gm, " *\n")
     .trim() + "\n"
+}
 
 function comment(token) {
   return `/**

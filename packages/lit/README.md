@@ -2,17 +2,80 @@
 
 # @talon/lit
 
-> encode/decode data to/from routes
+> literate programming with Markdown and JavaScript
 
 **Table of Contents**
 
 <!-- toc -->
 
-- [index](#index)
+- [babel](#babel)
+- [Literate files](#literate-files)
+- [Supported syntaxes](#supported-syntaxes)
+- [Does it work?](#does-it-work)
+- [lit](#lit)
 
 <!-- tocstop -->
 
-## index
+## babel
+
+Add it to `plugins` in your babel config
+
+```json
+{
+  "babel": {
+    "plugins": [
+      [
+        "./node_modules/@talon/lit/lib/babel.js",
+        {
+          "files": ".*\\.md$"
+        }
+      ]
+    ]
+  }
+}
+```
+
+### using with babel-jest
+
+```json
+{
+  "jest": {
+    "moduleFileExtensions": ["md", "js", "ts", "jsx", "tsx"],
+    "testRegex": ".*(README|\\.(test|spec|usage))\\.([jt]sx?|md)$",
+    "transform": {
+      "^.+\\.([jt]sx?|md)$": "babel-jest"
+    }
+  }
+}
+```
+
+## Literate files
+
+the `files` regex is used to determine what files are literate. The default matches any file with a `.md` extension
+
+**Note:** peer tools might also need to know of the `.md` extension. (See: "[using with babel-jest][1]")
+
+## Supported syntaxes
+
+by default it only supports `js` blocks. With a little engineering magic it could probably support
+[the same syntaxes as the @babel/parser][2]
+PRs welcome 😉
+
+## Does it work?
+
+this _very_ README is a literate file tested with `babel-jest`.
+
+> npm run test
+
+```js
+test("end-to-end integration test", () => {
+  expect(true).toBeTruthy()
+})
+```
+
+## lit
+
+Convert a markdown string with JS code blocks into executable code.
 
 ```js
 import lit from "./lib"
@@ -30,6 +93,5 @@ test("examples/simple", () => {
 })
 ```
 
-### Parameters
-
-- `markdown`
+[1]: #using-with-babel-jest
+[2]: https://babeljs.io/docs/en/babel-parser#language-extensions
