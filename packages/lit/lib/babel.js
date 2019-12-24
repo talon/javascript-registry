@@ -5,6 +5,8 @@ const lit = require("./")
 /**
  * Add it to `plugins` in your babel config
  * 
+ * The `files` regex is used to determine what files are literate. The default matches any file with a `.md` extension
+ * 
  * ```json
  * {
  *   "babel": {
@@ -20,13 +22,13 @@ const lit = require("./")
  * }
  * ```
  * 
- * ### using with babel-jest
+ * You'll have to tell jest about markdown files you want to test
  * 
  * ```json
  * {
  *   "jest": {
  *     "moduleFileExtensions": ["md", "js", "ts", "jsx", "tsx"],
- *     "testRegex": ".*(README|\\.(test|spec|usage))\\.([jt]sx?|md)$",
+ *     "testRegex": "(README|.+\\.(test|spec|usage))\\.([jt]sx?|md)$",
  *     "transform": {
  *       "^.+\\.([jt]sx?|md)$": "babel-jest"
  *     }
@@ -34,29 +36,9 @@ const lit = require("./")
  * }
  * ```
  * 
- * ## Literate files
- * 
- * the `files` regex is used to determine what files are literate. The default matches any file with a `.md` extension
- * 
- * **Note:** peer tools might also need to know of the `.md` extension. (See: "[using with babel-jest](#using-with-babel-jest)")
- * 
- * ## Supported syntaxes
- * 
- * by default it only supports `js` blocks. With a little engineering magic it could probably support
+ * Currently only `js` blocks are supported. With a little engineering magic it could probably support
  * [the same syntaxes as the @babel/parser](https://babeljs.io/docs/en/babel-parser#language-extensions)
  * PRs welcome 😉
- * 
- * ## Does it work?
- * 
- * this _very_ README is a literate file tested with `babel-jest`.
- * 
- * > npm run test
- * 
- * ```js
- * test("end-to-end integration test", () => {
- *   expect(true).toBeTruthy()
- * })
- * ```
  */
 module.exports = declare(({ assertVersion }, { files }) => {
     assertVersion(7)
