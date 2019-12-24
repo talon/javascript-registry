@@ -8,7 +8,7 @@ module.exports = ({
   ],
   "testRegex": [
     ".+\\.test\\.[jt]sx?$",
-    "packages\/.+(README|API)\\.md$"
+    "packages\/.+README\\.md$"
   ],
   "testPathIgnorePatterns": [
     "/node_modules/",

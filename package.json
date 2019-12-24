@@ -22,7 +22,6 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
     "babel-jest": "^24.9.0",
-    "babel-plugin-literate": "talon/babel-plugin-literate#feature/smarter",
     "commitizen": "^4.0.3",
     "cz-lerna-changelog": "^2.0.0",
     "documentation": "^12.1.4",
