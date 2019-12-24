@@ -8,4 +8,75 @@
 
 <!-- toc -->
 
+- [docs](#docs)
+- [test](#test)
+- [develop](#develop)
+- [format](#format)
+- [compile](#compile)
+- [build](#build)
+
 <!-- tocstop -->
+
+## docs
+
+Create a README.md for this package by parsing the source code for JSDoc style comments
+
+**You should never edit the README**, only lib code. Namaste 🕊
+
+### Parameters
+
+- `pkg` **[string][1]**
+
+## test
+
+With [@talon/lit][2] **you can test your README!**
+
+just add a js code block in your JSDoc comments 😎
+
+```js
+describe("readme driven development", () => {
+  it("is lit! 🔥", () => expect(true).toBeTruthy())
+})
+```
+
+### Parameters
+
+- `pkg` **[string][1]**
+
+## develop
+
+You probably want the docs and tests to update while you're in the thick of it
+
+### Parameters
+
+- `pkg` **[string][1]**
+
+## format
+
+Run prettier on everything, don't think about style
+
+### Parameters
+
+- `pkg` **[string][1]**
+
+## compile
+
+Babel it all up and stuff it into a distribution folder
+
+### Parameters
+
+- `pkg` **[string][1]**
+- `dir` **[string][1]** (optional, default `"./dist"`)
+
+## build
+
+All of this together into one task, excellent for CI environments!
+
+A bunch of sips === a gulp
+
+### Parameters
+
+- `pkg` **[string][1]**
+
+[1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[2]: https://github.com/talon/javascript-registry/packages/92916
