@@ -6,13 +6,9 @@ module.exports = ({
     "jsx",
     "tsx"
   ],
-  "testRegex": [
-    ".+\\.test\\.[jt]sx?$",
-    "packages\/.+README\\.md$"
-  ],
   "testPathIgnorePatterns": [
     "/node_modules/",
-    "/api/"
+    "/dist/",
   ],
   "transform": {
     "^.+\\.([jt]sx?|md)$": "./lib/babel-jest-upward.js"
