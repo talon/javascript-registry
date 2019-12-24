@@ -11,7 +11,7 @@
   ],
   "plugins": [
     [
-      "babel-plugin-literate",
+      "./packages/lit/lib/babel.js",
       {
         "files": "\\.md$"
       }
