@@ -1,0 +1,21 @@
+{
+  "name": "@talon/sip",
+  "description": "🥤 gulp tasks for great good",
+  "homepage": "https://github.com/talon/javascript-registry/tree/master/packages/sip",
+  "keywords": [
+    "utility",
+    "javascript",
+    "gulp"
+  ],
+  "author": "Talon Poole",
+  "license": "MIT",
+  "main": "lib",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/talon/javascript-registry.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
+  }
+}

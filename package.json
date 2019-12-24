@@ -12,6 +12,11 @@
     "release": "lerna exec --concurrency 1 -- npx --no-install semantic-release -e semantic-release-monorepo",
     "gulp": "lerna exec -- gulp"
   },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-lerna-changelog"
+    }
+  },
   "husky": {
     "hooks": {
       "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
@@ -21,6 +26,7 @@
     "@babel/core": "^7.7.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
+    "@babel/register": "^7.7.7",
     "babel-jest": "^24.9.0",
     "commitizen": "^4.0.3",
     "cz-lerna-changelog": "^2.0.0",
@@ -41,10 +47,5 @@
     "prettier": "^1.19.1",
     "semantic-release": "^15.14.0",
     "semantic-release-monorepo": "hweeks/semantic-release-monorepo#fix-latest-monorepo-issue"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-lerna-changelog"
-    }
   }
 }
