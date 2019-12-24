@@ -3,14 +3,6 @@ const MarkdownIt = require("markdown-it")
 const fs = require("fs")
 const { resolve } = require("path")
 
-const snapshot = tokens => {
-  fs.writeFileSync(
-    resolve("examples/simple/tokens.js"),
-    JSON.stringify(tokens, null, 2)
-  )
-  return tokens
-}
-
 /**
  * Convert a markdown string with JS code blocks into executable code.
  * 

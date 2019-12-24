@@ -1,7 +1,7 @@
 {
   "name": "@talon/route",
   "description": "encode/decode data to/from routes",
-  "homepage": "https://github.com/talon/javascript-registry/packages/route#readme",
+  "homepage": "https://github.com/talon/javascript-registry/tree/master/packages/route",
   "author": "Talon Poole",
   "license": "MIT",
   "main": "dist",

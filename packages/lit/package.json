@@ -1,7 +1,7 @@
 {
   "name": "@talon/lit",
-  "description": "literate programming with Markdown and JavaScript",
-  "homepage": "https://github.com/talon/javascript-registry/packages/route#readme",
+  "description": "🔥 literate programming with Markdown and JavaScript",
+  "homepage": "https://github.com/talon/javascript-registry/tree/master/packages/lit",
   "author": "Talon Poole",
   "license": "MIT",
   "main": "dist",
@@ -18,11 +18,17 @@
   },
   "keywords": [
     "utility",
-    "route"
+    "literate",
+    "javascript",
+    "babel",
+    "babel-plugin"
   ],
   "gitHead": "1fa7f09f82366ee26fedbc47581ca02678c674ee",
   "dependencies": {
-    "markdown-it": "^10.0.0",
-    "ramda": "^0.26.1"
+    "markdown-it": "^10.0.0"
+  },
+  "devDependencies": {
+    "@babel/helper-plugin-utils": "^7.0.0",
+    "@babel/parser": "^7.7.7"
   }
 }
