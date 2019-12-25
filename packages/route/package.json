@@ -1,25 +1,18 @@
 {
   "name": "@talon/route",
   "description": "encode/decode data to/from routes",
-  "homepage": "https://github.com/talon/javascript-registry/tree/master/packages/route",
-  "author": "Talon Poole",
-  "license": "MIT",
-  "main": "dist",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/talon/javascript-registry.git"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://npm.pkg.github.com"
-  },
-  "bugs": {
-    "url": "https://github.com/talon/javascript-registry/issues"
-  },
   "keywords": [
     "utility",
     "route"
   ],
+  "author": "Talon Poole",
+  "license": "MIT",
+  "main": "dist",
+  "repository": "https://github.com/talon/javascript-registry.git",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
+  },
   "gitHead": "1fa7f09f82366ee26fedbc47581ca02678c674ee",
   "dependencies": {
     "ramda": "^0.26.1"

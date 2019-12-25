@@ -2,9 +2,7 @@ module.exports = ({
   "moduleFileExtensions": [
     "md",
     "js",
-    "ts",
     "jsx",
-    "tsx"
   ],
   "testPathIgnorePatterns": [
     "/node_modules/",

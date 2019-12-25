@@ -1,7 +1,13 @@
 {
   "name": "@talon/lit",
   "description": "🔥 literate programming with Markdown and JavaScript",
-  "homepage": "https://github.com/talon/javascript-registry/tree/master/packages/lit",
+  "keywords": [
+    "utility",
+    "literate",
+    "javascript",
+    "babel",
+    "babel-plugin"
+  ],
   "author": "Talon Poole",
   "license": "MIT",
   "main": "dist",
@@ -13,21 +19,9 @@
     "access": "public",
     "registry": "https://npm.pkg.github.com"
   },
-  "bugs": {
-    "url": "https://github.com/talon/javascript-registry/issues"
-  },
-  "keywords": [
-    "utility",
-    "literate",
-    "javascript",
-    "babel",
-    "babel-plugin"
-  ],
   "gitHead": "1fa7f09f82366ee26fedbc47581ca02678c674ee",
   "dependencies": {
-    "markdown-it": "^10.0.0"
-  },
-  "devDependencies": {
+    "markdown-it": "^10.0.0",
     "@babel/helper-plugin-utils": "^7.0.0",
     "@babel/parser": "^7.7.7"
   }

@@ -18,7 +18,9 @@ jobs:
       - run: npm install
       - run: npm run bootstrap
       - run: npm run build
-      - run: npm run release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # TODO: currently this is zipping the entire monorepo for each package it publishes
+      #       so we'll hold off on publishing for now.
+      # - run: npm run release
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
