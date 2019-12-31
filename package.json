@@ -12,7 +12,7 @@
     "test": "lerna exec -- gulp test",
     "build": "yarn install && lerna exec -- gulp build",
     "release": "./node_modules/lerna-semantic-release/packages/lerna-semantic-release/bin/lerna-semantice-release.js",
-    "ci": "npm run release pre && npm run release perform"
+    "ci": "npm run build && npm run release pre && npm run release perform"
   },
   "config": {
     "commitizen": {
