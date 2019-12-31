@@ -81,9 +81,7 @@ A bunch of sips === a gulp
 
 ## tasks
 
-This initializes the Sip Suite with a package root.
-
-With Lerna you can use it like this
+This initializes the Sip Suite with a package root. With Lerna you can use it like this
 
     Object.assign(exports, Mono.tasks(process.env.LERNA_PACKAGE_NAME ? `${__dirname}/packages/${process.env.LERNA_PACKAGE_NAME.split("/").slice(-1)}` : false))
 
@@ -91,13 +89,9 @@ Now the Sip tasks will be available for your monorepo packages on the fly!
 
 ### Parameters
 
-- `pkg`
-
-Returns **[string][1]**
+- `pkg` **[string][1]**
 
 ## init
-
-You're gonna be growing out your monorepo, why not lean on Sip to at least create the files for each new package.
 
 You will be prompted for a few answers and then your package will be made available under your packages folder!
 

@@ -6,11 +6,6 @@ import prettier from "gulp-prettier"
 import toc from "markdown-toc"
 import babel from "gulp-babel"
 import jest from "gulp-jest"
-import inquirer from "inquirer"
-import fs from "fs"
-import { resolve, dirname } from "path"
-
-const { stat, mkdir, writeFile } = fs.promises
 
 /**
  * Create a README.md for this package by parsing the source code for JSDoc style comments

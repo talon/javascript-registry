@@ -4,9 +4,9 @@ const lit = require("./")
 
 /**
  * Add it to `plugins` in your babel config
- * 
+ *
  * The `files` regex is used to determine what files are literate. The default matches any file with a `.md` extension
- * 
+ *
  * ```json
  * {
  *   "babel": {
@@ -21,9 +21,9 @@ const lit = require("./")
  *   }
  * }
  * ```
- * 
+ *
  * You'll have to tell jest about markdown files you want to test
- * 
+ *
  * ```json
  * {
  *   "jest": {
@@ -35,18 +35,18 @@ const lit = require("./")
  *   }
  * }
  * ```
- * 
+ *
  * Currently only `js` blocks are supported. With a little engineering magic it could probably support
  * [the same syntaxes as the @babel/parser](https://babeljs.io/docs/en/babel-parser#language-extensions)
  * PRs welcome 😉
  */
 module.exports = declare(({ assertVersion }, { files }) => {
-    assertVersion(7)
-    return {
-        parserOverride(code, options) {
-            return options.sourceFileName.match(files || /\.md$/)
-                ? parse(lit(code), options)
-                : parse(code, options)
-        }
+  assertVersion(7)
+  return {
+    parserOverride(code, options) {
+      return options.sourceFileName.match(files || /\.md$/)
+        ? parse(lit(code), options)
+        : parse(code, options)
     }
+  }
 })

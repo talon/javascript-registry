@@ -15,12 +15,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install
-      - run: npm run bootstrap
-      - run: npm run build
-      # TODO: currently this is zipping the entire monorepo for each package it publishes
-      #       so we'll hold off on publishing for now.
-      # - run: npm run release
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: npx yarn install
+      - run: npx lerna bootstrap
+      - run: npx lerna exec --parallel -- npx gulp build
+      - run: npx lerna exec --concurrency 1 -- npx --no-install semantic-release -e semantic-release-monorepo
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
