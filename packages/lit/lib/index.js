@@ -19,7 +19,7 @@ const { resolve } = require("path")
  * ```
  * @name lit
  */
-module.exports = function lit(markdown) {
+module.exports = function lit(markdown /*: string */) {
   return MarkdownIt()
     .parse(markdown, {})
     .map(token => {

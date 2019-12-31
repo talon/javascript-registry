@@ -1,5 +1,6 @@
 {
   "name": "@talon/route",
+  "version": "3.0.0",
   "description": "encode/decode data to/from routes",
   "keywords": [
     "utility",

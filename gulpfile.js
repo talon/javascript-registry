@@ -4,22 +4,15 @@ require("@babel/register")({
     rootMode: "upward"
 })
 
-const Sip = require("./packages/sip/lib")
+const Mono = require("./packages/sip/lib/mono.js")
 const { resolve } = require("path")
+const meta = require("./package.json")
 
-exports.init = Sip.init({
-    repository: require("./package.json").repository.url,
-    directory: "packages",
+exports.init = Mono.init({
+    repository: meta.repository.url,
+    directory: meta.workspaces[0],
     registry: "https://npm.pkg.github.com",
     scope: "talon"
 })
 
-const PACKAGE = process.env.LERNA_PACKAGE_NAME ? `${process.env.LERNA_ROOT_PATH}/packages/${process.env.LERNA_PACKAGE_NAME.split("/").slice(-1)}` : false
-if (PACKAGE) {
-    exports.docs = Sip.docs(PACKAGE)
-    exports.format = Sip.format(PACKAGE)
-    exports.test = Sip.test(PACKAGE)
-    exports.compile = Sip.compile(PACKAGE)
-    exports.build = Sip.build(PACKAGE)
-    exports.develop = Sip.develop(PACKAGE)
-}
+Object.assign(exports, Mono.tasks(process.env.LERNA_PACKAGE_NAME ? `${__dirname}/packages/${process.env.LERNA_PACKAGE_NAME.split("/").slice(-1)}` : false))

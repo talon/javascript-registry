@@ -1,16 +1,12 @@
 {
   "name": "root",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/talon/javascript-registry.git"
-  },
-  "scripts": {
-    "clean": "lerna clean",
-    "bootstrap": "lerna bootstrap",
-    "build": "lerna exec -- gulp build",
-    "release": "lerna exec --concurrency 1 -- npx --no-install semantic-release -e semantic-release-monorepo",
-    "gulp": "lerna exec -- gulp"
   },
   "config": {
     "commitizen": {
@@ -29,15 +25,11 @@
     "@babel/register": "^7.7.7",
     "babel-jest": "^24.9.0",
     "commitizen": "^4.0.3",
-    "cz-lerna-changelog": "^2.0.0",
     "gulp": "^4.0.2",
-    "gulp-prompt": "^1.2.0",
     "husky": "^3.1.0",
     "jest": "^24.9.0",
-    "jest-cli": "^24.9.0",
-    "lerna": "^3.19.0",
+    "lerna": "^3.20.1",
     "prettier": "^1.19.1",
-    "semantic-release": "^15.14.0",
-    "semantic-release-monorepo": "hweeks/semantic-release-monorepo#fix-latest-monorepo-issue"
+    "semantic-release": "^15.14.0"
   }
 }
