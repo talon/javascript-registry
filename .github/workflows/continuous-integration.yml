@@ -18,7 +18,7 @@ jobs:
       - run: npx yarn install
       - run: npx lerna bootstrap
       - run: npx lerna exec --parallel -- npx gulp build
-      - run: npx lerna exec --concurrency 1 -- npx --no-install semantic-release -e semantic-release-monorepo
+      - run: npx lerna exec --concurrency 1 -- npx --no-install semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
