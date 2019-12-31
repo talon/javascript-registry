@@ -12,7 +12,5 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: install dependencies
-        run: npx yarn install
-      - name: build packages
-        run: npx lerna exec --parallel -- npx gulp build
+      - name: test
+        run: npx yarn run test

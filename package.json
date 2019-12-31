@@ -8,6 +8,10 @@
     "type": "git",
     "url": "git://github.com/talon/javascript-registry.git"
   },
+  "scripts": {
+    "test": "lerna exec -- gulp test",
+    "release": "yarn install && lerna exec -- gulp build && lerna-semantic-release pre && lerna-semantic-release perform"
+  },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-lerna-changelog"
