@@ -1,6 +1,7 @@
 {
   "name": "@talon/sip",
   "description": "🥤 gulp tasks for great good",
+  "version": "3.0.1",
   "keywords": [
     "utility",
     "javascript",
