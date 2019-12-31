@@ -16,7 +16,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npx yarn install
-      - run: npx lerna bootstrap
       - run: npx lerna exec --parallel -- npx gulp build
       - run: npx lerna exec --concurrency 1 -- npx --no-install semantic-release
         env:
