@@ -1,7 +1,7 @@
 {
   "name": "@talon/lit",
   "description": "🔥 literate programming with Markdown and JavaScript",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "keywords": [
     "utility",
     "literate",

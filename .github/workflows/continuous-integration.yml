@@ -11,13 +11,20 @@ jobs:
         node-version: [12.x]
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: use node ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npx yarn install
-      - run: npx lerna exec --parallel -- npx gulp build
-      - run: npx lerna exec --concurrency 1 -- npx --no-install semantic-release
+      - name: install dependencies
+        run: npx yarn install
+      - name: build packages
+        run: npx lerna exec --parallel -- npx gulp build
+      - name: semantic release
+        run: |
+          npx lerna-semantic-release pre
+          npx lerna-semantic-release perform
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_GITHUB_USERNAME: "talon"
