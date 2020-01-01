@@ -9,8 +9,7 @@
     "url": "git://github.com/talon/javascript-registry.git"
   },
   "scripts": {
-    "test": "lerna exec -- gulp test",
-    "build": "npx yarn install && lerna exec -- gulp build",
+    "build": "lerna exec -- gulp build",
     "release": "npm run build && multi-semantic-release"
   },
   "config": {
