@@ -1,4 +1,4 @@
-name: test
+name: build 
 on: pull_request
 jobs:
   build:
@@ -13,4 +13,5 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: test
-        run: npx yarn run test
+        run: npx yarn run install
+        run: npx yarn run build
