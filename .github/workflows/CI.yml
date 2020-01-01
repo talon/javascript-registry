@@ -1,4 +1,4 @@
-name: release
+name: CI
 on:
   push:
     branches:
@@ -15,8 +15,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: CI
-        run: npx yarn run ci
+      - name: release
+        run: npx yarn run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}

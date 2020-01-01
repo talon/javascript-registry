@@ -11,8 +11,7 @@
   "scripts": {
     "test": "lerna exec -- gulp test",
     "build": "npx yarn install && lerna exec -- gulp build",
-    "release": "./node_modules/lerna-semantic-release/packages/lerna-semantic-release/bin/lerna-semantic-release.js",
-    "ci": "npm run build && npm run release pre && npm run release perform"
+    "release": "npm run build && multi-semantic-release"
   },
   "config": {
     "commitizen": {
@@ -29,7 +28,6 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
     "@babel/register": "^7.7.7",
-    "@semantic-release/git": "^7.0.18",
     "babel-jest": "^24.9.0",
     "commitizen": "^4.0.3",
     "cz-lerna-changelog": "^2.0.2",
@@ -37,7 +35,7 @@
     "husky": "^3.1.0",
     "jest": "^24.9.0",
     "lerna": "^3.20.1",
-    "lerna-semantic-release": "ZachCase/lerna-semantic-release#caribou",
+    "multi-semantic-release": "^1.1.2",
     "prettier": "^1.19.1"
   }
 }

@@ -1,4 +1,6 @@
-# JavaScript Registry [![](https://github.com/talon/javascript-registry/workflows/release/badge.svg)](https://github.com/talon/javascript-registry/actions?query=workflow%3A%22release)
+# JavaScript Registry
+
+[![](https://github.com/talon/javascript-registry/workflows/CI/badge.svg)](https://github.com/talon/javascript-registry/actions?query=workflow%3A%22CI%22)
 
 # Usage
 
