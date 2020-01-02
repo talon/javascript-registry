@@ -92,3 +92,28 @@ export const compile = (pkg /*: string */) => () =>
  */
 export const build = (pkg /*: string */) =>
   series(test(pkg), format(pkg), compile(pkg))
+
+/**
+ * This initializes the Sip Suite with a package root. With Lerna you can use it like this
+ *
+ * ```
+ * Object.assign(exports, Sip.tasks(process.env.LERNA_PACKAGE_NAME ? `${__dirname}/packages/${process.env.LERNA_PACKAGE_NAME.split("/").slice(-1)}` : false))
+ * ```
+ * 
+ * or for non-monorepo projects like this
+ * 
+ * ```
+ * Object.assign(exports, Sip.tasks(__dirname))
+ * ```
+ */
+export const tasks = (pkg /*: string */) =>
+  pkg
+    ? {
+      docs: Sip.docs(pkg),
+      format: Sip.format(pkg),
+      test: Sip.test(pkg),
+      compile: Sip.compile(pkg),
+      build: Sip.build(pkg),
+      develop: Sip.develop(pkg)
+    }
+    : {}

@@ -7,27 +7,6 @@ import fs from "fs"
 // $FlowFixMe
 const { stat, mkdir, writeFile } = fs.promises
 
-/**
- * This initializes the Sip Suite with a package root. With Lerna you can use it like this
- *
- * ```
- * Object.assign(exports, Mono.tasks(process.env.LERNA_PACKAGE_NAME ? `${__dirname}/packages/${process.env.LERNA_PACKAGE_NAME.split("/").slice(-1)}` : false))
- * ```
- *
- * Now the Sip tasks will be available for your monorepo packages on the fly!
- */
-export const tasks = (pkg /*: string */) =>
-  pkg
-    ? {
-      docs: Sip.docs(pkg),
-      format: Sip.format(pkg),
-      test: Sip.test(pkg),
-      compile: Sip.compile(pkg),
-      build: Sip.build(pkg),
-      develop: Sip.develop(pkg)
-    }
-    : {}
-
 /*:: 
 type Package = {
   repository: string,
