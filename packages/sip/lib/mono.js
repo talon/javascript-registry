@@ -4,7 +4,8 @@ import inquirer from "inquirer"
 import { resolve, dirname } from "path"
 import fs from "fs"
 
-const { stat, mkdir, writeFile, readFile } = fs.promises
+// $FlowFixMe
+const { stat, mkdir, writeFile } = fs.promises
 
 /**
  * This initializes the Sip Suite with a package root. With Lerna you can use it like this

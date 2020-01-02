@@ -30,6 +30,7 @@
     "gulp-prettier": "^2.3.0",
     "gulp-prompt": "^1.2.0",
     "inquirer": "^7.0.1",
+    "gulp-flowtype": "^1.0.0",
     "markdown-toc": "^1.2.0"
   }
 }
