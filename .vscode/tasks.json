@@ -1,0 +1,44 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build registry",
+      "type": "shell",
+      "group": "build",
+      "command": "lerna exec -- gulp build",
+      "problemMatcher": []
+    },
+    {
+      "label": "develop package",
+      "type": "shell",
+      "group": "build",
+      "command": "lerna exec --scope @talon/${input:package} -- gulp develop",
+      "problemMatcher": []
+    },
+    {
+      "label": "commit registry",
+      "type": "shell",
+      "group": "build",
+      "command": "git add . && git commit",
+      "problemMatcher": []
+    },
+    {
+      "label": "commit package",
+      "type": "shell",
+      "group": "build",
+      "command": "git add ./packages/${input:package} && git commit",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "type": "pickString",
+      "id": "package",
+      "description": "which package?",
+      // TODO: can we get these programitcally?
+      "options": ["lit", "sip", "route"]
+    }
+  ]
+}
