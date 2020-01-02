@@ -72,4 +72,11 @@ test("examples/simple", () => {
 })
 ```
 
+### Parameters
+
+- `markdown` **[string][2]** some markdown with JS code blocks
+
+Returns **[string][2]** code an executable JS file of the stripped code blocks
+
 [1]: https://babeljs.io/docs/en/babel-parser#language-extensions
+[2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String

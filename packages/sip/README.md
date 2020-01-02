@@ -8,30 +8,63 @@
 
 <!-- toc -->
 
-- [docs](#docs)
+- [SipSuite](#sipsuite)
+- [suite](#suite)
 - [test](#test)
 - [develop](#develop)
-- [format](#format)
-- [compile](#compile)
 - [build](#build)
-- [tasks](#tasks)
+- [dependencies](#dependencies)
+- [format](#format)
+- [typecheck](#typecheck)
+- [docs](#docs)
 - [init](#init)
 
 <!-- tocstop -->
 
-## docs
+## SipSuite
 
-Create a README.md for this package by parsing the source code for JSDoc style comments
+Sip is a suite of gulp tasks that make developing JavaScript less painful.
 
-**You should never edit the README**, only lib code. Namaste 🕊
+Type: [object][1]
+
+### Properties
+
+- `test` **TaskFunction** check dependencies, check types, generate a README and run Jest
+- `develop` **TaskFunction** all the above and also watch for changes
+- `build` **TaskFunction** all the above and also formats your files and compiles your `lib` into `dist` with Babel
+
+## suite
+
+initialize Sip with a package root in your `gulpfile.js`
 
 ### Parameters
 
-- `pkg` **[string][1]**
+- `pkg` **[string][2]** the path to the package to operate on
+
+### Examples
+
+```javascript
+// With Lerna you can use it like this to create tasks for packages on the fly
+Object.assign(
+  exports,
+  Sip.suite(
+    `${__dirname}/packages/${process.env.LERNA_PACKAGE_NAME.split("/").slice(
+      -1
+    )}`
+  )
+)
+```
+
+```javascript
+// or for non-monorepo projects like this
+Object.assign(exports, Sip.suite(__dirname))
+```
+
+Returns **[SipSuite][3]** initalized gulp tasks
 
 ## test
 
-With [@talon/lit][2] **you can test your README!**
+With [@talon/lit][4] **you can test your README!**
 
 just add a js code block in your JSDoc comments 😎
 
@@ -43,7 +76,9 @@ describe("readme driven development", () => {
 
 ### Parameters
 
-- `pkg` **[string][1]**
+- `pkg` **[string][2]** the path to the package to operate on
+
+Returns **TaskFunction** the initialized gulp task
 
 ## develop
 
@@ -51,23 +86,9 @@ You probably want the docs and tests to update while you're in the thick of it
 
 ### Parameters
 
-- `pkg` **[string][1]**
+- `pkg` **[string][2]** the path to the package to operate on
 
-## format
-
-Run prettier on everything, don't think about style
-
-### Parameters
-
-- `pkg` **[string][1]**
-
-## compile
-
-Babel it all up and stuff it into a distribution folder
-
-### Parameters
-
-- `pkg` **[string][1]**
+Returns **TaskFunction** the initialized gulp task
 
 ## build
 
@@ -77,21 +98,51 @@ A bunch of sips === a gulp
 
 ### Parameters
 
-- `pkg` **[string][1]**
+- `pkg` **[string][2]** the path to the package to operate on
 
-## tasks
+Returns **TaskFunction** the initialized gulp task
 
-This initializes the Sip Suite with a package root. With Lerna you can use it like this
+## dependencies
 
-    Object.assign(exports, Sip.tasks(process.env.LERNA_PACKAGE_NAME ? `${__dirname}/packages/${process.env.LERNA_PACKAGE_NAME.split("/").slice(-1)}` : false))
-
-or for non-monorepo projects like this
-
-    Object.assign(exports, Sip.tasks(__dirname))
+Automatically update dependencies adding and removing as needed
 
 ### Parameters
 
-- `pkg` **[string][1]**
+- `pkg` **[string][2]** the path to the package to operate on
+
+Returns **TaskFunction** the initialized gulp task
+
+## format
+
+don't think about style
+
+### Parameters
+
+- `pkg` **[string][2]** the path to the package to operate on
+
+Returns **TaskFunction** the initialized gulp task
+
+## typecheck
+
+Lints for and typechecks JSDoc comments
+
+### Parameters
+
+- `pkg` **[string][2]** the path to the package to operate on
+
+Returns **TaskFunction** the initialized gulp task
+
+## docs
+
+Create a README.md for this package by parsing the source code for JSDoc style comments
+
+**You should never edit the README**, only lib code. Namaste 🕊
+
+### Parameters
+
+- `pkg` **[string][2]** the path to the package to operate on
+
+Returns **TaskFunction** the initialized gulp task
 
 ## init
 
@@ -108,7 +159,16 @@ Here's how to initialize this in your root monorepo gulpfile
 
 ### Parameters
 
-- `pkg` **Package**
+- `repo` **[object][1]** an object describing your monorepo
+  - `repo.repository` **[string][2]** the URL for this repo
+  - `repo.directory` **[string][2]** the directory with your packages
+  - `repo.registry` **[string][2]** the registry link where you publish your packages
+  - `repo.scope` **[string][2]** your npm scope
 
-[1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
-[2]: https://github.com/talon/javascript-registry/packages/92916
+Returns **[Function][5]** the initalized gulp task
+
+[1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[3]: #sipsuite
+[4]: https://github.com/talon/javascript-registry/packages/92916
+[5]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function

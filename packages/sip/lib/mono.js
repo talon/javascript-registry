@@ -7,16 +7,8 @@ import fs from "fs"
 // $FlowFixMe
 const { stat, mkdir, writeFile } = fs.promises
 
-/*:: 
-type Package = {
-  repository: string,
-  directory: string,
-  registry: string,
-  scope: string
-} 
-*/
-
 /**
+ *
  * You will be prompted for a few answers and then your package will be made available under your packages folder!
  *
  * Here's how to initialize this in your root monorepo gulpfile
@@ -29,8 +21,15 @@ type Package = {
  *     scope: "talon"
  * })
  * ```
+ *
+ * @param {object} repo an object describing your monorepo
+ * @param {string} repo.repository the URL for this repo
+ * @param {string} repo.directory the directory with your packages
+ * @param {string} repo.registry the registry link where you publish your packages
+ * @param {string} repo.scope your npm scope
+ * @returns {Function} the initalized gulp task
  */
-export const init = (pkg /*: Package */) => () => {
+export const init = repo => () => {
   console.log("🥚  Oh! A package!")
   return inquirer
     .prompt([
@@ -57,12 +56,12 @@ export const init = (pkg /*: Package */) => () => {
     ])
     .then(prompt =>
       Object.assign(prompt, {
-        name: `@${pkg.scope}/${prompt.name}`,
+        name: `@${repo.scope}/${prompt.name}`,
         version: "1.0.0",
         repository: {
           type: "git",
-          url: pkg.repository,
-          directory: `${dirname(pkg.directory)}/${prompt.name}`
+          url: repo.repository,
+          directory: `${dirname(repo.directory)}/${prompt.name}`
         },
         keywords: prompt.keywords.split(",").map(keyword => keyword.trim()),
         main: "dist",
@@ -89,7 +88,7 @@ export const init = (pkg /*: Package */) => () => {
           .then(() =>
             writeFile(
               `${dir}/lib/index.js`,
-              `//@flow\n\n/**\n * @name ${
+              `/**\n * @name ${
                 meta.name.split("/").slice(-1)[0]
               }\n */\nexport default () => {}`,
               "utf8"

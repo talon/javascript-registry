@@ -13,8 +13,11 @@ const KEY = /:\w+/g
  *   expect(Route.keys("/routes/are/made/of/:keys")).toEqual(["routes", "are", "made", "of", "keys"]);
  * });
  * ```
+ *
+ * @param {string} route or pathname, basically any string that has "/"
+ * @returns {Array} the keys of the route/pathname
  */
-export const keys = (route /*: string */) /*: Array<string> */ =>
+export const keys = route =>
   (route || "")
     .replace(/^\//, "")
     .split("/")
@@ -38,8 +41,11 @@ export const keys = (route /*: string */) /*: Array<string> */ =>
  *   ]);
  * });
  * ```
+ *
+ * @param {string} pathname or route, basically any string that has "/"
+ * @returns {Array} the keys of the route/pathname
  */
-export const values = (pathname /*: string */) /*: Array<string> */ =>
+export const values = pathname =>
   (pathname || "")
     .replace(/^\//, "")
     .split("/")
@@ -59,9 +65,13 @@ export const values = (pathname /*: string */) /*: Array<string> */ =>
  *  ).toBe("/1/people/belle?limit=1");
  * });
  * ```
+ *
+ * @param {string} route the route to fill with values
+ * @param {object} values the values to put into the route
+ * @returns {string} the resulting pathname
  */
-export const encode = (route /*: string */, data /*: any */) /*: string */ => {
-  const [pathname, search] = withBody(route, data)
+export const encode = (route, values) => {
+  const [pathname, search] = withBody(route, values)
 
   return `${pathname}?${QueryString.stringify(search)}`
 }
@@ -82,11 +92,16 @@ export const encode = (route /*: string */, data /*: any */) /*: string */ => {
  *   });
  * });
  * ```
+ *
+ * @param {string} route the route that maps the pathname keys
+ * @param {string} path the pathname to extract the values from
+ * @returns {object} the resulting key value pairs
  */
-export const decode = (route /*: string */, url /*: string */) /*: any */ => {
-  const { query, pathname } = Url.parse(url, true)
+export const decode = (route, path) => {
+  const { query, pathname } = Url.parse(path, true)
 
   return Object.assign(
+    // @ts-ignore
     Object.fromEntries(zip(keys(route), keys(pathname || ""))),
     query
   )
@@ -98,26 +113,27 @@ export const decode = (route /*: string */, url /*: string */) /*: any */ => {
  *
  * ```js
  * test("Route.withBody", () => {
- *   const [pathname, body] = Route.withBody("/:id/people/:name", {
- *     id: 1,
- *     name: "belle",
- *     limit: 1
- *   });
+ * const [pathname, body] = Route.withBody("/:id/people/:name", {
+ * id: 1,
+ * name: "belle",
+ * limit: 1
+ * });
  *
- *   expect(pathname).toBe("/1/people/belle");
- *   expect(body).toEqual({ limit: 1 });
+ * expect(pathname).toBe("/1/people/belle");
+ * expect(body).toEqual({ limit: 1 });
  * });
  * ```
+ *
+ * @param {string} route the route to fill with values
+ * @param {object} values the values to put into the route
+ * @returns {Array} a tuple where the first value is the pathname and the second are the left over values
  */
-export const withBody = (
-  route /*: string */,
-  data /*: any */
-) /*: [string, any]*/ => {
+export const withBody = (route, values) => {
   const keeze = keys(route)
 
   return [
-    keeze.reduce((path, key) => path.replace(`:${key}`, data[key]), route),
-    omit(keeze, data)
+    keeze.reduce((path, key) => path.replace(`:${key}`, values[key]), route),
+    omit(keeze, values)
   ]
 }
 
@@ -126,46 +142,48 @@ export const withBody = (
  *
  * ```js
  * test("Route.matches", () => {
- *   expect(
- *     Route.matches(
-
- *       "/pathnames/are/made/of/:keys"
- *     )
- *   ).toBeTruthy();
+ * expect(
+ * Route.matches(
  *
- *   expect(
- *     Route.matches("/pathnames/are/made/of/:keys", "/pathnames/made/of/:keys")
- *   ).toBeFalsy();
+ * "/pathnames/are/made/of/:keys"
+ * )
+ * ).toBeTruthy();
+ *
+ * expect(
+ * Route.matches("/pathnames/are/made/of/:keys", "/pathnames/made/of/:keys")
+ * ).toBeFalsy();
  * });
  * ```
+ *
+ * @param {string} route see if this route
+ * @param {string} other matches this route
+ * @returns {boolean} true if matches false if not!
  */
-export const matches = (
-  route /*: string */,
-  other /*: string */
-) /*: boolean */ => !!route.match(other)
+export const matches = (route, other) => !!route.match(other)
 
 /**
  * or check if the route fits a pathname
  *
  * ```js
  * test("Route.fits", () => {
- *   expect(
- *     Route.fits(
-
- *       "/pathnames/dogs/made/of/things"
- *     )
- *   ).toBeTruthy();
+ * expect(
+ * Route.fits(
  *
- *   expect(
- *     Route.fits("/pathnames/are/made/of/:keys", "/pathnames/made/of/things")
- *   ).toBeFalsy();
+ * "/pathnames/dogs/made/of/things"
+ * )
+ * ).toBeTruthy();
+ *
+ * expect(
+ * Route.fits("/pathnames/are/made/of/:keys", "/pathnames/made/of/things")
+ * ).toBeFalsy();
  * });
  * ```
+ *
+ * @param {string} route does this route
+ * @param {string} pathname fit this pathname
+ * @returns {boolean} true if matches false if not!
  */
-export const fits = (
-  route /*: string */,
-  pathname /*: string */
-) /*: boolean */ => {
+export const fits = (route, pathname) => {
   const vals = values(pathname)
   return route
     .replace(/^\//, "")
@@ -178,17 +196,19 @@ export const fits = (
  *
  * ```js
  * test.skip("Route.create", () => {
- *   const route = Route.create("/another/:adjective/route");
+ * const route = Route.create("/another/:adjective/route");
  *
-
- *   expect(route.encode({ adjective: "fun" })).toBe("/another/fun/route");
- *   expect(route.matches("/another/:adjective/route")).toBeTruthy();
- *   expect(route.fits("/another/sick/route")).toBeTruthy();
- *   expect(route.keys).toEqual(["another", "adjective", "route"]);
- *   expect(route.values).toEqual(["another", undefined, "route"]);
+ *
+ * expect(route.encode({ adjective: "fun" })).toBe("/another/fun/route");
+ * expect(route.matches("/another/:adjective/route")).toBeTruthy();
+ * expect(route.fits("/another/sick/route")).toBeTruthy();
+ * expect(route.keys).toEqual(["another", "adjective", "route"]);
+ * expect(route.values).toEqual(["another", undefined, "route"]);
  * });
  * ```
+ *
+ * @private
  */
-export const create = (route /*: string */) => {
+export const create = route => {
   throw new Error("not implemented")
 }

@@ -17,9 +17,12 @@ const { resolve } = require("path")
  *   ).toBe(readFileSync(resolve(__dirname, "./examples/simple/illiterate.js"), "utf8"))
  * })
  * ```
+ *
  * @name lit
+ * @param {string} markdown some markdown with JS code blocks
+ * @returns {string} code an executable JS file of the stripped code blocks
  */
-module.exports = function lit(markdown /*: string */) {
+module.exports = function lit(markdown) {
   return (
     MarkdownIt()
       .parse(markdown, {})
@@ -45,6 +48,9 @@ module.exports = function lit(markdown /*: string */) {
   )
 }
 
+/**
+ * @private
+ */
 function comment(token) {
   return `/**
  * ${token.markup}${token.info}
