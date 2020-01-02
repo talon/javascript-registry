@@ -109,11 +109,11 @@ export const build = (pkg /*: string */) =>
 export const tasks = (pkg /*: string */) =>
   pkg
     ? {
-      docs: Sip.docs(pkg),
-      format: Sip.format(pkg),
-      test: Sip.test(pkg),
-      compile: Sip.compile(pkg),
-      build: Sip.build(pkg),
-      develop: Sip.develop(pkg)
+      docs: docs(pkg),
+      format: format(pkg),
+      test: test(pkg),
+      compile: compile(pkg),
+      build: build(pkg),
+      develop: develop(pkg)
     }
     : {}
