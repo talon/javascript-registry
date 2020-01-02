@@ -4,6 +4,32 @@
     "sourceType": "module",
     "ecmaFeatures": {}
   },
-  "extends": ["plugin:prettier/recommended", "plugin:jsdoc/recommended"],
-  "rules": {}
+  "extends": ["plugin:jsdoc/recommended"],
+  "rules": {
+    "jsdoc/check-alignment": 1,
+    "jsdoc/check-examples": 1,
+    "jsdoc/check-indentation": 1,
+    "jsdoc/check-param-names": 1,
+    "jsdoc/check-syntax": 2,
+    "jsdoc/check-tag-names": 1,
+    "jsdoc/check-types": 1,
+    "jsdoc/implements-on-classes": 1,
+    "jsdoc/no-undefined-types": 1,
+    "jsdoc/require-description": 2,
+    "jsdoc/require-jsdoc": 2,
+    "jsdoc/require-param": 2,
+    "jsdoc/require-param-description": 2,
+    "jsdoc/require-param-name": 2,
+    "jsdoc/require-param-type": 2,
+    "jsdoc/require-returns": 2,
+    "jsdoc/require-returns-check": 2,
+    "jsdoc/require-returns-description": 2,
+    "jsdoc/require-returns-type": 2,
+    "jsdoc/valid-types": 2
+  },
+  "settings": {
+    "jsdoc": {
+      "ignorePrivate": true
+    }
+  }
 }

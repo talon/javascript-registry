@@ -9,14 +9,6 @@ const { stat, mkdir, writeFile } = fs.promises
 
 /**
  *
- * @typedef {object} Monorepo
- * @property {string} repository the URL for this repo
- * @property {string} directory the directory with your packages
- * @property {string} registry the registry link where you publish your packages
- * @property {string} scope your npm scope
- */
-
-/**
  * You will be prompted for a few answers and then your package will be made available under your packages folder!
  *
  * Here's how to initialize this in your root monorepo gulpfile
@@ -30,7 +22,11 @@ const { stat, mkdir, writeFile } = fs.promises
  * })
  * ```
  *
- * @param {Monorepo} repo for the mono repo
+ * @param {object} repo an object describing your monorepo
+ * @param {string} repo.repository the URL for this repo
+ * @param {string} repo.directory the directory with your packages
+ * @param {string} repo.registry the registry link where you publish your packages
+ * @param {string} repo.scope your npm scope
  * @returns {Function} the initalized gulp task
  */
 export const init = repo => () => {
@@ -92,7 +88,7 @@ export const init = repo => () => {
           .then(() =>
             writeFile(
               `${dir}/lib/index.js`,
-              `// @flow\n\n/**\n * @name ${
+              `/**\n * @name ${
                 meta.name.split("/").slice(-1)[0]
               }\n */\nexport default () => {}`,
               "utf8"

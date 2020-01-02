@@ -15,7 +15,6 @@
 - [withBody](#withbody)
 - [matches](#matches)
 - [fits](#fits)
-- [create](#create)
 
 <!-- tocstop -->
 
@@ -37,9 +36,9 @@ test("Route.keys", () => {
 
 ### Parameters
 
-- `route` **[string][1]**
+- `route` **[string][1]** or pathname, basically any string that has "/"
 
-Returns **[Array][2]&lt;[string][1]>**
+Returns **[Array][2]** the keys of the route/pathname
 
 ## values
 
@@ -57,9 +56,9 @@ test("Route.values", () => {
 
 ### Parameters
 
-- `pathname` **[string][1]**
+- `pathname` **[string][1]** or route, basically any string that has "/"
 
-Returns **[Array][2]&lt;[string][1]>**
+Returns **[Array][2]** the keys of the route/pathname
 
 ## encode
 
@@ -79,10 +78,10 @@ test("Route.encode", () => {
 
 ### Parameters
 
-- `route` **[string][1]**
-- `data` **any**
+- `route` **[string][1]** the route to fill with values
+- `values` **[object][3]** the values to put into the route
 
-Returns **[string][1]**
+Returns **[string][1]** the resulting pathname
 
 ## decode
 
@@ -105,10 +104,10 @@ test("Route.decode", () => {
 
 ### Parameters
 
-- `route` **[string][1]**
-- `url` **[string][1]**
+- `route` **[string][1]** the route that maps the pathname keys
+- `path` **[string][1]** the pathname to extract the values from
 
-Returns **any**
+Returns **[object][3]** the resulting key value pairs
 
 ## withBody
 
@@ -130,10 +129,10 @@ test("Route.withBody", () => {
 
 ### Parameters
 
-- `route` **[string][1]**
-- `data` **any**
+- `route` **[string][1]** the route to fill with values
+- `values` **[object][3]** the values to put into the route
 
-Returns **\[[string][1], any]**
+Returns **[Array][2]** a tuple where the first value is the pathname and the second are the left over values
 
 ## matches
 
@@ -151,10 +150,10 @@ test("Route.matches", () => {
 
 ### Parameters
 
-- `route` **[string][1]**
-- `other` **[string][1]**
+- `route` **[string][1]** see if this route
+- `other` **[string][1]** matches this route
 
-Returns **[boolean][3]**
+Returns **[boolean][4]** true if matches false if not!
 
 ## fits
 
@@ -172,31 +171,12 @@ test("Route.fits", () => {
 
 ### Parameters
 
-- `route` **[string][1]**
-- `pathname` **[string][1]**
+- `route` **[string][1]** does this route
+- `pathname` **[string][1]** fit this pathname
 
-Returns **[boolean][3]**
-
-## create
-
-**Perhaps:** a sugar kinda way to deal with all this
-
-```js
-test.skip("Route.create", () => {
-  const route = Route.create("/another/:adjective/route")
-
-  expect(route.encode({ adjective: "fun" })).toBe("/another/fun/route")
-  expect(route.matches("/another/:adjective/route")).toBeTruthy()
-  expect(route.fits("/another/sick/route")).toBeTruthy()
-  expect(route.keys).toEqual(["another", "adjective", "route"])
-  expect(route.values).toEqual(["another", undefined, "route"])
-})
-```
-
-### Parameters
-
-- `route` **[string][1]**
+Returns **[boolean][4]** true if matches false if not!
 
 [1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 [2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
-[3]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[3]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[4]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
