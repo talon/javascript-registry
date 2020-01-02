@@ -26,7 +26,7 @@
       "label": "add package dependency",
       "type": "shell",
       "group": "build",
-      "command": "lerna exec --scope @talon/${input:package} -- yarn add ${input:dependency}",
+      "command": "yarn workspace @talon/${input:package} add ${input:dependency}",
       "problemMatcher": []
     },
     {
@@ -40,7 +40,7 @@
       "label": "build registry",
       "type": "shell",
       "group": "build",
-      "command": "lerna exec -- gulp build",
+      "command": "lerna exec --concurrency 1 -- gulp build",
       "problemMatcher": []
     },
     {

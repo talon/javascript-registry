@@ -22,8 +22,8 @@
   },
   "gitHead": "1fa7f09f82366ee26fedbc47581ca02678c674ee",
   "dependencies": {
-    "markdown-it": "^10.0.0",
     "@babel/helper-plugin-utils": "^7.0.0",
-    "@babel/parser": "^7.7.7"
+    "@babel/parser": "^7.7.7",
+    "markdown-it": "^10.0.0"
   }
 }
