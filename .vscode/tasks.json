@@ -21,14 +21,14 @@
       "label": "commit registry",
       "type": "shell",
       "group": "build",
-      "command": "git add . && git commit",
+      "command": "git add . && git commit && git push",
       "problemMatcher": []
     },
     {
       "label": "commit package",
       "type": "shell",
       "group": "build",
-      "command": "git add ./packages/${input:package} && git commit",
+      "command": "git add ./packages/${input:package} && git commit && git push",
       "problemMatcher": []
     }
   ],
