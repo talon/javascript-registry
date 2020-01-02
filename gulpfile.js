@@ -4,10 +4,11 @@ require("@babel/register")({
     rootMode: "upward"
 })
 
-const Sip = require("./packages/sip/lib/mono.js")
+const Mono = require("./packages/sip/lib/mono.js")
+const Sip = require("./packages/sip/lib")
 const meta = require("./package.json")
 
-exports.init = Sip.init({
+exports.init = Mono.init({
     repository: meta.repository.url,
     directory: meta.workspaces[0],
     registry: "https://npm.pkg.github.com",
