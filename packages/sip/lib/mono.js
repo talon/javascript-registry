@@ -78,6 +78,7 @@ export const init = (pkg /*: Package */) => () => {
     .then(prompt =>
       Object.assign(prompt, {
         name: `@${pkg.scope}/${prompt.name}`,
+        version: "1.0.0",
         repository: {
           type: "git",
           url: pkg.repository,
