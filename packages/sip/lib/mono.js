@@ -71,47 +71,53 @@ export const init = (pkg /*: Package */) => () => {
     )
     .then(meta => {
       const dir = resolve(meta.repository.directory)
-      return stat(dir)
-        .then(stat => {
-          throw new Error(`Oh no. ${meta.name} already exists! (${dir})`)
-        })
-        .catch(e => { })
-        .then(() => mkdir(dir))
-        .then(() =>
-          writeFile(
-            `${dir}/package.json`,
-            JSON.stringify(meta, null, 2),
-            "utf8"
+      return (
+        stat(dir)
+          .then(stat => {
+            throw new Error(`Oh no. ${meta.name} already exists! (${dir})`)
+          })
+          .catch(e => {})
+          .then(() => mkdir(dir))
+          .then(() =>
+            writeFile(
+              `${dir}/package.json`,
+              JSON.stringify(meta, null, 2),
+              "utf8"
+            )
           )
-        )
-        .then(() => mkdir(`${dir}/lib`))
-        .then(() =>
-          writeFile(
-            `${dir}/lib/index.js`,
-            `/**\n * @name ${
-            meta.name.split("/").slice(-1)[0]
-            }\n */\nexport default () => {}`,
-            "utf8"
+          .then(() => mkdir(`${dir}/lib`))
+          .then(() =>
+            writeFile(
+              `${dir}/lib/index.js`,
+              `//@flow\n\n/**\n * @name ${
+                meta.name.split("/").slice(-1)[0]
+              }\n */\nexport default () => {}`,
+              "utf8"
+            )
           )
-        )
-        // TODO: this is a pretty ugly hack to keep the tasks.json inputs "package" options up-to-date when new packages are added 
-        //       there's gotta be a nicer way to do this. I think with an Extension or something maybe... idk but this works
-        .then(() => {
-          const tasks = resolve(process.cwd(), ".vscode/tasks.json")
-          return stat(tasks)
-            .then(() => {
-              const json = require(tasks)
-              Object.assign(json, {
-                inputs: json.inputs.map(i =>
-                  i.id === "package" ? Object.assign(i, {
-                    options: i.options.concat([meta.name.split("/").slice(-1)[0]]).sort()
-                  }) : i
-                )
+          // TODO: this is a pretty ugly hack to keep the tasks.json inputs "package" options up-to-date when new packages are added
+          //       there's gotta be a nicer way to do this. I think with an Extension or something maybe... idk but this works
+          .then(() => {
+            const tasks = resolve(process.cwd(), ".vscode/tasks.json")
+            return stat(tasks)
+              .then(() => {
+                const json = require(tasks)
+                Object.assign(json, {
+                  inputs: json.inputs.map(i =>
+                    i.id === "package"
+                      ? Object.assign(i, {
+                          options: i.options
+                            .concat([meta.name.split("/").slice(-1)[0]])
+                            .sort()
+                        })
+                      : i
+                  )
+                })
+                return writeFile(tasks, JSON.stringify(json, null, 2), "utf8")
               })
-              return writeFile(tasks, JSON.stringify(json, null, 2), "utf8")
-            })
-            .catch(e => { })
-        })
-        .then(() => console.log(`🐣   ${meta.name} has been created!`))
+              .catch(e => {})
+          })
+          .then(() => console.log(`🐣   ${meta.name} has been created!`))
+      )
     })
 }

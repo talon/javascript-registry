@@ -9,7 +9,7 @@
     "url": "git://github.com/talon/javascript-registry.git"
   },
   "scripts": {
-    "build": "lerna exec -- gulp build",
+    "build": "lerna exec --concurrency 1 -- gulp build",
     "release": "npm run build && multi-semantic-release"
   },
   "config": {
@@ -36,6 +36,7 @@
     "jest": "^24.9.0",
     "lerna": "^3.20.1",
     "multi-semantic-release": "^1.1.2",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "semantic-release": "^15.14.0"
   }
 }
