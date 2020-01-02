@@ -4,7 +4,7 @@ import inquirer from "inquirer"
 import { resolve, dirname } from "path"
 import fs from "fs"
 
-const { stat, mkdir, writeFile } = fs.promises
+const { stat, mkdir, writeFile, readFile } = fs.promises
 
 /**
  * This initializes the Sip Suite with a package root. With Lerna you can use it like this
@@ -18,13 +18,13 @@ const { stat, mkdir, writeFile } = fs.promises
 export const tasks = (pkg /*: string */) =>
   pkg
     ? {
-        docs: Sip.docs(pkg),
-        format: Sip.format(pkg),
-        test: Sip.test(pkg),
-        compile: Sip.compile(pkg),
-        build: Sip.build(pkg),
-        develop: Sip.develop(pkg)
-      }
+      docs: Sip.docs(pkg),
+      format: Sip.format(pkg),
+      test: Sip.test(pkg),
+      compile: Sip.compile(pkg),
+      build: Sip.build(pkg),
+      develop: Sip.develop(pkg)
+    }
     : {}
 
 /*:: 
@@ -78,6 +78,7 @@ export const init = (pkg /*: Package */) => () => {
     .then(prompt =>
       Object.assign(prompt, {
         name: `@${pkg.scope}/${prompt.name}`,
+        version: "1.0.0",
         repository: {
           type: "git",
           url: pkg.repository,
@@ -94,7 +95,7 @@ export const init = (pkg /*: Package */) => () => {
         .then(stat => {
           throw new Error(`Oh no. ${meta.name} already exists! (${dir})`)
         })
-        .catch(e => {})
+        .catch(e => { })
         .then(() => mkdir(dir))
         .then(() =>
           writeFile(
@@ -108,11 +109,29 @@ export const init = (pkg /*: Package */) => () => {
           writeFile(
             `${dir}/lib/index.js`,
             `/**\n * @name ${
-              meta.name.split("/").slice(-1)[0]
+            meta.name.split("/").slice(-1)[0]
             }\n */\nexport default () => {}`,
             "utf8"
           )
         )
+        // TODO: this is a pretty ugly hack to keep the tasks.json inputs "package" options up-to-date when new packages are added 
+        //       there's gotta be a nicer way to do this. I think with an Extension or something maybe... idk but this works
+        .then(() => {
+          const tasks = resolve(process.cwd(), ".vscode/tasks.json")
+          return stat(tasks)
+            .then(() => {
+              const json = require(tasks)
+              Object.assign(json, {
+                inputs: json.inputs.map(i =>
+                  i.id === "package" ? Object.assign(i, {
+                    options: i.options.concat([meta.name.split("/").slice(-1)[0]]).sort()
+                  }) : i
+                )
+              })
+              return writeFile(tasks, JSON.stringify(json, null, 2), "utf8")
+            })
+            .catch(e => { })
+        })
         .then(() => console.log(`🐣   ${meta.name} has been created!`))
     })
 }

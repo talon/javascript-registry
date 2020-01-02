@@ -1,0 +1,81 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "install dependencies",
+      "type": "shell",
+      "group": "build",
+      "command": "npx yarn install",
+      "problemMatcher": []
+    },
+    {
+      "label": "init package",
+      "type": "shell",
+      "group": "build",
+      "command": "gulp init",
+      "problemMatcher": []
+    },
+    {
+      "label": "develop package",
+      "type": "shell",
+      "group": "build",
+      "command": "lerna exec --scope @talon/${input:package} -- gulp develop",
+      "problemMatcher": []
+    },
+    {
+      "label": "add package dependency",
+      "type": "shell",
+      "group": "build",
+      "command": "lerna exec --scope @talon/${input:package} -- yarn add ${input:dependency}",
+      "problemMatcher": []
+    },
+    {
+      "label": "commit package",
+      "type": "shell",
+      "group": "build",
+      "command": "git add ./packages/${input:package} && git commit && git push",
+      "problemMatcher": []
+    },
+    {
+      "label": "build registry",
+      "type": "shell",
+      "group": "build",
+      "command": "lerna exec -- gulp build",
+      "problemMatcher": []
+    },
+    {
+      "label": "add registry dependency",
+      "type": "shell",
+      "group": "build",
+      "command": "yarn add --dev -W ${input:dependency}",
+      "problemMatcher": []
+    },
+    {
+      "label": "commit registry",
+      "type": "shell",
+      "group": "build",
+      "command": "git add . && git commit && git push",
+      "problemMatcher": []
+    },
+    {
+      "label": "reset",
+      "type": "shell",
+      "group": "build",
+      "command": "rm -rf node_modules && rm -rf packages/*/node_modules && rm -rf packages/*/dist",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "type": "pickString",
+      "id": "package",
+      "description": "Which package?",
+      "options": ["lit", "route", "sip"]
+    },
+    {
+      "type": "promptString",
+      "id": "dependency",
+      "description": "Which dependency?"
+    }
+  ]
+}
