@@ -22,6 +22,7 @@ const { stat, mkdir, writeFile } = fs.promises
  * })
  * ```
  *
+ * @private
  * @param {object} repo an object describing your monorepo
  * @param {string} repo.repository the URL for this repo
  * @param {string} repo.directory the directory with your packages
