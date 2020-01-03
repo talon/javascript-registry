@@ -29,7 +29,6 @@
     "gulp-modify-file": "^1.0.1",
     "gulp-prettier": "^2.3.0",
     "gulp-typescript": "^6.0.0-alpha.1",
-    "inquirer": "^7.0.1",
     "jest-cli": "^24.9.0",
     "markdown-toc": "^1.2.0",
     "typescript": "^3.7.4"

@@ -9,13 +9,6 @@
       "problemMatcher": []
     },
     {
-      "label": "init package",
-      "type": "shell",
-      "group": "build",
-      "command": "gulp init",
-      "problemMatcher": []
-    },
-    {
       "label": "develop package",
       "type": "shell",
       "group": "build",
