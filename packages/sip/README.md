@@ -28,7 +28,7 @@ Type: [object][1]
 
 ## setup
 
-`Sip.setup` will return an object of Tasks that you can use in your `gulpfile.js`
+`Sip.setup` will return an object of Tasks that you can use in your `gulpfile.js` 🥂
 
     import * as Sip from "@talon/sip"
 
@@ -62,9 +62,7 @@ describe("readme driven development", () => {
 })
 ```
 
-You can [configure documentation.js][9] to tweak the README generation
-
-and/or also [configure Jest][10] as you please
+You can [configure documentation.js][9] to tweak the README generation and/or also [configure Jest][10] as you please
 
 ESLint is used as part of the JSDoc typechecker, you can [override the rules][11] with your own [`eslintrc` file][12]
 
@@ -78,9 +76,9 @@ Returns **TaskFunction** the initialized gulp task
 
 ## develop
 
-Everything that `test` does but also watches `lib` and runs again on file changes.
+Everything that `test` does but also watches `lib` and runs again on file changes 👀
 
-**Note**: Automatic JSDoc fixing is turned off to avoid infinite looping of this task.
+**Note**: automatic JSDoc fixing is turned off to avoid infinite looping of this task.
 
 ### Parameters
 
@@ -92,11 +90,9 @@ Returns **TaskFunction** the initialized gulp task
 
 Everything that `test` does and _also_ formats your code then compiles it with Babel to `dist`
 
-[Babel may be configured][14] in many ways
+[Babel may be configured][14] in many ways and/or if you have [prettier preferences][15] they can be configured as well
 
-and/or if you have [prettier preferences][15] they can be configured as well
-
-**this is the one you run in CI**
+**this is the one you run in CI** 🔁
 
 ### Parameters
 

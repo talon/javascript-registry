@@ -14,7 +14,7 @@ import { dependencies, format, typecheck, docs } from "./utils"
  */
 
 /**
- * `Sip.setup` will return an object of Tasks that you can use in your `gulpfile.js`
+ * `Sip.setup` will return an object of Tasks that you can use in your `gulpfile.js` 🥂
  *
  * ```
  * import * as Sip from "@talon/sip"
@@ -58,9 +58,7 @@ export function setup(root) {
  * })
  * ```
  *
- * You can [configure documentation.js](https://github.com/documentationjs/documentation/blob/master/docs/CONFIG.md) to tweak the README generation
- *
- * and/or also [configure Jest](https://jestjs.io/docs/en/configuration) as you please
+ * You can [configure documentation.js](https://github.com/documentationjs/documentation/blob/master/docs/CONFIG.md) to tweak the README generation and/or also [configure Jest](https://jestjs.io/docs/en/configuration) as you please
  *
  * ESLint is used as part of the JSDoc typechecker, you can [override the rules](https://www.npmjs.com/package/eslint-plugin-jsdoc#eslint-plugin-jsdoc-rules) with your own [`eslintrc` file](https://eslint.org/docs/user-guide/configuring)
  *
@@ -88,9 +86,9 @@ export function test(root, { fix }) {
 }
 
 /**
- * Everything that `test` does but also watches `lib` and runs again on file changes.
+ * Everything that `test` does but also watches `lib` and runs again on file changes 👀
  *
- * **Note**: Automatic JSDoc fixing is turned off to avoid infinite looping of this task.
+ * **Note**: automatic JSDoc fixing is turned off to avoid infinite looping of this task.
  *
  * @param {string} root the root path of the package to operate on
  * @returns {TaskFunction} the initialized gulp task
@@ -104,11 +102,9 @@ export function develop(root) {
 /**
  * Everything that `test` does and _also_ formats your code then compiles it with Babel to `dist`
  *
- * [Babel may be configured](https://babeljs.io/docs/en/configuration) in many ways
+ * [Babel may be configured](https://babeljs.io/docs/en/configuration) in many ways and/or if you have [prettier preferences](https://prettier.io/docs/en/configuration.html) they can be configured as well
  *
- * and/or if you have [prettier preferences](https://prettier.io/docs/en/configuration.html) they can be configured as well
- *
- * **this is the one you run in CI**
+ * **this is the one you run in CI** 🔁
  *
  * @param {string} root the root path of the package to operate on
  * @returns {TaskFunction} the initialized gulp task
