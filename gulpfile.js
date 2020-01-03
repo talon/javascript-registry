@@ -15,4 +15,4 @@ exports.init = Mono.init({
     scope: "talon"
 })
 
-Object.assign(exports, Sip.suite(`${__dirname}/packages/${process.env.LERNA_PACKAGE_NAME.split("/").slice(-1)}`))
+Object.assign(exports, Sip.setup(`${__dirname}/packages/${process.env.LERNA_PACKAGE_NAME.split("/").slice(-1)}`))
