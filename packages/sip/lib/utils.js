@@ -24,7 +24,13 @@ export function dependencies(root, { fix }) {
   return function checkDependencies() {
     return check(root, {
       // TODO: this list is prob gonna be too unpredictable to maintain here
-      ignoreMatches: ["eslint*", "jest-cli", "documentation", "typescript"],
+      ignoreMatches: [
+        "eslint*",
+        "jest-cli",
+        "documentation",
+        "typescript",
+        "@types/*"
+      ],
       ignoreDirs: ["dist"]
     })
       .then(data => {
@@ -59,7 +65,7 @@ export function dependencies(root, { fix }) {
  */
 export function format(root, { fix }) {
   return function formatFiles() {
-    const results = src(`${root}/**`, { since: lastRun(formatFiles) })
+    const results = src([`${root}/**`, `!${root}/node_modules/**`])
       .pipe(prettier())
       .pipe(dest(root))
 
