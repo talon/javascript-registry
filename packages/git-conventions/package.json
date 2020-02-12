@@ -1,0 +1,29 @@
+{
+  "name": "@talon/git-conventions",
+  "description": "conventional commits and semantic tags",
+  "version": "1.0.0",
+  "bin": {
+    "git-conventions": "./dist/index.js"
+  },
+  "keywords": [
+    "utility",
+    "git"
+  ],
+  "author": "Talon Poole",
+  "license": "UNLICENSED",
+  "main": "dist",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/talon/javascript-registry.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
+  },
+  "dependencies": {
+    "@types/jest": "^25.1.2",
+    "dedent-js": "^1.0.1",
+    "shelljs": "^0.8.3",
+    "yargs": "^15.1.0"
+  }
+}
