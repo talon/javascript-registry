@@ -12,7 +12,14 @@
       "label": "develop package",
       "type": "shell",
       "group": "build",
-      "command": "lerna exec --scope @talon/${input:package} -- gulp develop",
+      "command": "npx lerna exec --scope @talon/${input:package} -- npx gulp develop",
+      "problemMatcher": []
+    },
+    {
+      "label": "build package",
+      "type": "shell",
+      "group": "build",
+      "command": "npx lerna exec --scope @talon/${input:package} -- npx gulp build",
       "problemMatcher": []
     },
     {
@@ -33,7 +40,7 @@
       "label": "build registry",
       "type": "shell",
       "group": "build",
-      "command": "lerna exec --concurrency 1 -- gulp build",
+      "command": "npx lerna exec --concurrency 1 -- npx gulp build",
       "problemMatcher": []
     },
     {
@@ -63,7 +70,7 @@
       "type": "pickString",
       "id": "package",
       "description": "Which package?",
-      "options": ["lit", "route", "sip"]
+      "options": ["lit", "route", "sip", "git-conventions"]
     },
     {
       "type": "promptString",
