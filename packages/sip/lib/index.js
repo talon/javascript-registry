@@ -76,9 +76,7 @@ export function test(root, { fix }) {
       process.env.NODE_ENV = "test"
       return src(`${root}`).pipe(
         jest({
-          testRegex: new RegExp(
-            `${root}\/(README.md|.+\.(usage|test)\.([jt]sx?|md))`
-          )
+          testRegex: `${root}\/(README.md|.+\.(usage|test)\.([jt]sx?|md))`
         })
       )
     }
