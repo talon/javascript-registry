@@ -65,9 +65,9 @@ export function dependencies(root, { fix }) {
  */
 export function format(root, { fix }) {
   return function formatFiles() {
-    const results = src([`${root}/**`, `!${root}/node_modules/**`])
-      .pipe(prettier())
-      .pipe(dest(root))
+    const results = src([`${root}/**`, `!${root}/node_modules/**`]).pipe(
+      prettier()
+    )
 
     if (fix) return results.pipe(dest(root))
     else return results
