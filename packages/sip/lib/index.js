@@ -40,7 +40,7 @@ export function setup(root) {
   return {
     test: test(root, { fix: true }),
     develop: develop(root),
-    build: build(root)
+    build: build(root, { fix: true })
   }
 }
 
@@ -71,6 +71,7 @@ export function test(root, { fix }) {
   return series(
     dependencies(root, { fix }),
     typecheck(root, { fix }),
+    format(root, { fix }),
     docs(root),
     function runJest() {
       process.env.NODE_ENV = "test"
@@ -84,20 +85,6 @@ export function test(root, { fix }) {
 }
 
 /**
- * Everything that `test` does but also watches `lib` and runs again on file changes 👀
- *
- * **Note**: automatic JSDoc fixing is turned off to avoid infinite looping of this task.
- *
- * @param {string} root the root path of the package to operate on
- * @returns {TaskFunction} the initialized gulp task
- */
-export function develop(root) {
-  return series(test(root, { fix: false }), function watchLib() {
-    watch(`${root}/lib/**/*.js`, test(root, { fix: false }))
-  })
-}
-
-/**
  * Everything that `test` does and _also_ formats your code then compiles it with Babel to `dist`
  *
  * [Babel may be configured](https://babeljs.io/docs/en/configuration) in many ways and/or if you have [prettier preferences](https://prettier.io/docs/en/configuration.html) they can be configured as well
@@ -107,14 +94,27 @@ export function develop(root) {
  * @param {string} root the root path of the package to operate on
  * @returns {TaskFunction} the initialized gulp task
  */
-export function build(root) {
-  return series(
-    test(root, { fix: true }),
-    format(root, { fix: true }),
-    function compile() {
-      return src(`${root}/lib/**`)
-        .pipe(babel())
-        .pipe(dest(`${root}/dist`, { overwrite: true }))
-    }
-  )
+export function build(root, { fix }) {
+  return series(test(root, { fix }), function compile() {
+    return src(`${root}/lib/**`)
+      .pipe(babel())
+      .pipe(dest(`${root}/dist`, { overwrite: true }))
+  })
+}
+
+/**
+ * Everything that `build` does but also watches `lib` and runs again on file changes 👀
+ *
+ * **Note**: automatic JSDoc fixing is turned off to avoid infinite looping of this task.
+ *
+ * @param {string} root the root path of the package to operate on
+ * @returns {TaskFunction} the initialized gulp task
+ */
+export function develop(root) {
+  return series(build(root, { fix: false }), function watchLib() {
+    watch(`${root}/lib/**/*.js`, build(root, { fix: false })).on(
+      "change",
+      file => console.log(file)
+    )
+  })
 }
