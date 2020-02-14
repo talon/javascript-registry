@@ -44,6 +44,7 @@ import dedent from "dedent-js"
  * @param {string} [options.scope] - the scope of the commit
  * @param {string} options.description - a terse desription of the commit
  * @param {string} [options.body] - a detailed explanation of the commit
+ * @param {string} [options.footer] - follow a convention similar to git trailer format
  * @returns {string} a conventional commit
  */
 export default function({ type, scope, description, body, footer }) {
