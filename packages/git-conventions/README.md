@@ -7,22 +7,36 @@
 <!-- toc -->
 
 - [commit](#commit)
+- [breaking](#breaking)
+- [footer](#footer)
 
 <!-- tocstop -->
 
 ## commit
 
+[The Conventional Commits specification][1] is a lightweight convention on top of commit messages. It provides an easy set of rules for creating an explicit commit history; which makes it easier to write automated tools on top of. This convention dovetails with SemVer, by describing the features, fixes, and breaking changes made in commit messages.
+
 ```js
 import commit from "./lib/commit"
+describe("commit", () => {
+```
 
-describe("git-conventions commit", () => {
+Commits MUST be prefixed with a type, which consists of a noun, feat, fix, etc. followed by a [...] REQUIRED terminal colon and space.
+
+A description MUST immediately follow the colon and space after the type/scope prefix. The description is a short summary of the code changes
+
+```js
   it("formats commits conventionally", () => {
     expect(commit({
       type: "feat",
       description: "improve stuff",
     })).toBe("feat: improve stuff")
   })
+```
 
+A scope MAY be provided after a type. A scope MUST consist of a noun describing a section of the codebase surrounded by parenthesis
+
+```js
   it("handles optional scopes", () => {
     expect(commit({
       type: "feat",
@@ -30,37 +44,105 @@ describe("git-conventions commit", () => {
       description: "improve stuff",
     })).toBe("feat(sip): improve stuff")
   })
+```
+
+A longer commit body MAY be provided after the short description, providing additional contextual information about the code changes
+
+A commit body is free-form and MAY consist of any number of newline separated paragraphs.
+
+```js
+  const body = "you would not believe it\ncause that's what we do"
 
   it("handles optional body", () => {
     expect(commit({
       type: "feat",
       description: "improve stuff",
-      body: "you would not believe it",
-    })).toBe("feat: improve stuff\n\nyou would not believe it")
+      body
+    })).toBe(`feat: improve stuff\n\n${body}`)
   })
+```
+
+One or more footers MAY be provided one blank line after the body.
+
+```js
+  const footer = "Reviewed-by: talon\naffects: packages/git-conventions"
 
   it("handles optional footer", () => {
     expect(commit({
       type: "feat",
       description: "improve stuff",
-      body: "you would not believe it",
-      footer: "BREAKING CHANGE: all of it",
-    })).toBe("feat: improve stuff\n\nyou would not believe it\n\nBREAKING CHANGE: all of it")
+      body,
+      footer
+    })).toBe(`feat: improve stuff\n\n${body}\n\n${footer}`)
   })
 })
 ```
 
 ### Parameters
 
--   `options` **[object][1]** the commit options
-    -   `options.type` **[string][2]** the commit type
-    -   `options.scope` **[string][2]?** the scope of the commit
-    -   `options.description` **[string][2]** a terse desription of the commit
-    -   `options.body` **[string][2]?** a detailed explanation of the commit
-    -   `options.footer` **[string][2]?** follow a convention similar to git trailer format
+-   `options` **[object][2]** the commit options
+    -   `options.type` **[string][3]** the commit type
+    -   `options.scope` **[string][3]?** the scope of the commit
+    -   `options.description` **[string][3]** a terse desription of the commit
+    -   `options.body` **[string][3]?** a detailed explanation of the commit
+    -   `options.footer` **[string][3]?** follow a convention similar to git trailer format
 
-Returns **[string][2]** a conventional commit
+Returns **[string][3]** a conventional commit
 
-[1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+## breaking
 
-[2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+```js
+import {breaking} from "./lib/commit"
+describe("breaking changes", () => {
+```
+
+a breaking change MUST consist of the uppercase text BREAKING CHANGE, followed by a colon, space, and description
+
+```js
+  it("handles a breaking change", () => {
+    expect(breaking("all of it, everything")).toBe("BREAKING CHANGE: all of it, everything")
+  })
+
+  it("handles breaking changes", () => {
+    expect(breaking(["all of it, everything", "it's been gutted"])).toBe("BREAKING CHANGE: all of it, everything\nBREAKING CHANGE: it's been gutted")
+  })
+})
+```
+
+### Parameters
+
+-   `changes` **([string][3] \| [Array][4]&lt;[string][3]>)** the breaking change(s)
+
+Returns **[string][3]** a conventional commit footer
+
+## footer
+
+```js
+import {footer} from "./lib/commit"
+describe("footer", () => {
+```
+
+Each footer MUST consist of a word token, followed by either a :<space> or <space># separator, followed by a string value (this is inspired by the git trailer convention).
+
+A footer’s token MUST use - in place of whitespace characters, e.g., Acked-by (this helps differentiate the footer section from a multi-paragraph body). An exception is made for BREAKING CHANGE, which MAY also be used as a token.
+
+```js
+  it("turns an object into a commit footer", () => {
+    expect(footer({"Reviewed-by": "talon", "affects": "packages/git-conventions"})).toBe("Reviewed-by: talon\naffects: packages/git-conventions")
+  })
+})
+```
+
+### Parameters
+
+-   `meta` **[object][2]** the footer keys and values
+
+Returns **[string][3]** a conventional commit footer
+
+[1]: https://www.conventionalcommits.org/en/v1.0.0
+
+[2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+
+[3]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+
+[4]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
