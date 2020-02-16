@@ -7,6 +7,7 @@
 <!-- toc -->
 
 - [commit](#commit)
+- [format](#format)
 - [breaking](#breaking)
 - [footer](#footer)
 
@@ -14,11 +15,22 @@
 
 ## commit
 
-[The Conventional Commits specification][1] is a lightweight convention on top of commit messages. It provides an easy set of rules for creating an explicit commit history; which makes it easier to write automated tools on top of. This convention dovetails with SemVer, by describing the features, fixes, and breaking changes made in commit messages.
+Create a conventionally formatted commit
+
+### Parameters
+
+-   `sources` **[string][1]?** the directory where you keep your sources in a monorepo
+-   `types` **[Array][2]&lt;[string][1]>?** the available commit types (optional, default `["feat","fix","chore","test","WIP"]`)
+
+Returns **[Promise][3]&lt;[string][1]>** a conventionally formatted commit message
+
+## format
+
+[The Conventional Commits specification][4] is a lightweight convention on top of commit messages. It provides an easy set of rules for creating an explicit commit history; which makes it easier to write automated tools on top of. This convention dovetails with SemVer, by describing the features, fixes, and breaking changes made in commit messages.
 
 ```js
-import commit from "./lib/commit"
-describe("commit", () => {
+import {format} from "./lib/commit"
+describe("format", () => {
 ```
 
 Commits MUST be prefixed with a type, which consists of a noun, feat, fix, etc. followed by a [...] REQUIRED terminal colon and space.
@@ -27,7 +39,7 @@ A description MUST immediately follow the colon and space after the type/scope p
 
 ```js
   it("formats commits conventionally", () => {
-    expect(commit({
+    expect(format({
       type: "feat",
       description: "improve stuff",
     })).toBe("feat: improve stuff")
@@ -38,7 +50,7 @@ A scope MAY be provided after a type. A scope MUST consist of a noun describing 
 
 ```js
   it("handles optional scopes", () => {
-    expect(commit({
+    expect(format({
       type: "feat",
       scope: "sip",
       description: "improve stuff",
@@ -54,7 +66,7 @@ A commit body is free-form and MAY consist of any number of newline separated pa
   const body = "you would not believe it\ncause that's what we do"
 
   it("handles optional body", () => {
-    expect(commit({
+    expect(format({
       type: "feat",
       description: "improve stuff",
       body
@@ -68,7 +80,7 @@ One or more footers MAY be provided one blank line after the body.
   const footer = "Reviewed-by: talon\naffects: packages/git-conventions"
 
   it("handles optional footer", () => {
-    expect(commit({
+    expect(format({
       type: "feat",
       description: "improve stuff",
       body,
@@ -80,14 +92,14 @@ One or more footers MAY be provided one blank line after the body.
 
 ### Parameters
 
--   `options` **[object][2]** the commit options
-    -   `options.type` **[string][3]** the commit type
-    -   `options.scope` **[string][3]?** the scope of the commit
-    -   `options.description` **[string][3]** a terse desription of the commit
-    -   `options.body` **[string][3]?** a detailed explanation of the commit
-    -   `options.footer` **[string][3]?** follow a convention similar to git trailer format
+-   `options` **[object][5]** the commit options
+    -   `options.type` **[string][1]** the commit type
+    -   `options.scope` **[string][1]?** the scope of the commit
+    -   `options.description` **[string][1]** a terse desription of the commit
+    -   `options.body` **[string][1]?** a detailed explanation of the commit
+    -   `options.footer` **[string][1]?** follow a convention similar to git trailer format
 
-Returns **[string][3]** a conventional commit
+Returns **[string][1]** a conventional commit
 
 ## breaking
 
@@ -111,9 +123,9 @@ a breaking change MUST consist of the uppercase text BREAKING CHANGE, followed b
 
 ### Parameters
 
--   `changes` **([string][3] \| [Array][4]&lt;[string][3]>)** the breaking change(s)
+-   `changes` **([string][1] \| [Array][2]&lt;[string][1]>)** the breaking change(s)
 
-Returns **[string][3]** a conventional commit footer
+Returns **[string][1]** a conventional commit footer
 
 ## footer
 
@@ -135,14 +147,16 @@ A footer’s token MUST use - in place of whitespace characters, e.g., Acked-by 
 
 ### Parameters
 
--   `meta` **[object][2]** the footer keys and values
+-   `meta` **[object][5]** the footer keys and values
 
-Returns **[string][3]** a conventional commit footer
+Returns **[string][1]** a conventional commit footer
 
-[1]: https://www.conventionalcommits.org/en/v1.0.0
+[1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[3]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[3]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
 
-[4]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[4]: https://www.conventionalcommits.org/en/v1.0.0
+
+[5]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
