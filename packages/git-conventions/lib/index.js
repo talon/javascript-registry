@@ -1,25 +1,53 @@
 #!/usr/bin/env node
 
-import dedent from "dedent-js"
+import vorpal from "vorpal"
 import shell from "shelljs"
-import yargs from "yargs"
 import commit, { breaking, footer } from "./commit"
 
-yargs.command(
-  "commit",
-  "Wraps `git commit` by generating a commit message from a few standard prompts based off of https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines",
-  function() {
-    console.log("Example:\n")
-    console.log(
-      commit({
-        type: "feat",
-        description: "improve stuff",
-        body: "you would not believe it\ncause that's what we do",
-        footer: `${breaking("everything, like all of it")}\n${footer({
-          "Reviewed-by": "talon",
-          affects: "packages/git-conventions"
-        })}`
-      })
-    )
+const conventions = vorpal()
+const adapter = [
+  {
+    type: "list",
+    name: "type",
+    message: "What type of change is this? ",
+    default: "wip",
+    choices: ["feat", "fix", "dev", "test", "wip"]
+  },
+  {
+    type: "input",
+    name: "description",
+    message: "Briefly describe this change: "
+  },
+  {
+    type: "input",
+    name: "scope",
+    message: "Provide the scope of this change (optional): "
+  },
+  {
+    type: "input",
+    name: "body",
+    message: "Additional details (optional): "
   }
-).argv
+  // TODO: footer data
+  // affects: [directory]
+]
+
+conventions.command(
+  "commit",
+  "Wraps `git commit` to assist in formatting a conventional commit"
+  ).action(function(args, cb) {
+    return this.prompt(adapter).then(({type, scope, description, body}) => {
+      this.log("Example:\n")
+      this.log(
+        commit({
+          type,
+          scope,
+          description,
+          body,
+          // TODO: footer
+        })
+      )
+    })
+  })
+
+conventions.show().parse(process.argv)
