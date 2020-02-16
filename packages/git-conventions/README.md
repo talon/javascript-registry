@@ -8,8 +8,6 @@
 
 - [commit](#commit)
 - [format](#format)
-- [breaking](#breaking)
-- [footer](#footer)
 
 <!-- tocstop -->
 
@@ -19,14 +17,15 @@ Create a conventionally formatted commit
 
 ### Parameters
 
--   `sources` **[string][1]?** the directory where you keep your sources in a monorepo
--   `types` **[Array][2]&lt;[string][1]>?** the available commit types (optional, default `["feat","fix","chore","test","WIP"]`)
+-   `options` **[object][1]** Extend the base convention
+    -   `options.sources` **[string][2]?** the directory where you keep your sources in a monorepo
+    -   `options.types` **[Array][3]&lt;[string][2]>?** the available commit types
 
-Returns **[Promise][3]&lt;[string][1]>** a conventionally formatted commit message
+Returns **[Promise][4]&lt;[string][2]>** a conventionally formatted commit message
 
 ## format
 
-[The Conventional Commits specification][4] is a lightweight convention on top of commit messages. It provides an easy set of rules for creating an explicit commit history; which makes it easier to write automated tools on top of. This convention dovetails with SemVer, by describing the features, fixes, and breaking changes made in commit messages.
+[The Conventional Commits specification][5] is a lightweight convention on top of commit messages. It provides an easy set of rules for creating an explicit commit history; which makes it easier to write automated tools on top of. This convention dovetails with SemVer, by describing the features, fixes, and breaking changes made in commit messages.
 
 ```js
 import {format} from "./lib/commit"
@@ -63,100 +62,48 @@ A longer commit body MAY be provided after the short description, providing addi
 A commit body is free-form and MAY consist of any number of newline separated paragraphs.
 
 ```js
-  const body = "you would not believe it\ncause that's what we do"
-
   it("handles optional body", () => {
     expect(format({
       type: "feat",
       description: "improve stuff",
-      body
-    })).toBe(`feat: improve stuff\n\n${body}`)
+      body: "you would not believe it\ncause that's what we do"
+    })).toBe(`feat: improve stuff\n\nyou would not believe it\ncause that's what we do`)
   })
 ```
 
 One or more footers MAY be provided one blank line after the body.
 
 ```js
-  const footer = "Reviewed-by: talon\naffects: packages/git-conventions"
-
   it("handles optional footer", () => {
     expect(format({
       type: "feat",
       description: "improve stuff",
-      body,
-      footer
-    })).toBe(`feat: improve stuff\n\n${body}\n\n${footer}`)
+      footer: {
+        "Reviewed-by": "talon",
+        "affects": "git-conventions"
+      }
+    })).toBe(`feat: improve stuff\n\nReviewed-by: talon\naffects: git-conventions`)
   })
 })
 ```
 
 ### Parameters
 
--   `options` **[object][5]** the commit options
-    -   `options.type` **[string][1]** the commit type
-    -   `options.scope` **[string][1]?** the scope of the commit
-    -   `options.description` **[string][1]** a terse desription of the commit
-    -   `options.body` **[string][1]?** a detailed explanation of the commit
-    -   `options.footer` **[string][1]?** follow a convention similar to git trailer format
+-   `options` **[object][1]** the commit options
+    -   `options.type` **[string][2]** the commit type
+    -   `options.scope` **[string][2]?** the scope of the commit
+    -   `options.description` **[string][2]** a terse desription of the commit
+    -   `options.body` **[string][2]?** a detailed explanation of the commit
+    -   `options.footer` **[object][1]?** follow a convention similar to git trailer format
 
-Returns **[string][1]** a conventional commit
+Returns **[string][2]** a conventional commit
 
-## breaking
+[1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-```js
-import {breaking} from "./lib/commit"
-describe("breaking changes", () => {
-```
+[2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-a breaking change MUST consist of the uppercase text BREAKING CHANGE, followed by a colon, space, and description
+[3]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-```js
-  it("handles a breaking change", () => {
-    expect(breaking("all of it, everything")).toBe("BREAKING CHANGE: all of it, everything")
-  })
+[4]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
 
-  it("handles breaking changes", () => {
-    expect(breaking(["all of it, everything", "it's been gutted"])).toBe("BREAKING CHANGE: all of it, everything\nBREAKING CHANGE: it's been gutted")
-  })
-})
-```
-
-### Parameters
-
--   `changes` **([string][1] \| [Array][2]&lt;[string][1]>)** the breaking change(s)
-
-Returns **[string][1]** a conventional commit footer
-
-## footer
-
-```js
-import {footer} from "./lib/commit"
-describe("footer", () => {
-```
-
-Each footer MUST consist of a word token, followed by either a :<space> or <space># separator, followed by a string value (this is inspired by the git trailer convention).
-
-A footer’s token MUST use - in place of whitespace characters, e.g., Acked-by (this helps differentiate the footer section from a multi-paragraph body). An exception is made for BREAKING CHANGE, which MAY also be used as a token.
-
-```js
-  it("turns an object into a commit footer", () => {
-    expect(footer({"Reviewed-by": "talon", "affects": "packages/git-conventions"})).toBe("Reviewed-by: talon\naffects: packages/git-conventions")
-  })
-})
-```
-
-### Parameters
-
--   `meta` **[object][5]** the footer keys and values
-
-Returns **[string][1]** a conventional commit footer
-
-[1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
-
-[2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
-
-[3]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
-
-[4]: https://www.conventionalcommits.org/en/v1.0.0
-
-[5]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[5]: https://www.conventionalcommits.org/en/v1.0.0

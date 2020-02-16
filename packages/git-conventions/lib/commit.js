@@ -3,21 +3,23 @@ import shell from "shelljs"
 /**
  * Create a conventionally formatted commit
  *
- * @param {string} [sources] the directory where you keep your sources in a monorepo
- * @param {string[]} [types] the available commit types
+ * @param {object} options Extend the base convention
+ * @param {string} [options.sources] the directory where you keep your sources in a monorepo
+ * @param {string[]} [options.types] the available commit types
  * @returns {Promise<string>} a conventionally formatted commit message
  */
-export default function(
-  sources,
-  types = ["feat", "fix", "chore", "test", "WIP"]
-) {
+export default function(options) {
+  const { sources, types } = Object.assign({}, options, {
+    types: ["feat", "fix", "chore", "test", "WIP"]
+  })
+
   const staged = shell
     .exec("git diff --cached --name-only", { silent: true })
     .stdout.split("\n")
 
   if (staged[0] === "")
     return Promise.reject(
-      "You don't currently have any staged files\ntry `git add`"
+      "No changes found.\nUse `git add` to stage your changes!"
     )
 
   return (
@@ -45,42 +47,45 @@ export default function(
         message: "Provide any additional details (optional): "
       }
     ])
-      // Monorepo support
+      // if this is a monorepo (i.e. has `sources`)
+      // packages identifed as affected are confirmed by the user using the prompt
+      // and added to the commit footer as `affects: [dir(s)]`
       .then(answers => {
-        if (sources) {
-          const affected = new Set(
-            staged
-              .filter(path => path.match(new RegExp(`${sources}\/*`)))
-              .map(
-                path =>
-                  path.replace(new RegExp(`${sources}\/`), "").split("/")[0]
-              )
-          )
-          const all = shell.ls(sources)
+        if (!sources) return answers
 
-          return this.prompt({
-            type: "checkbox",
-            name: "affects",
-            message: "Identify what sources this commit affects: ",
-            choices: all.map(pkg => {
-              return { name: pkg, value: pkg, checked: affected.has(pkg) }
-            })
-          }).then(({ affects }) => ({ affects, answers }))
-        } else {
-          return { answers, affects: false }
-        }
+        const all = shell.ls(sources)
+        const affected = new Set(
+          staged
+            .filter(path => path.match(new RegExp(`${sources}\/*`)))
+            .map(
+              path => path.replace(new RegExp(`${sources}\/`), "").split("/")[0]
+            )
+        )
+        return this.prompt({
+          type: "checkbox",
+          name: "affects",
+          message: "Identify what sources this commit affects: ",
+          choices: all.map(pkg => {
+            return { name: pkg, value: pkg, checked: affected.has(pkg) }
+          })
+        }).then(({ affects }) =>
+          Object.assign(answers, {
+            footer: { affects: affects.join(", ") }
+          })
+        )
+      })
+      // TODO
+      //   - build BREAKING CHANGES with prompt loop
+      .then(answers => {
+        // if (!Array.isArray(changes)) changes = [changes]
+        // return changes.map(change => `BREAKING CHANGE: ${change}`).join("\n")
+        return answers
       })
       // TODO
       //   - build footer key values with prompt loop
       //   - with an option to require keys
-      .then(({ answers, affects }) =>
-        format(
-          Object.assign(
-            answers,
-            affects ? { footer: footer({ affects: affects.join(", ") }) } : {}
-          )
-        )
-      )
+      .then(answers => answers)
+      .then(answers => format(answers))
       .then(message => this.log(`\n${message}\n`))
   )
 }
@@ -121,28 +126,26 @@ export default function(
  *
  * A commit body is free-form and MAY consist of any number of newline separated paragraphs.
  * ```js
- *   const body = "you would not believe it\ncause that's what we do"
- *
  *   it("handles optional body", () => {
  *     expect(format({
  *       type: "feat",
  *       description: "improve stuff",
- *       body
- *     })).toBe(`feat: improve stuff\n\n${body}`)
+ *       body: "you would not believe it\ncause that's what we do"
+ *     })).toBe(`feat: improve stuff\n\nyou would not believe it\ncause that's what we do`)
  *   })
  * ```
  *
  * One or more footers MAY be provided one blank line after the body.
  * ```js
- *   const footer = "Reviewed-by: talon\naffects: packages/git-conventions"
- *
  *   it("handles optional footer", () => {
  *     expect(format({
  *       type: "feat",
  *       description: "improve stuff",
- *       body,
- *       footer
- *     })).toBe(`feat: improve stuff\n\n${body}\n\n${footer}`)
+ *       footer: {
+ *         "Reviewed-by": "talon",
+ *         "affects": "git-conventions"
+ *       }
+ *     })).toBe(`feat: improve stuff\n\nReviewed-by: talon\naffects: git-conventions`)
  *   })
  * })
  * ```
@@ -152,7 +155,7 @@ export default function(
  * @param {string} [options.scope] the scope of the commit
  * @param {string} options.description a terse desription of the commit
  * @param {string} [options.body] a detailed explanation of the commit
- * @param {string} [options.footer] follow a convention similar to git trailer format
+ * @param {object} [options.footer] follow a convention similar to git trailer format
  * @returns {string} a conventional commit
  */
 export function format({ type, scope, description, body, footer }) {
@@ -165,59 +168,10 @@ export function format({ type, scope, description, body, footer }) {
   }
 
   if (footer) {
-    commit = `${commit}\n\n${footer}`
+    commit = `${commit}\n\n${Object.keys(footer)
+      .map(key => `${key}: ${footer[key]}`)
+      .join("\n")}`
   }
 
   return commit
-}
-
-/**
- * ```js
- * import {breaking} from "./lib/commit"
- * describe("breaking changes", () => {
- * ```
- *
- * a breaking change MUST consist of the uppercase text BREAKING CHANGE, followed by a colon, space, and description
- * ```js
- *   it("handles a breaking change", () => {
- *     expect(breaking("all of it, everything")).toBe("BREAKING CHANGE: all of it, everything")
- *   })
- *
- *   it("handles breaking changes", () => {
- *     expect(breaking(["all of it, everything", "it's been gutted"])).toBe("BREAKING CHANGE: all of it, everything\nBREAKING CHANGE: it's been gutted")
- *   })
- * })
- * ```
- *
- * @param {string|string[]} changes the breaking change(s)
- * @returns {string} a conventional commit footer
- */
-export function breaking(changes) {
-  if (!Array.isArray(changes)) changes = [changes]
-  return changes.map(change => `BREAKING CHANGE: ${change}`).join("\n")
-}
-
-/**
- * ```js
- * import {footer} from "./lib/commit"
- * describe("footer", () => {
- * ```
- *
- * Each footer MUST consist of a word token, followed by either a :<space> or <space># separator, followed by a string value (this is inspired by the git trailer convention).
- *
- * A footer’s token MUST use - in place of whitespace characters, e.g., Acked-by (this helps differentiate the footer section from a multi-paragraph body). An exception is made for BREAKING CHANGE, which MAY also be used as a token.
- * ```js
- *   it("turns an object into a commit footer", () => {
- *     expect(footer({"Reviewed-by": "talon", "affects": "packages/git-conventions"})).toBe("Reviewed-by: talon\naffects: packages/git-conventions")
- *   })
- * })
- * ```
- *
- * @param {object} meta the footer keys and values
- * @returns {string} a conventional commit footer
- */
-export function footer(meta) {
-  return Object.keys(meta)
-    .map(key => `${key}: ${meta[key]}`)
-    .join("\n")
 }

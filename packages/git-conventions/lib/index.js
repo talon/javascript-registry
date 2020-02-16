@@ -12,7 +12,7 @@ cli
   )
   .action(function(args) {
     // TODO: Error UX, colors and stuff
-    return commit.call(this, "packages").catch(e => this.log(e))
+    return commit.call(this, { sources: "packages" }).catch(e => this.log(e))
   })
 
 cli
