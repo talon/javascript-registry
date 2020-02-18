@@ -1,8 +1,15 @@
 import { src, dest, series, watch, TaskFunction } from "gulp"
 import babel from "gulp-babel"
+import plumber from "gulp-plumber"
 import jest from "gulp-jest"
+import log from "fancy-log"
 
-import { dependencies, format, typecheck, docs } from "./utils"
+import {
+  checkDependencies,
+  formatFiles,
+  checkTypes,
+  generateREADME
+} from "./utils"
 
 /**
  * In three simple Gulp tasks Sip will drive your JavaScript development to new productive heights! 📈
@@ -69,11 +76,10 @@ export function setup(root) {
  */
 export function test(root, { fix }) {
   return series(
-    dependencies(root, { fix }),
-    typecheck(root, { fix }),
-    format(root, { fix }),
-    docs(root),
-    function runJest() {
+    formatFiles(root, { fix }),
+    checkTypes(root, { fix }),
+    generateREADME(root),
+    function tests() {
       process.env.NODE_ENV = "test"
       return src(`${root}`).pipe(
         jest({
@@ -111,10 +117,11 @@ export function build(root, { fix }) {
  * @returns {TaskFunction} the initialized gulp task
  */
 export function develop(root) {
-  return series(build(root, { fix: false }), function watchLib() {
-    watch(`${root}/lib/**/*.js`, build(root, { fix: false })).on(
-      "change",
-      file => console.log(file)
+  return function watchLib() {
+    watch(
+      `${root}/lib/**/*.js`,
+      { ignoreInitial: false },
+      build(root, { fix: false })
     )
-  })
+  }
 }

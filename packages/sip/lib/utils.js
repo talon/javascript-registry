@@ -1,4 +1,5 @@
-import { src, dest, series, lastRun, TaskFunction } from "gulp"
+import { src, dest, series, TaskFunction } from "gulp"
+import plumber from "gulp-plumber"
 import documentation from "gulp-documentation"
 import modify from "gulp-modify-file"
 import eslint from "gulp-eslint"
@@ -12,16 +13,18 @@ import { exec } from "child_process"
 /**
  * Automatically update dependencies adding and removing as needed
  *
+ * TODO: support for mono or single repo and npm or yarn
+ *
  * @private
  * @param {string} root the root path of the package to operate on
  * @param {object} options task options
  * @param {boolean} options.fix whether or not to write changes for automatically fixable issues
  * @returns {TaskFunction} the initialized gulp task
  */
-export function dependencies(root, { fix }) {
+export function checkDependencies(root, { fix }) {
   const name = root.split("/").slice(-1)
 
-  return function checkDependencies() {
+  return function dependencies() {
     return check(root, {
       // TODO: this list is prob gonna be too unpredictable to maintain here
       ignoreMatches: [
@@ -63,14 +66,15 @@ export function dependencies(root, { fix }) {
  * @param {boolean} options.fix whether or not to write changes for automatically fixable issues
  * @returns {TaskFunction} the initialized gulp task
  */
-export function format(root, { fix }) {
-  return function formatFiles() {
-    const results = src([`${root}/**`, `!${root}/node_modules/**`]).pipe(
-      prettier()
-    )
-
-    if (fix) return results.pipe(dest(root))
-    else return results
+export function formatFiles(root, { fix }) {
+  return function format() {
+    const files = src([
+      `${root}/**`,
+      `!${root}/node_modules/**`,
+      `!${root}/dist/**`
+    ])
+    if (fix) return files.pipe(prettier()).pipe(dest(root))
+    else return files.pipe(prettier())
   }
 }
 
@@ -83,18 +87,18 @@ export function format(root, { fix }) {
  * @param {boolean} options.fix whether or not to write changes for automatically fixable issues
  * @returns {TaskFunction} the initialized gulp task
  */
-export function typecheck(root, { fix }) {
+export function checkTypes(root, { fix }) {
   return series(
-    function lintJSDoc() {
+    function lint() {
       const results = src([`${root}/lib/*.js`])
         .pipe(
           eslint({
             fix,
             baseConfig: {
               parserOptions: {
-                ecmaVersion: 6,
-                sourceType: "module",
-                ecmaFeatures: {}
+                ecmaVersion: 2018,
+                env: { es6: true },
+                sourceType: "module"
               },
               extends: ["plugin:jsdoc/recommended"],
               settings: {
@@ -129,22 +133,32 @@ export function typecheck(root, { fix }) {
           })
         )
         .pipe(eslint.format())
-        .pipe(eslint.failOnError())
 
-      if (fix) return results.pipe(dest(`${root}/lib`))
+      if (fix)
+        return results.pipe(eslint.failOnError()).pipe(dest(`${root}/lib`))
       else return results
     },
-    function checkTypes() {
-      return src([`${root}/lib/*.js`]).pipe(
-        typescript({
-          esModuleInterop: true,
-          allowJs: true,
-          checkJs: true,
-          moduleResolution: "node",
-          target: "ES6",
-          noEmit: true
-        })
-      )
+    function typecheck() {
+      return src([`${root}/lib/*.js`])
+        .pipe(
+          plumber({
+            errorHandler: function buildError(e) {
+              if (fix) {
+                throw e
+              }
+            }
+          })
+        )
+        .pipe(
+          typescript({
+            esModuleInterop: true,
+            allowJs: true,
+            checkJs: true,
+            moduleResolution: "node",
+            target: "ES6",
+            noEmit: true
+          })
+        )
     }
   )
 }
@@ -158,10 +172,15 @@ export function typecheck(root, { fix }) {
  * @param {string} root the root path of the package to operate on
  * @returns {TaskFunction} the initialized gulp task
  */
-export function docs(root) {
-  return function generateREADME() {
+export function generateREADME(root) {
+  return function README() {
     const meta = require(`${root}/package.json`)
     return src(`${root}/lib/**`)
+      .pipe(
+        plumber({
+          errorHandler: function buildError(e) {}
+        })
+      )
       .pipe(documentation("md", { filename: "README.md" }, null))
       .pipe(
         modify(
@@ -176,6 +195,7 @@ export function docs(root) {
         )
       )
       .pipe(modify(content => toc.insert(content, { maxdepth: 2 })))
+      .pipe(prettier())
       .pipe(dest(root), { overwrite: true })
   }
 }
