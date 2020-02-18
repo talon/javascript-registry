@@ -1,21 +1,22 @@
 #!/usr/bin/env node
 
-import Vorpal from "vorpal"
+import yargs from "yargs"
 import commit from "./commit"
 
-const cli = new Vorpal()
-
-cli
+yargs
   .command(
     "commit",
-    "Wraps `git commit` to assist in formatting a conventional commit"
+    "Wraps `git commit` to assist in formatting a conventional commit",
+    async function() {
+      try {
+        console.log(await commit({ sources: "packages" }))
+      } catch (e) {
+        // TODO: Error UX, colors and stuff
+        console.error(e.message)
+      }
+    }
   )
-  .action(function(args) {
+  .command("version", "Tag HEAD with a semantic version", async function() {
     // TODO: Error UX, colors and stuff
-    return commit.call(this, { sources: "packages" }).catch(e => this.log(e))
-  })
-
-cli
-  .delimiter("git-conventions")
-  .show()
-  .parse(process.argv)
+    console.log("got em")
+  }).argv

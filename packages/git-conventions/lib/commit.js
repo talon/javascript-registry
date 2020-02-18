@@ -1,4 +1,6 @@
 import shell from "shelljs"
+import { Subject } from "rxjs"
+import inquirer from "inquirer"
 
 /**
  * Create a conventionally formatted commit
@@ -19,75 +21,65 @@ export default function(options) {
 
   if (staged[0] === "")
     return Promise.reject(
-      "No changes found.\nUse `git add` to stage your changes!"
+      new Error("No changes found.\nUse `git add` to stage your changes!")
     )
 
-  return (
-    this.prompt([
-      {
-        type: "list",
-        name: "type",
-        message: "What type of change is this? ",
-        default: "WIP",
-        choices: types
-      },
-      {
-        type: "input",
-        name: "description",
-        message: "Briefly describe this change: "
-      },
-      {
-        type: "input",
-        name: "scope",
-        message: "Provide the scope of this change (optional): "
-      },
-      {
-        type: "input",
-        name: "body",
-        message: "Provide any additional details (optional): "
-      }
-    ])
-      // if this is a monorepo (i.e. has `sources`)
-      // packages identifed as affected are confirmed by the user using the prompt
-      // and added to the commit footer as `affects: [dir(s)]`
-      .then(answers => {
-        if (!sources) return answers
+  const prompts = new Subject()
+  const message = inquirer.prompt(prompts).then(answers => format(answers))
 
-        const all = shell.ls(sources)
-        const affected = new Set(
-          staged
-            .filter(path => path.match(new RegExp(`${sources}\/*`)))
-            .map(
-              path => path.replace(new RegExp(`${sources}\/`), "").split("/")[0]
-            )
-        )
-        return this.prompt({
-          type: "checkbox",
-          name: "affects",
-          message: "Identify what sources this commit affects: ",
-          choices: all.map(pkg => {
-            return { name: pkg, value: pkg, checked: affected.has(pkg) }
-          })
-        }).then(({ affects }) =>
-          Object.assign(answers, {
-            footer: { affects: affects.join(", ") }
-          })
-        )
+  prompts.next({
+    type: "list",
+    name: "type",
+    message: "What type of change is this? ",
+    default: "WIP",
+    choices: types
+  })
+
+  prompts.next({
+    type: "input",
+    name: "description",
+    message: "Briefly describe this change: "
+  })
+
+  prompts.next({
+    type: "input",
+    name: "scope",
+    message: "Provide the scope of this change (optional): "
+  })
+
+  prompts.next({
+    type: "input",
+    name: "body",
+    message: "Provide any additional details (optional): "
+  })
+
+  // if this is a monorepo (i.e. has `sources`)
+  // packages identifed as affected are confirmed by the user using the prompt
+  // and added to the commit footer as `affects: [dir(s)]`
+  if (sources) {
+    const all = shell.ls(sources)
+    const affected = new Set(
+      staged
+        .filter(path => path.match(new RegExp(`${sources}\/*`)))
+        .map(path => path.replace(new RegExp(`${sources}\/`), "").split("/")[0])
+    )
+
+    prompts.next({
+      type: "checkbox",
+      name: "affects",
+      message: "Identify what sources this commit affects: ",
+      choices: all.map(pkg => {
+        return { name: pkg, value: pkg, checked: affected.has(pkg) }
       })
-      // TODO
-      //   - build BREAKING CHANGES with prompt loop
-      .then(answers => {
-        // if (!Array.isArray(changes)) changes = [changes]
-        // return changes.map(change => `BREAKING CHANGE: ${change}`).join("\n")
-        return answers
-      })
-      // TODO
-      //   - build footer key values with prompt loop
-      //   - with an option to require keys
-      .then(answers => answers)
-      .then(answers => format(answers))
-      .then(message => this.log(`\n${message}\n`))
-  )
+    })
+  }
+
+  // TODO
+  //   - build footer key values with prompt loop
+  //   - with an option to require keys
+  //   - BREAKING CHANGES
+  prompts.complete()
+  return message
 }
 
 /**
