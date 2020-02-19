@@ -1,5 +1,4 @@
 import shell from "shelljs"
-import { Subject } from "rxjs"
 import inquirer from "inquirer"
 
 /**
