@@ -6,12 +6,12 @@ import inquirer from "inquirer"
  * Create a conventionally formatted commit
  *
  * @param {object} options Extend the base convention
- * @param {string} [options.sources] the directory where you keep your sources in a monorepo
  * @param {string[]} [options.types] the available commit types
+ * @param {Function[]} [options.footers] include footer information
  * @returns {Promise<string>} a conventionally formatted commit message
  */
-export default function(options) {
-  const { sources, types } = Object.assign({}, options, {
+export default async function(options) {
+  const { types, footers } = Object.assign({}, options, {
     types: ["feat", "fix", "chore", "test", "WIP"]
   })
 
@@ -24,62 +24,39 @@ export default function(options) {
       new Error("No changes found.\nUse `git add` to stage your changes!")
     )
 
-  const prompts = new Subject()
-  const message = inquirer.prompt(prompts).then(answers => format(answers))
-
-  prompts.next({
-    type: "list",
-    name: "type",
-    message: "What type of change is this? ",
-    default: "WIP",
-    choices: types
-  })
-
-  prompts.next({
-    type: "input",
-    name: "description",
-    message: "Briefly describe this change: "
-  })
-
-  prompts.next({
-    type: "input",
-    name: "scope",
-    message: "Provide the scope of this change (optional): "
-  })
-
-  prompts.next({
-    type: "input",
-    name: "body",
-    message: "Provide any additional details (optional): "
-  })
-
-  // if this is a monorepo (i.e. has `sources`)
-  // packages identifed as affected are confirmed by the user using the prompt
-  // and added to the commit footer as `affects: [dir(s)]`
-  if (sources) {
-    const all = shell.ls(sources)
-    const affected = new Set(
-      staged
-        .filter(path => path.match(new RegExp(`${sources}\/*`)))
-        .map(path => path.replace(new RegExp(`${sources}\/`), "").split("/")[0])
-    )
-
-    prompts.next({
-      type: "checkbox",
-      name: "affects",
-      message: "Identify what sources this commit affects: ",
-      choices: all.map(pkg => {
-        return { name: pkg, value: pkg, checked: affected.has(pkg) }
-      })
+  return inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "type",
+        message: "What type of change is this? ",
+        default: "WIP",
+        choices: types
+      },
+      {
+        type: "input",
+        name: "description",
+        message: "Briefly describe this change: "
+      },
+      {
+        type: "input",
+        name: "scope",
+        message: "Provide the scope of this change (optional): "
+      },
+      {
+        type: "input",
+        name: "body",
+        message: "Provide any additional details (optional): "
+      }
+    ])
+    .then(async function(convention) {
+      let footer = {}
+      for (let item of footers) {
+        Object.assign(footer, await item())
+      }
+      return Object.assign(convention, { footer })
     })
-  }
-
-  // TODO
-  //   - build footer key values with prompt loop
-  //   - with an option to require keys
-  //   - BREAKING CHANGES
-  prompts.complete()
-  return message
+    .then(format)
 }
 
 /**
