@@ -9,16 +9,12 @@ import inquirer from "inquirer"
  * @param {Function[]} [options.footers] include footer information
  * @returns {Promise<string>} a conventionally formatted commit message
  */
-export default async function(options) {
-  const { types, footers } = Object.assign({}, options, {
-    types: ["feat", "fix", "chore", "test", "WIP"]
-  })
-
-  const staged = shell
-    .exec("git diff --cached --name-only", { silent: true })
-    .stdout.split("\n")
-
-  if (staged[0] === "")
+export default async function({ types, footers }) {
+  if (
+    shell
+      .exec("git diff --cached --name-only", { silent: true })
+      .stdout.split("\n")[0] === ""
+  )
     return Promise.reject(
       new Error("No changes found.\nUse `git add` to stage your changes!")
     )
@@ -29,18 +25,17 @@ export default async function(options) {
         type: "list",
         name: "type",
         message: "What type of change is this? ",
-        default: "WIP",
         choices: types
-      },
-      {
-        type: "input",
-        name: "description",
-        message: "Briefly describe this change: "
       },
       {
         type: "input",
         name: "scope",
         message: "Provide the scope of this change (optional): "
+      },
+      {
+        type: "input",
+        name: "description",
+        message: "Briefly describe this change: "
       },
       {
         type: "input",
@@ -142,4 +137,20 @@ export function format({ type, scope, description, body, footer }) {
   }
 
   return commit
+}
+
+/**
+ * used to include BREAKING CHANGES in the footer
+ *
+ * @private
+ * @returns {object} BREAKING CHANGES, for the footer
+ */
+export function breaking() {
+  return inquirer
+    .prompt({
+      type: "input",
+      name: "BREAKING CHANGES",
+      message: "Identify any BREAKING CHANGES: "
+    })
+    .then(answers => (answers["BREAKING CHANGES"] !== "" ? answers : {}))
 }
