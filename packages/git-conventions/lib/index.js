@@ -12,7 +12,7 @@ yargs
     "Wraps `git commit` to assist in formatting a conventional commit",
     async function() {
       try {
-        // TODO: This should be configurable from the CLI
+        // TODO make this configurable from the CLI
         shell.exec(
           `git commit -m "${await commit({
             types: ["feat", "fix", "chore", "test", "WIP"],
