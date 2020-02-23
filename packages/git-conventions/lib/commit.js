@@ -9,7 +9,7 @@ import inquirer from "inquirer"
  * @param {Function[]} [options.footers] include footer information
  * @returns {Promise<string>} a conventionally formatted commit message
  */
-export default async function({ types, footers }) {
+export default async function commit({ types, footers }) {
   if (
     shell
       .exec("git diff --cached --name-only", { silent: true })
