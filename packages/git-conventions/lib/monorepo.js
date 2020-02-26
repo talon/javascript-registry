@@ -5,6 +5,7 @@ import inquirer from "inquirer"
  * Finds sources affected by a commit and prompts if they should be included
  * as `affects: [source]` in the footer
  *
+ * @private
  * @param {string} sources the directory where independently versioned sources exist
  * @returns {Function} used to create the footer in `commit`
  */

@@ -10,11 +10,7 @@
 
 - [commit](#commit)
 - [format](#format)
-- [affects](#affects)
 - [version](#version)
-- [current](#current)
-- [bump](#bump)
-- [highlight](#highlight)
 
 <!-- tocstop -->
 
@@ -113,17 +109,6 @@ One or more footers MAY be provided one blank line after the body.
 
 Returns **[string][3]** a conventional commit
 
-## affects
-
-Finds sources affected by a commit and prompts if they should be included
-as `affects: [source]` in the footer
-
-### Parameters
-
-- `sources` **[string][3]** the directory where independently versioned sources exist
-
-Returns **[Function][4]** used to create the footer in `commit`
-
 ## version
 
 Get the version tags to be applied to the repo
@@ -133,38 +118,6 @@ Get the version tags to be applied to the repo
 - `sources` **[string][3]** what sources to operate on in a monorepo
 
 Returns **[Promise][5]&lt;[Array][2]&lt;[string][3]>>** the tag(s) to apply to the repo
-
-## current
-
-Get the current version of a source
-
-### Parameters
-
-- `source` **[string][3]** the source to grab the version from
-
-Returns **[Promise][5]&lt;[string][3]>** the most recent version of the source
-
-## bump
-
-Get the next version of a source
-
-### Parameters
-
-- `source` **[string][3]** the source to operate on
-- `version` **[string][3]** the current version to bump
-
-Returns **[Promise][5]&lt;[object][1]>** the next recommended release type, version and reason
-
-## highlight
-
-prints out a user friendly string identifying the version change
-
-### Parameters
-
-- `v` **[string][3]** the version string to operate on
-- `type` **[string][3]** the type of release this is
-
-Returns **[string][3]** user friendly string identifying the version change
 
 [1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 [2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array

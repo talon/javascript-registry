@@ -39,6 +39,7 @@ export default async function version(sources) {
 /**
  * Get the current version of a source
  *
+ * @private
  * @param {string} source the source to grab the version from
  * @returns {Promise<string>} the most recent version of the source
  */
@@ -56,6 +57,7 @@ export function current(source) {
 /**
  * Get the next version of a source
  *
+ * @private
  * @param {string} source the source to operate on
  * @param {string} version the current version to bump
  * @returns {Promise<object>} the next recommended release type, version and reason
@@ -96,11 +98,12 @@ export function bump(source, version) {
 /**
  * prints out a user friendly string identifying the version change
  *
+ * @private
  * @param {string} v the version string to operate on
  * @param {string} type the type of release this is
  * @returns {string} user friendly string identifying the version change
  */
-function highlight(v, type) {
+export function highlight(v, type) {
   const [major, minor, patch] = v.split(".")
   switch (type) {
     case "major":
