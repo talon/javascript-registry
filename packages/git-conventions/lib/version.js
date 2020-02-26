@@ -1,6 +1,41 @@
 import recommend from "conventional-recommended-bump"
 import versions from "git-semver-tags"
+import shell from "shelljs"
+import inquirer from "inquirer"
+import chalk from "chalk"
 
+/**
+ * Get the version tags to be applied to the repo
+ *
+ * @param {string} sources what sources to operate on in a monorepo
+ * @returns {Promise<string[]>} the tag(s) to apply to the repo
+ */
+export default async function version(sources) {
+  // TODO make `sources` optional
+  // TODO only tag changed sources
+  // TODO flag to accept all tags
+  return inquirer
+    .prompt({
+      type: "checkbox",
+      name: "plan",
+      message: "Identify what sources to version bump: ",
+      choices: await Promise.all(
+        shell.ls(sources).map(async function(source) {
+          let version = await current(source)
+          let next = await bump(source, version)
+
+          return {
+            value: `${source}@${next.version}`,
+            // checked: next.type === "patch",
+            name: `${chalk.bold(source)}@${chalk.dim(
+              version + " ->"
+            )} ${highlight(next.version, next.type)}`
+          }
+        })
+      )
+    })
+    .then(({ plan }) => plan)
+}
 /**
  * Get the current version of a source
  *
@@ -30,7 +65,6 @@ export function bump(source, version) {
   return new Promise((resolve, reject) => {
     recommend(
       {
-        // TODO consider how this interacts with the types in `commit`
         preset: `angular`,
         tagPrefix: source + "@"
       },
@@ -57,4 +91,23 @@ export function bump(source, version) {
       }
     )
   })
+}
+
+/**
+ * prints out a user friendly string identifying the version change
+ *
+ * @param {string} v the version string to operate on
+ * @param {string} type the type of release this is
+ * @returns {string} user friendly string identifying the version change
+ */
+function highlight(v, type) {
+  const [major, minor, patch] = v.split(".")
+  switch (type) {
+    case "major":
+      return `${chalk.underline.bold(major)}.${minor}.${patch} 💥`
+    case "minor":
+      return `${major}.${chalk.underline.bold(minor)}.${patch} 📈`
+    default:
+      return `${major}.${minor}.${chalk.underline.bold(patch)} 🩹`
+  }
 }

@@ -19,6 +19,7 @@ export default async function commit({ types, footers }) {
       new Error("No changes found.\nUse `git add` to stage your changes!")
     )
 
+  // TODO validate required prompts
   return inquirer
     .prompt([
       {
