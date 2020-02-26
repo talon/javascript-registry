@@ -10,6 +10,8 @@
 
 - [commit](#commit)
 - [format](#format)
+- [current](#current)
+- [bump](#bump)
 
 <!-- tocstop -->
 
@@ -107,6 +109,27 @@ One or more footers MAY be provided one blank line after the body.
   - `options.footer` **[object][1]?** follow a convention similar to git trailer format
 
 Returns **[string][3]** a conventional commit
+
+## current
+
+Get the current version of a source
+
+### Parameters
+
+- `source` **[string][3]** the source to grab the version from
+
+Returns **[Promise][5]&lt;[string][3]>** the most recent version of the source
+
+## bump
+
+Get the next version of a source
+
+### Parameters
+
+- `source` **[string][3]** the source to operate on
+- `version` **[string][3]** the current version to bump
+
+Returns **[Promise][5]&lt;[string][3]>** the next reecommended version
 
 [1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 [2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array

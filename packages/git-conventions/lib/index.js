@@ -3,9 +3,8 @@
 import yargs from "yargs"
 import commit, { breaking } from "./commit"
 import { affects } from "./monorepo"
+import { bump, current } from "./version"
 import shell from "shelljs"
-import commits from "git-raw-commits"
-import parser from "conventional-commits-parser"
 
 // TODO use meow? https://github.com/sindresorhus/meow
 yargs
@@ -27,13 +26,13 @@ yargs
     }
   )
   .command("version", "Tag HEAD with a semantic version", async function() {
-    // TODO get commits https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/git-raw-commits
-    // TODO parse commits https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-commits-parser
-    // TODO recommended bump https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-recommended-bump
-    // TODO GPG signing support
+    const source = "@talon/lit"
+    // TODO do this for every package
+    const version = await current(source)
+    const next = await bump(source, version)
+
+    console.log(`${source}: ${version} -> ${next}`)
+    // TODO tag the repo shell.exec(`git tag ${source}@${version}"`)
     // TODO release message
-    // TODO tag the repo shell.exec(`git tag "${await version()}"`)
-    commits({})
-      // .pipe(parser())
-      .pipe(process.stdout)
+    // TODO GPG signing support
   }).argv
