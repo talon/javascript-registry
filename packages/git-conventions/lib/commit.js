@@ -4,57 +4,11 @@ import inquirer from "inquirer"
 /**
  * Create a conventionally formatted commit
  *
- * @param {object} options Extend the base convention
- * @param {string[]} [options.types] the available commit types
- * @param {Function[]} [options.footers] include footer information
- * @returns {Promise<string>} a conventionally formatted commit message
- */
-export default async function commit({ types, footers }) {
-  if (
-    shell
-      .exec("git diff --cached --name-only", { silent: true })
-      .stdout.split("\n")[0] === ""
-  )
-    return Promise.reject(
-      new Error("No changes found.\nUse `git add` to stage your changes!")
-    )
-
-  // TODO validate required prompts
-  return inquirer
-    .prompt([
-      {
-        type: "list",
-        name: "type",
-        message: "What type of change is this? ",
-        choices: types
-      },
-      {
-        type: "input",
-        name: "scope",
-        message: "Provide the scope of this change (optional): "
-      },
-      {
-        type: "input",
-        name: "description",
-        message: "Briefly describe this change: "
-      },
-      {
-        type: "input",
-        name: "body",
-        message: "Provide any additional details (optional): "
-      }
-    ])
-    .then(async function(convention) {
-      let footer = {}
-      for (let item of footers) {
-        Object.assign(footer, await item())
-      }
-      return Object.assign(convention, { footer })
-    })
-    .then(format)
-}
-
-/**
+ * ```sh
+ * git-conventions commit
+ * git-conventions commit --sources packages # for monorepos
+ * ```
+ *
  * [The Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0) is a lightweight convention on top of commit messages. It provides an easy set of rules for creating an explicit commit history; which makes it easier to write automated tools on top of. This convention dovetails with SemVer, by describing the features, fixes, and breaking changes made in commit messages.
  *
  * ```js
@@ -114,6 +68,60 @@ export default async function commit({ types, footers }) {
  * })
  * ```
  *
+ * @param {object} options Extend the base convention
+ * @param {string[]} [options.types] the available commit types
+ * @param {Function[]} [options.footers] include footer information
+ * @returns {Promise<string>} a conventionally formatted commit message
+ */
+export default async function commit({ types, footers }) {
+  if (
+    shell
+      .exec("git diff --cached --name-only", { silent: true })
+      .stdout.split("\n")[0] === ""
+  )
+    return Promise.reject(
+      new Error("No changes found.\nUse `git add` to stage your changes!")
+    )
+
+  // TODO validate required prompts
+  return inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "type",
+        message: "What type of change is this? ",
+        choices: types
+      },
+      {
+        type: "input",
+        name: "scope",
+        message: "Provide the scope of this change (optional): "
+      },
+      {
+        type: "input",
+        name: "description",
+        message: "Briefly describe this change: "
+      },
+      {
+        type: "input",
+        name: "body",
+        message: "Provide any additional details (optional): "
+      }
+    ])
+    .then(async function(convention) {
+      let footer = {}
+      for (let item of footers) {
+        Object.assign(footer, await item())
+      }
+      return Object.assign(convention, { footer })
+    })
+    .then(format)
+}
+
+/**
+ * Format the commit object into a string
+ *
+ * @private
  * @param {object} options the commit options
  * @param {string} options.type the commit type
  * @param {string} [options.scope] the scope of the commit

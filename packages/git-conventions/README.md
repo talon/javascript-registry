@@ -9,8 +9,7 @@
 <!-- toc -->
 
 - [commit](#commit)
-- [format](#format)
-- [version](#version)
+- [bump](#bump)
 
 <!-- tocstop -->
 
@@ -18,17 +17,12 @@
 
 Create a conventionally formatted commit
 
-### Parameters
+```sh
+git-conventions commit
+git-conventions commit --sources packages # for monorepos
+```
 
-- `options` **[object][1]** Extend the base convention
-  - `options.types` **[Array][2]&lt;[string][3]>?** the available commit types
-  - `options.footers` **[Array][2]&lt;[Function][4]>?** include footer information
-
-Returns **[Promise][5]&lt;[string][3]>** a conventionally formatted commit message
-
-## format
-
-[The Conventional Commits specification][6] is a lightweight convention on top of commit messages. It provides an easy set of rules for creating an explicit commit history; which makes it easier to write automated tools on top of. This convention dovetails with SemVer, by describing the features, fixes, and breaking changes made in commit messages.
+[The Conventional Commits specification][1] is a lightweight convention on top of commit messages. It provides an easy set of rules for creating an explicit commit history; which makes it easier to write automated tools on top of. This convention dovetails with SemVer, by describing the features, fixes, and breaking changes made in commit messages.
 
 ```js
 import {format} from "./lib/commit"
@@ -100,28 +94,34 @@ One or more footers MAY be provided one blank line after the body.
 
 ### Parameters
 
-- `options` **[object][1]** the commit options
-  - `options.type` **[string][3]** the commit type
-  - `options.scope` **[string][3]?** the scope of the commit
-  - `options.description` **[string][3]** a terse desription of the commit
-  - `options.body` **[string][3]?** a detailed explanation of the commit
-  - `options.footer` **[object][1]?** follow a convention similar to git trailer format
+- `options` **[object][2]** Extend the base convention
+  - `options.types` **[Array][3]&lt;[string][4]>?** the available commit types
+  - `options.footers` **[Array][3]&lt;[Function][5]>?** include footer information
 
-Returns **[string][3]** a conventional commit
+Returns **[Promise][6]&lt;[string][4]>** a conventionally formatted commit message
 
-## version
+## bump
 
-Get the version tags to be applied to the repo
+Apply [Semantically Versioned][7] tags derived from the Conventional Commit history
+
+```sh
+git-conventions bump
+git-conventions bump --sources packages # for monorepos
+```
+
+> The version is calculated by [conventional-recommended-bump][8] using the Angular preset
 
 ### Parameters
 
-- `sources` **[string][3]** what sources to operate on in a monorepo
+- `sources` **[string][4]** what sources to operate on in a monorepo
 
-Returns **[Promise][5]&lt;[Array][2]&lt;[string][3]>>** the tag(s) to apply to the repo
+Returns **[Promise][6]&lt;[Array][3]&lt;[string][4]>>** the tag(s) to apply to the repo
 
-[1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
-[2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
-[3]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
-[4]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
-[5]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
-[6]: https://www.conventionalcommits.org/en/v1.0.0
+[1]: https://www.conventionalcommits.org/en/v1.0.0
+[2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[3]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[4]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[5]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[6]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[7]: https://semver.org
+[8]: https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-recommended-bump

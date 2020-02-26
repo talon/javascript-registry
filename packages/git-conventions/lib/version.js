@@ -5,12 +5,18 @@ import inquirer from "inquirer"
 import chalk from "chalk"
 
 /**
- * Get the version tags to be applied to the repo
+ * Apply [Semantically Versioned](https://semver.org) tags derived from the Conventional Commit history
+ *
+ * ```sh
+ * git-conventions bump
+ * git-conventions bump --sources packages # for monorepos
+ * ```
+ * > The version is calculated by [conventional-recommended-bump](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-recommended-bump) using the Angular preset
  *
  * @param {string} sources what sources to operate on in a monorepo
  * @returns {Promise<string[]>} the tag(s) to apply to the repo
  */
-export default async function version(sources) {
+export default async function bump(sources) {
   // TODO make `sources` optional
   // TODO only tag changed sources
   // TODO flag to accept all tags
@@ -22,14 +28,14 @@ export default async function version(sources) {
       choices: await Promise.all(
         shell.ls(sources).map(async function(source) {
           let version = await current(source)
-          let next = await bump(source, version)
+          let bump = await next(source, version)
 
           return {
-            value: `${source}@${next.version}`,
+            value: `${source}@${bump.version}`,
             // checked: next.type === "patch",
             name: `${chalk.bold(source)}@${chalk.dim(
               version + " ->"
-            )} ${highlight(next.version, next.type)}`
+            )} ${highlight(bump.version, bump.type)}`
           }
         })
       )
@@ -62,7 +68,7 @@ export function current(source) {
  * @param {string} version the current version to bump
  * @returns {Promise<object>} the next recommended release type, version and reason
  */
-export function bump(source, version) {
+export function next(source, version) {
   let [major, minor, patch] = version.split(".").map(i => parseInt(i))
   return new Promise((resolve, reject) => {
     recommend(

@@ -2,7 +2,7 @@
 
 import yargs from "yargs"
 import commit, { breaking } from "./commit"
-import version from "./version"
+import bump from "./version"
 import { affects } from "./monorepo"
 import shell from "shelljs"
 
@@ -20,7 +20,7 @@ yargs
         shell.exec(
           `git commit -m "${await commit({
             // strictly follows the Angular Convention https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type
-            // becatuse that's the preset used in version.bump
+            // because that's the preset used in `version.next`
             types: [
               "feat",
               "fix",
@@ -41,7 +41,7 @@ yargs
   )
   .command("bump", "Tag HEAD with a semantic version", async function() {
     // TODO GPG signing support
-    for (let tag of await version(sources)) {
+    for (let tag of await bump(sources)) {
       shell.exec(`git tag '${tag}'`)
     }
   }).argv
