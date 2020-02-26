@@ -110,7 +110,7 @@ export default async function commit({ types, footers }) {
     ])
     .then(async function(convention) {
       let footer = {}
-      for (let item of footers) {
+      for (let item of footers.filter(x => x)) {
         Object.assign(footer, await item())
       }
       return Object.assign(convention, { footer })
