@@ -22,6 +22,10 @@
   },
   "dependencies": {
     "@types/jest": "^25.1.2",
+    "conventional-commits-parser": "^3.0.8",
+    "conventional-recommended-bump": "^6.0.5",
+    "dedent": "^0.7.0",
+    "git-raw-commits": "^2.0.3",
     "inquirer": "^7.0.4",
     "inquirer-recursive": "^0.0.6",
     "rxjs": "^6.5.4",

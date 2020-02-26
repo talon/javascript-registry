@@ -2,10 +2,12 @@
 
 import yargs from "yargs"
 import commit, { breaking } from "./commit"
-import version from "./version"
 import { affects } from "./monorepo"
 import shell from "shelljs"
+import commits from "git-raw-commits"
+import parser from "conventional-commits-parser"
 
+// TODO use meow? https://github.com/sindresorhus/meow
 yargs
   .command(
     "commit",
@@ -25,9 +27,13 @@ yargs
     }
   )
   .command("version", "Tag HEAD with a semantic version", async function() {
-    try {
-      shell.exec(`git tag "${await version()}"`)
-    } catch (e) {
-      console.error(e.message)
-    }
+    // TODO get commits https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/git-raw-commits
+    // TODO parse commits https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-commits-parser
+    // TODO recommended bump https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-recommended-bump
+    // TODO GPG signing support
+    // TODO release message
+    // TODO tag the repo shell.exec(`git tag "${await version()}"`)
+    commits({})
+      // .pipe(parser())
+      .pipe(process.stdout)
   }).argv
