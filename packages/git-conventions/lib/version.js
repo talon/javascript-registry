@@ -12,6 +12,7 @@ export function current(source) {
     // this is just "lerna-style" (pacakge@version), not lerna dependent.
     versions({ lernaTags: true, package: source }, (error, tags) => {
       if (error) return reject(error)
+      if (tags.length === 0) return resolve("0.0.0")
       resolve(tags[0].replace(source + "@", ""))
     })
   })
@@ -22,17 +23,18 @@ export function current(source) {
  *
  * @param {string} source the source to operate on
  * @param {string} version the current version to bump
- * @returns {Promise<string>} the next reecommended version
+ * @returns {Promise<object>} the next recommended release type, version and reason
  */
 export function bump(source, version) {
   let [major, minor, patch] = version.split(".").map(i => parseInt(i))
   return new Promise((resolve, reject) => {
     recommend(
       {
+        // TODO consider how this interacts with the types in `commit`
         preset: `angular`,
         tagPrefix: source + "@"
       },
-      (error, { releaseType }) => {
+      (error, { releaseType, reason }) => {
         if (error) return reject(error)
 
         switch (releaseType) {
@@ -47,7 +49,11 @@ export function bump(source, version) {
             break
         }
 
-        resolve(`${major}.${minor}.${patch}`)
+        resolve({
+          type: releaseType,
+          version: `${major}.${minor}.${patch}`,
+          reason
+        })
       }
     )
   })

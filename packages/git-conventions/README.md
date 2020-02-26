@@ -10,6 +10,7 @@
 
 - [commit](#commit)
 - [format](#format)
+- [affects](#affects)
 - [current](#current)
 - [bump](#bump)
 
@@ -110,6 +111,17 @@ One or more footers MAY be provided one blank line after the body.
 
 Returns **[string][3]** a conventional commit
 
+## affects
+
+Finds sources affected by a commit and prompts if they should be included
+as `affects: [source]` in the footer
+
+### Parameters
+
+- `sources` **[string][3]** the directory where independently versioned sources exist
+
+Returns **[Function][4]** used to create the footer in `commit`
+
 ## current
 
 Get the current version of a source
@@ -129,7 +141,7 @@ Get the next version of a source
 - `source` **[string][3]** the source to operate on
 - `version` **[string][3]** the current version to bump
 
-Returns **[Promise][5]&lt;[string][3]>** the next reecommended version
+Returns **[Promise][5]&lt;[object][1]>** the next recommended release type, version and reason
 
 [1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 [2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
