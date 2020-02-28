@@ -9,7 +9,7 @@
 <!-- toc -->
 
 - [commit](#commit)
-- [bump](#bump)
+- [version](#version)
 
 <!-- tocstop -->
 
@@ -100,7 +100,7 @@ One or more footers MAY be provided one blank line after the body.
 
 Returns **[Promise][6]&lt;[string][4]>** a conventionally formatted commit message
 
-## bump
+## version
 
 Apply [Semantically Versioned][7] tags derived from the Conventional Commit history
 
@@ -113,9 +113,10 @@ git-conventions bump --sources packages # for monorepos
 
 ### Parameters
 
-- `sources` **[string][4]** what sources to operate on in a monorepo
+- `sources` **[string][4]?** what sources to operate on in a monorepo
+- `convention`
 
-Returns **[Promise][6]&lt;[Array][3]&lt;[string][4]>>** the tag(s) to apply to the repo
+Returns **[Promise][6]&lt;[Array][3]&lt;[object][2]>>** the tag(s) to apply to the repo
 
 [1]: https://www.conventionalcommits.org/en/v1.0.0
 [2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object

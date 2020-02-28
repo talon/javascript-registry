@@ -1,7 +1,6 @@
 import recommend from "conventional-recommended-bump"
 import versions from "git-semver-tags"
 import shell from "shelljs"
-import inquirer from "inquirer"
 import chalk from "chalk"
 
 /**
@@ -13,67 +12,56 @@ import chalk from "chalk"
  * ```
  * > The version is calculated by [conventional-recommended-bump](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-recommended-bump) using the Angular preset
  *
- * @param {string} sources what sources to operate on in a monorepo
- * @returns {Promise<string[]>} the tag(s) to apply to the repo
+ * @param {string} [sources] what sources to operate on in a monorepo
+ * @returns {Promise<object[]>} the tag(s) to apply to the repo
  */
-export default async function bump(sources) {
-  // TODO make `sources` optional
+export default function version(sources, convention) {
   // TODO only tag changed sources
   // TODO flag to accept all tags
-  return inquirer
-    .prompt({
-      type: "checkbox",
-      name: "plan",
-      message: "Identify what sources to version bump: ",
-      choices: await Promise.all(
-        shell.ls(sources).map(async function(source) {
-          let version = await current(source)
-          let bump = await next(source, version)
+  if (!sources) {
+    return new Promise((resolve, reject) => {
+      resolve([
+        {
+          value: "0.0.1",
+          name: highlight({
+            current: "0.0.0",
+            next: "0.0.1",
+            type: "minor"
+          })
+        }
+      ])
+    })
+  } else {
+    return Promise.all(
+      shell.ls(sources).map(async function(source) {
+        const current = await new Promise((resolve, reject) => {
+          // this is just "lerna-style" (pacakge@version), not lerna dependent.
+          // TODO: support private registries here with prefix ("@talon/") + source
+          versions({ lernaTags: true, package: source }, (error, tags) => {
+            if (error) return reject(error)
+            if (tags.length === 0) return resolve("0.0.0")
+            resolve(tags[0].replace(source + "@", ""))
+          })
+        })
 
+        return await bump(source, current, convention).then(bump => {
           return {
-            value: `${source}@${bump.version}`,
+            value: `${bump.source}@${bump.next}`,
             // checked: next.type === "patch",
-            name: `${chalk.bold(source)}@${chalk.dim(
-              version + " ->"
-            )} ${highlight(bump.version, bump.type)}`
+            name: highlight(bump)
           }
         })
-      )
-    })
-    .then(({ plan }) => plan)
-}
-/**
- * Get the current version of a source
- *
- * @private
- * @param {string} source the source to grab the version from
- * @returns {Promise<string>} the most recent version of the source
- */
-export function current(source) {
-  return new Promise((resolve, reject) => {
-    // this is just "lerna-style" (pacakge@version), not lerna dependent.
-    versions({ lernaTags: true, package: source }, (error, tags) => {
-      if (error) return reject(error)
-      if (tags.length === 0) return resolve("0.0.0")
-      resolve(tags[0].replace(source + "@", ""))
-    })
-  })
+      })
+    )
+  }
 }
 
-/**
- * Get the next version of a source
- *
- * @private
- * @param {string} source the source to operate on
- * @param {string} version the current version to bump
- * @returns {Promise<object>} the next recommended release type, version and reason
- */
-export function next(source, version) {
-  let [major, minor, patch] = version.split(".").map(i => parseInt(i))
-  return new Promise((resolve, reject) => {
+export async function bump(source, current, convention) {
+  return await new Promise((resolve, reject) => {
+    let [major, minor, patch] = current.split(".").map(i => parseInt(i))
     recommend(
       {
-        preset: `angular`,
+        preset: convention,
         tagPrefix: source + "@"
       },
       (error, { releaseType, reason }) => {
@@ -92,8 +80,10 @@ export function next(source, version) {
         }
 
         resolve({
+          source,
+          current,
+          next: `${major}.${minor}.${patch}`,
           type: releaseType,
-          version: `${major}.${minor}.${patch}`,
           reason
         })
       }
@@ -105,18 +95,25 @@ export function next(source, version) {
  * prints out a user friendly string identifying the version change
  *
  * @private
- * @param {string} v the version string to operate on
- * @param {string} type the type of release this is
+ * @param {object} bump
+ * @param {string} bump.current the current version string
+ * @param {string} bump.next the next version string
+ * @param {string} bump.type the type of release this is
+ * @param {string} [bump.source] the source to operate on
  * @returns {string} user friendly string identifying the version change
  */
-export function highlight(v, type) {
-  const [major, minor, patch] = v.split(".")
-  switch (type) {
+export function highlight(bump) {
+  const prefix = `${chalk.bold(bump.source)}@${chalk.dim(
+    bump.current + " -> "
+  )}`
+
+  const [major, minor, patch] = bump.next.split(".")
+  switch (bump.type) {
     case "major":
-      return `${chalk.underline.bold(major)}.${minor}.${patch} 💥`
+      return prefix + `${chalk.underline.bold(major)}.${minor}.${patch} 💥`
     case "minor":
-      return `${major}.${chalk.underline.bold(minor)}.${patch} 📈`
+      return prefix + `${major}.${chalk.underline.bold(minor)}.${patch} 📈`
     default:
-      return `${major}.${minor}.${chalk.underline.bold(patch)} 🩹`
+      return prefix + `${major}.${minor}.${chalk.underline.bold(patch)} 🩹`
   }
 }

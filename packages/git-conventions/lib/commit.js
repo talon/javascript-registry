@@ -83,14 +83,19 @@ export default async function commit({ types, footers }) {
       new Error("No changes found.\nUse `git add` to stage your changes!")
     )
 
-  // TODO validate required prompts
   return inquirer
     .prompt([
       {
         type: "list",
         name: "type",
         message: "What type of change is this? ",
-        choices: types
+        choices: types,
+        validate: value => {
+          if (value.length === 0)
+            return "Please identify what type of change this is"
+
+          return true
+        }
       },
       {
         type: "input",
@@ -100,7 +105,13 @@ export default async function commit({ types, footers }) {
       {
         type: "input",
         name: "description",
-        message: "Briefly describe this change: "
+        message: "Briefly describe this change: ",
+        validate: value => {
+          if (value.length === 0)
+            return "Please provide a brief description for this change"
+
+          return true
+        }
       },
       {
         type: "input",
@@ -110,7 +121,7 @@ export default async function commit({ types, footers }) {
     ])
     .then(async function(convention) {
       let footer = {}
-      for (let item of footers) {
+      for (let item of footers.filter(x => x)) {
         Object.assign(footer, await item())
       }
       return Object.assign(convention, { footer })
@@ -146,20 +157,4 @@ export function format({ type, scope, description, body, footer }) {
   }
 
   return commit
-}
-
-/**
- * used to include BREAKING CHANGES in the footer
- *
- * @private
- * @returns {object} BREAKING CHANGES, for the footer
- */
-export function breaking() {
-  return inquirer
-    .prompt({
-      type: "input",
-      name: "BREAKING CHANGES",
-      message: "Identify any BREAKING CHANGES: "
-    })
-    .then(answers => (answers["BREAKING CHANGES"] !== "" ? answers : {}))
 }
