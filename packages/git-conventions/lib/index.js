@@ -2,11 +2,11 @@
 
 import yargs from "yargs"
 import shell from "shelljs"
-import inquirer from "inquirer"
 
-import * as convention from "./convention"
 import commit from "./commit"
-import version from "./version"
+import * as convention from "./convention"
+import * as version from "./version"
+// import * as monorepo from "./monorepo"
 
 yargs
   .option("sources", {
@@ -32,38 +32,14 @@ yargs
     }
   )
   .command(
-    "bump",
+    "tag",
     "Tag HEAD with a semantic version",
     () => {},
     async function({ sources }) {
-      const choices = await version(sources, convention.name)
-      const tags = await inquirer
-        .prompt({
-          type: sources ? "checkbox" : "confirm",
-          name: "plan",
-          message: sources
-            ? "Identify what sources to version bump: "
-            : `Tag HEAD as ${choices[0].value}? `,
-          // "confirm" ignores choices so it's okay to leave this here for now
-          choices
-        })
-        .then(({ plan }) => {
-          if (plan instanceof Array) {
-            if (plan.length === 0)
-              throw new Error("Aborting. No sources have been tagged.")
-            return plan
-          } else {
-            if (plan) {
-              return [choices[0].value]
-            } else {
-              throw new Error("Aborting. HEAD has not been tagged.")
-            }
-          }
-        })
-
-      for (let tag of tags) {
-        console.log(`git tag '${tag}'`)
-        shell.exec(`git tag '${tag}'`)
+      try {
+        shell.exec(`git tag '${await version.tag(convention.name)}'`)
+      } catch (e) {
+        console.error(e.message)
       }
     }
   ).argv
