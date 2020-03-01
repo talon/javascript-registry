@@ -6,7 +6,7 @@ import shell from "shelljs"
 import commit from "./commit"
 import * as convention from "./convention"
 import * as version from "./version"
-// import * as monorepo from "./monorepo"
+import * as monorepo from "./monorepo"
 
 yargs
   .option("sources", {
@@ -33,11 +33,17 @@ yargs
   )
   .command(
     "tag",
-    "Tag HEAD with a semantic version",
+    "Tag the repo with the next semantic version",
     () => {},
     async function({ sources }) {
+      // TODO a flag to accept all tags
       try {
-        shell.exec(`git tag '${await version.tag(convention.name)}'`)
+        if (!sources)
+          return shell.exec(`git tag '${await version.tag(convention.name)}'`)
+
+        for (let tag of await monorepo.tag(sources, convention.name)) {
+          shell.exec(`git tag '${tag}'`)
+        }
       } catch (e) {
         console.error(e.message)
       }

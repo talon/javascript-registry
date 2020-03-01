@@ -40,6 +40,7 @@ export async function tag(convention) {
  * @returns {Promise<string>} the most recent version of the source
  */
 export function current(source) {
+  // TODO only tag changed sources
   return new Promise((resolve, reject) => {
     versions(
       // this is just "lerna-style" (pacakge@version), not lerna dependent.
